@@ -183,5 +183,5 @@ CommQueueTest >> testUpdateLastMSec [
 	x := q lastMSec.
 	0.1 asSeconds wait.
 	q updateLastMSec.
-	self assert: q lastMSec - x >= 100
+	self assert: q lastMSec - x >= 80
 ]
