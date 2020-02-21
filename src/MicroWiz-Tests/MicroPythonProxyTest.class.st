@@ -130,7 +130,6 @@ MicroPythonProxyTest >> testCommOptionsNamed [
 	p comm: c.
 	self assert: (p commOptionsNamed: #dummy) isCollection.
 	self assert: (p commOptionsNamed: #portName) isCollection.
-	self assert: (p commOptionsNamed: #portName) notEmpty.
 	self assert: (p commOptionsNamed: #baudRate) isCollection.
 	self assert: (p commOptionsNamed: #baudRate) notEmpty
 ]

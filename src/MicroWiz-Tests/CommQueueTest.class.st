@@ -125,8 +125,7 @@ CommQueueTest >> testIsTimeout [
 	| q |
 	q := self newQueue.
 	self deny: q isTimeout.
-	self deny: q isTimeout.
-	q timeout: 100.
+	q timeout: 50.
 	0.1 asSeconds wait.
 	self assert: q isTimeout
 ]

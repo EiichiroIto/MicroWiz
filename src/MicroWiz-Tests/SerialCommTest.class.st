@@ -72,7 +72,6 @@ SerialCommTest >> testOptionsNamed [
 	c := self newComm.
 	self assert: (c optionsNamed: #dummy) isCollection.
 	self assert: (c optionsNamed: #portName) isCollection.
-	self assert: (c optionsNamed: #portName) notEmpty.
 	self assert: (c optionsNamed: #baudRate) isCollection.
 	self assert: (c optionsNamed: #baudRate) notEmpty
 ]

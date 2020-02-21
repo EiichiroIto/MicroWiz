@@ -106,10 +106,17 @@ SerialComm >> portName: aString [
 { #category : #private }
 SerialComm >> portNames [
 	Smalltalk os isUnix
-		ifTrue: [ ^ self unixPortNames ].
+		ifTrue: [ ^ self portNamesDo: [ self unixPortNames ] ].
 	Smalltalk os isWin32
-		ifTrue: [ ^ self win32PortNames ].
+		ifTrue: [ ^ self portNamesDo: [ self win32PortNames ] ].
 	self error: 'not supported'
+]
+
+{ #category : #private }
+SerialComm >> portNamesDo: aBlock [
+	^ aBlock
+		ifError:
+			[ {(UIManager default request: 'Enter COM port (like COM3)')} ]
 ]
 
 { #category : #printing }
@@ -124,17 +131,6 @@ SerialComm >> printOn: aStream [
 		nextPut: $,;
 		nextPutAll: self baudRate asString;
 		nextPut: $)
-]
-
-{ #category : #private }
-SerialComm >> privWin32PortNames [
-	| ext size str |
-	ext := FFIExternalArray externalNewType: 'byte' size: 1024.
-	size := self class enumerateComPort: ext max: 1024.
-	str := ByteArray new: size.
-	1 to: size do: [ :each | str at: each put: (ext at: each) ].
-	ext release.
-	^ str asString lines
 ]
 
 { #category : #api }
@@ -165,7 +161,11 @@ SerialComm >> unixPortNames [
 
 { #category : #private }
 SerialComm >> win32PortNames [
-	^ [ self privWin32PortNames ]
-		ifError:
-			[ {(UIManager default request: 'Enter COM port (like COM3)')} ]
+	| ext size str |
+	ext := FFIExternalArray externalNewType: 'byte' size: 1024.
+	size := self class enumerateComPort: ext max: 1024.
+	str := ByteArray new: size.
+	1 to: size do: [ :each | str at: each put: (ext at: each) ].
+	ext release.
+	^ str asString lines
 ]
