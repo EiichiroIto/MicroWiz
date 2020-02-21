@@ -89,6 +89,11 @@ SerialComm >> optionsNamed: aSymbol [
 ]
 
 { #category : #private }
+SerialComm >> osxPortNames [
+	^ self unixPortNames
+]
+
+{ #category : #private }
 SerialComm >> port [
 	^ port
 ]
@@ -109,6 +114,8 @@ SerialComm >> portNames [
 		ifTrue: [ ^ self portNamesDo: [ self unixPortNames ] ].
 	Smalltalk os isWin32
 		ifTrue: [ ^ self portNamesDo: [ self win32PortNames ] ].
+	Smalltalk os isMacOSX
+		ifTrue: [ ^ self portNamesDo: [ self osxPortNames ] ].
 	self error: 'not supported'
 ]
 
