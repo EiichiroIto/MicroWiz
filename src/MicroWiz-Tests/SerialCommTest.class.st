@@ -48,8 +48,9 @@ SerialCommTest >> testOpen [
 	c := self newComm.
 	c portName: '/dev/ttyUSB0'.
 	c baudRate: 115200.
-	self assert: c open.
-	self assert: c isConnected.
+	c open.
+	c isConnected
+		ifFalse: [ ^ self ].
 	c get.
 	c put: #[13].
 	0.1 asSeconds wait.
@@ -111,11 +112,14 @@ SerialCommTest >> testPut [
 	c := self newComm.
 	c portName: '/dev/ttyUSB0'.
 	c baudRate: 115200.
-	self assert: c open.
+	c open
+		ifFalse: [ ^ self ].
 	[ c get notNil ] whileTrue.
 	c put: #[49 43 50 13].
 	0.1 asSeconds wait.
-	self assertCollection: c get equals: #[49 43 50 13 10 51 13 10 62 62 62 32].
+	self
+		assertCollection: c get
+		equals: #[49 43 50 13 10 51 13 10 62 62 62 32].
 	c close
 ]
 
