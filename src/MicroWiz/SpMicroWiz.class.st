@@ -25,7 +25,7 @@ SpMicroWiz class >> extension [
 { #category : #'class initialization' }
 SpMicroWiz class >> initialize [
 	ScratchDirectory current appName: self appFolderName.
-	ScratchTheme setupThemeNamed: self appFolderName
+	MicroWizTheme setupThemeNamed: self appFolderName
 ]
 
 { #category : #'world menu' }
