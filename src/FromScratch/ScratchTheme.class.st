@@ -7,7 +7,8 @@ Class {
 		'fonts'
 	],
 	#classVars : [
-		'CurrentTheme'
+		'CurrentTheme',
+		'ThemesURL'
 	],
 	#category : #'FromScratch-Morphic'
 }
@@ -79,8 +80,10 @@ ScratchTheme class >> formAt: aString ifAbsent: aBlock [
 
 { #category : #private }
 ScratchTheme class >> getThemes [
-	| response ref |
-	response := ZnEasy get: self themesURL.
+	| response ref url |
+	url := self themesURL.
+	url ifNil: [ self error: 'Need to set ThemesURL' ].
+	response := ZnEasy get: url.
 	response isSuccess
 		ifFalse: [ self error: 'Cannot get Themes.zip' ].
 	ref := 'Themes.zip' asFileReference.
@@ -251,9 +254,14 @@ ScratchTheme class >> themeIsInstalled [
 	^ 'Themes' asFileReference in: [ :ref | ref isDirectory and: [ ref entries notEmpty ] ]
 ]
 
-{ #category : #private }
+{ #category : #accessing }
 ScratchTheme class >> themesURL [
-	self subclassResponsibility
+	^ ThemesURL
+]
+
+{ #category : #accessing }
+ScratchTheme class >> themesURL: aString [
+	ThemesURL := aString
 ]
 
 { #category : #colors }

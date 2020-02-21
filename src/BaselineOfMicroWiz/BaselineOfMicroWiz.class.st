@@ -11,5 +11,9 @@ BaselineOfMicroWiz >> baseline: spec [
 		for: #common
 		do: [ spec
 				package: 'FromScratch';
-				package: 'MicroWiz' with: [ spec requires: #('FromScratch') ] ]
+				package: 'FromScratch-Tests'
+					with: [ spec requires: #('FromScratch') ];
+				package: 'MicroWiz' with: [ spec requires: #('FromScratch') ];
+				package: 'MicroWiz-Tests'
+					with: [ spec requires: #('FromScratch' 'MicroWiz') ] ]
 ]

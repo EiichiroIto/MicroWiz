@@ -24,8 +24,11 @@ SpMicroWiz class >> extension [
 
 { #category : #'class initialization' }
 SpMicroWiz class >> initialize [
+	"SpMicroWiz initialize"
 	ScratchDirectory current appName: self appFolderName.
-	MicroWizTheme setupThemeNamed: self appFolderName
+	ScratchTheme
+		themesURL: self themesURL;
+		setupThemeNamed: self appFolderName
 ]
 
 { #category : #'world menu' }
@@ -37,6 +40,11 @@ SpMicroWiz class >> menuCommandOn: aBuilder [
 		action: [self new open]; 
 		parent: #Tools;
 		icon: self icon
+]
+
+{ #category : #private }
+SpMicroWiz class >> themesURL [
+	^ 'https://raw.githubusercontent.com/EiichiroIto/MicroWiz/master/Themes.zip'
 ]
 
 { #category : #private }
