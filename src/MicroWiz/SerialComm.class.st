@@ -126,6 +126,17 @@ SerialComm >> printOn: aStream [
 		nextPut: $)
 ]
 
+{ #category : #private }
+SerialComm >> privWin32PortNames [
+	| ext size str |
+	ext := FFIExternalArray externalNewType: 'byte' size: 1024.
+	size := self class enumerateComPort: ext max: 1024.
+	str := ByteArray new: size.
+	1 to: size do: [ :each | str at: each put: (ext at: each) ].
+	ext release.
+	^ str asString lines
+]
+
 { #category : #api }
 SerialComm >> put: aByteArray [
 	self isConnected
@@ -154,11 +165,7 @@ SerialComm >> unixPortNames [
 
 { #category : #private }
 SerialComm >> win32PortNames [
-	| ext size str |
-	ext := FFIExternalArray externalNewType: 'byte' size: 1024.
-	size := self class enumerateComPort: ext max: 1024.
-	str := ByteArray new: size.
-	1 to: size do: [ :each | str at: each put: (ext at: each) ].
-	ext release.
-	^ str asString lines
+	^ [ self privWin32PortNames ]
+		ifError:
+			[ {(UIManager default request: 'Enter COM port (like COM3)')} ]
 ]
