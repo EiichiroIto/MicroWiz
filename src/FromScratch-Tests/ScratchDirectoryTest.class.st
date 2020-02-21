@@ -41,7 +41,7 @@ ScratchDirectoryTest >> testDesktop [
 ScratchDirectoryTest >> testDocuments [
 	| d |
 	d := self newDirectory.
-	self assert: d documents isDirectory
+	self assert: (d documents isKindOf: FileReference)
 ]
 
 { #category : #test }
@@ -159,10 +159,10 @@ ScratchDirectoryTest >> testUser [
 	| d u x |
 	d := self newDirectory.
 	u := d user.
-	self assert: u isDirectory.
+	self assert: (u isKindOf: FileReference).
 	x := FileSystem workingDirectory.
 	d setHomeDir: x.
-	self assert: d user equals: x.
+	self assert: d user equals: x
 ]
 
 { #category : #test }
