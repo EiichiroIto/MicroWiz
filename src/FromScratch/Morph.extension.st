@@ -105,16 +105,6 @@ Morph >> isCommentMorph [
 ]
 
 { #category : #'*FromScratch' }
-Morph >> isPartsDonor [
-	^ self valueOfProperty: #isPartsDonor ifAbsentPut: [ false ]
-]
-
-{ #category : #'*FromScratch' }
-Morph >> isPartsDonor: aBoolean [
-	self setProperty: #isPartsDonor toValue: aBoolean
-]
-
-{ #category : #'*FromScratch' }
 Morph >> isScriptEditor [
 	^ false
 ]
@@ -155,15 +145,13 @@ Morph >> project [
 Morph >> rootForGrabOf: aMorph [
 	"Answer the root of the morph structure to be picked up when the given morph is grabbed."
 
-	(self isSticky and: [self isPartsDonor not])
-		ifTrue: [^ nil]
-		ifFalse: [
-			(owner isNil or: [owner isWorldOrHandMorph])
-				ifTrue: [^ self]
-				ifFalse: [
-					owner allowSubmorphExtraction
-						ifTrue: [^ self]
-						ifFalse: [^ owner rootForGrabOf: aMorph]]].
+	self isSticky
+		ifTrue: [ ^ nil ].
+	(owner isNil or: [ owner isWorldOrHandMorph ])
+		ifTrue: [ ^ self ].
+	owner allowSubmorphExtraction
+		ifTrue: [ ^ self ].
+	^ owner rootForGrabOf: aMorph
 ]
 
 { #category : #'*FromScratch' }

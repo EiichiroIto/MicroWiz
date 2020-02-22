@@ -36,16 +36,6 @@ String >> asNumberNoError [
 ]
 
 { #category : #'*FromScratch' }
-String >> indexOfSeparatorStartingAt: index [
-	"Answer the index of the next separator character found starting at the given index. Answer size + 1 if none is found."
-
-	^ self
-		indexOfAnyOf: CSSeparators
-		startingAt: index 
-		ifAbsent: [self size + 1]
-]
-
-{ #category : #'*FromScratch' }
 String >> isNumberString [
 	| aStream d pointNumber digitAppears |
 	pointNumber := false.
@@ -71,11 +61,6 @@ String >> isScriptable [
 ]
 
 { #category : #'*FromScratch' }
-String >> isUnicode [
-	^ false
-]
-
-{ #category : #'*FromScratch' }
 String >> localized [
 	"Answer myself translated into the current Scratch language. If there is no translation for me, then answer myself."
 
@@ -84,16 +69,4 @@ String >> localized [
 	ScratchTranslator addUITranslation: selfAsString.
 	^ ScratchTranslator translationFor: selfAsString."
 	^ self
-]
-
-{ #category : #'*FromScratch' }
-String >> trailingDigits [
-	"Answer the trailing digits of a string such as 'foo123' If the string does not end in a digit, answer the empty string."
-	"'foo123' trailingDigits"
-	"'foo' trailingDigits"
-
-	| i |
-	i := self size.
-	[(i > 0) and: [(self at: i) isDigit]] whileTrue: [i := i - 1].
-	^ self copyFrom: i + 1 to: self size
 ]

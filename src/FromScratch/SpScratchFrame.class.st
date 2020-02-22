@@ -42,7 +42,9 @@ SpScratchFrame >> aboutTitle [
 ]
 
 { #category : #private }
-SpScratchFrame >> blockMenuFor: aBlockMorph [
+SpScratchFrame >> blockMenuFor: aBlockMorph inScriptEditor: aBoolean [
+	aBoolean
+		ifFalse: [ ^ self ].
 	^ self newMenu
 		addGroup: [ :grp | 
 			grp

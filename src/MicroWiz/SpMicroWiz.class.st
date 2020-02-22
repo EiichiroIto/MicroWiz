@@ -312,6 +312,13 @@ SpMicroWiz >> pyExtension [
 	^ 'py'
 ]
 
+{ #category : #'menu actions' }
+SpMicroWiz >> quit [
+	(self confirm: 'Quit Application?' translated)
+		ifFalse: [ ^ self ].
+	Smalltalk snapshot: false andQuit: true
+]
+
 { #category : #private }
 SpMicroWiz >> restoreProject [
 	"do nothing"

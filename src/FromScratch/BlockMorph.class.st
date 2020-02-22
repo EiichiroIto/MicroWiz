@@ -921,10 +921,7 @@ BlockMorph >> rejectDropEvent: evt [
 
 { #category : #'event handling' }
 BlockMorph >> rightButtonMenu: anEvent [
-	self isInBlockPalette
-		ifTrue: [ ^ self ].
-	owner isScriptEditor
-		ifTrue: [ ^ self showMenu: anEvent ]
+	self showMenu: anEvent
 ]
 
 { #category : #'dropping/grabbing' }

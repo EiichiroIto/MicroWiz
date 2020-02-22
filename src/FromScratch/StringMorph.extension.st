@@ -31,16 +31,6 @@ StringMorph >> initFieldsFrom: anObjStream version: classVersion [
 ]
 
 { #category : #'*FromScratch' }
-StringMorph >> isArgMorph [
-	^ false
-]
-
-{ #category : #'*FromScratch' }
-StringMorph >> isBlockMorph [
-	^ false
-]
-
-{ #category : #'*FromScratch' }
 StringMorph >> leftMargin [
 	"Answer the left edge of this StringMorph. For a left-justified string, this the left edge of its bounding box, but for a right-justified string it may be inset."
 
@@ -72,11 +62,6 @@ StringMorph >> stringToDisplay [
 	"Answer the string that is displayed. In password mode, this will be all asterisks."
 
 	^ contents
-]
-
-{ #category : #'*FromScratch' }
-StringMorph >> stringWidth: aString [
-	^(((self fontToUse widthOfString: aString) max: self minimumWidth) + (self layoutInset * 2)) ceiling
 ]
 
 { #category : #'*FromScratch' }

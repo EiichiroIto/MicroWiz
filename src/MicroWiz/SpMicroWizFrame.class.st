@@ -43,6 +43,32 @@ SpMicroWizFrame class >> libraryPaneHeight [
 	^ self buttonHeight + 10
 ]
 
+{ #category : #private }
+SpMicroWizFrame >> blockMenuFor: aBlockMorph inScriptEditor: aBoolean [
+	| m |
+	m := self newMenu.
+	m
+		addGroup: [ :grp | 
+			grp
+				addItem: [ :item | 
+					item
+						name: 'start';
+						action: [ aBlockMorph topBlock toggleProcess ] ] ].
+	aBoolean
+		ifTrue: [ m
+				addGroup: [ :grp | 
+					grp
+						addItem: [ :item | 
+							item
+								name: 'delete';
+								action: [ aBlockMorph delete ] ];
+						addItem: [ :item | 
+							item
+								name: 'duplicate';
+								action: [ application duplicateBlock: aBlockMorph ] ] ] ].
+	^ m
+]
+
 { #category : #accessing }
 SpMicroWizFrame >> comm: aComm [
 	stageFrame comm: aComm

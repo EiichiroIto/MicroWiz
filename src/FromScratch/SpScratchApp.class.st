@@ -567,9 +567,9 @@ SpScratchApp >> setupView [
 
 { #category : #'menu actions' }
 SpScratchApp >> showBlockMenu: aBlockMorph event: anEvent [
-	aBlockMorph isInScriptEditor
-		ifFalse: [ ^ self ].
-	(presenter blockMenuFor: aBlockMorph)
+	(presenter
+		blockMenuFor: aBlockMorph
+		inScriptEditor: aBlockMorph isInScriptEditor)
 		openWithSpecAt: anEvent cursorPoint
 ]
 
