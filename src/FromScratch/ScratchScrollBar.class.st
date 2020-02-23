@@ -267,17 +267,6 @@ ScratchScrollBar >> mouseMove: evt [
 ]
 
 { #category : #'scroll bar protocol' }
-ScratchScrollBar >> percentVisible: percentVisible [
-	"Supply an optional floating fraction so slider can expand to indicate the percent of the content that is visible."
-
-	sliderLength := ((percentVisible min: 1.0) * self maxSliderLength) rounded.
-	sliderLength := sliderLength max: self minSliderLength.
-	sliderLength = self maxSliderLength ifTrue: [self scrollFraction: 0].
-	self changed.
-
-]
-
-{ #category : #'scroll bar protocol' }
 ScratchScrollBar >> scrollDelta: ignore1 pageDelta: ignore2 [
 	"For compatability with old scrollbars. I don't support paging or scrolling arrows."
 

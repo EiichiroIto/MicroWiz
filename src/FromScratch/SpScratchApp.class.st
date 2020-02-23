@@ -9,7 +9,7 @@ Class {
 	],
 	#classVars : [
 		'Clipboard',
-		'UseErrorCatcher'
+		'Options'
 	],
 	#category : #'FromScratch-Spec2'
 }
@@ -40,13 +40,40 @@ SpScratchApp class >> icon [
 
 { #category : #'class initialization' }
 SpScratchApp class >> initialize [
-	UseErrorCatcher := false.
-	Clipboard := nil
+	Clipboard := nil.
+	Options := nil
+]
+
+{ #category : #private }
+SpScratchApp class >> loadOptions [
+	| fr dict |
+	fr := FileSystem workingDirectory / 'options.ston'.
+	fr isFile
+		ifFalse: [ ^ self ].
+	dict := STON fromString: fr contents.
+	dict isDictionary
+		ifFalse: [ ^ self ].
+	Options := dict
+]
+
+{ #category : #private }
+SpScratchApp class >> options [
+	^ Options ifNil: [ Options := Dictionary new ]
 ]
 
 { #category : #accessing }
 SpScratchApp class >> putInClipboard: anObject [
 	Clipboard := anObject
+]
+
+{ #category : #accessing }
+SpScratchApp class >> stickyWindow [
+	^ self options at: #stickyWindow ifAbsent: [ false ]
+]
+
+{ #category : #accessing }
+SpScratchApp class >> stickyWindow: aBoolean [
+	self options at: #stickyWindow put: aBoolean
 ]
 
 { #category : #private }
@@ -63,12 +90,12 @@ SpScratchApp class >> try: aBlock onFailure: anErrorBlock [
 
 { #category : #accessing }
 SpScratchApp class >> useErrorCatcher [
-	^ UseErrorCatcher
+	^ self options at: #useErrorCatcher ifAbsent: [ false ]
 ]
 
 { #category : #accessing }
 SpScratchApp class >> useErrorCatcher: aBoolean [
-	UseErrorCatcher := aBoolean
+	self options at: #useErrorCatcher put: aBoolean
 ]
 
 { #category : #private }
@@ -385,6 +412,7 @@ SpScratchApp >> newProject [
 
 { #category : #accessing }
 SpScratchApp >> open [
+	self class loadOptions.
 	self open: presenter.
 	self newProject.
 	presenter window maximize.

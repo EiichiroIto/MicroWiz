@@ -51,31 +51,11 @@ ToggleButton >> addCustomMenuItems: aCustomMenu hand: aHandMorph [
 
 ]
 
-{ #category : #accessing }
-ToggleButton >> alphaOn: aBoolean [
-
-	alphaOn := aBoolean.
-]
-
 { #category : #drawing }
 ToggleButton >> areasRemainingToFill: aRectangle [
 	"Don't optimize redraw; I may have transparent areas!"
 
 	^ Array with: aRectangle
-
-]
-
-{ #category : #accessing }
-ToggleButton >> clearIsOver [
-
-	| f |
-	isOver ifFalse: [^ self].  "already cleared"
-	isOver := false.
-
-	"update my extent"
-	f := isOn ifTrue: [onForm] ifFalse: [offForm].
-	isDisabled ifTrue: [f := disabledForm].
-	f ifNotNil: [self extent: f extent].
 
 ]
 
@@ -193,13 +173,6 @@ ToggleButton >> isDisabled [
 ToggleButton >> isDisabled: aBoolean [
 
 	isDisabled := aBoolean.
-
-]
-
-{ #category : #accessing }
-ToggleButton >> isMomentary: aBoolean [
-
-	isMomentary := aBoolean.
 
 ]
 
@@ -342,28 +315,8 @@ ToggleButton >> onForm: f1 offForm: f2 overForm: f3 [
 ]
 
 { #category : #initialization }
-ToggleButton >> onForm: f1 offForm: f2 overForm: f3 disabledForm: f4 [
-
-	onForm := f1.
-	offForm := f2.
-	overForm := f3.
-	disabledForm := f4.
-	self on; off.
-
-]
-
-{ #category : #initialization }
 ToggleButton >> setDefaultLabel [
 	"Overridden to do nothing. I have no label by default, although a label can be added."
-
-]
-
-{ #category : #accessing }
-ToggleButton >> setLabelColor: aColor [
-
-	| s |
-	s := self findA: StringMorph.
-	s color: aColor.
 
 ]
 

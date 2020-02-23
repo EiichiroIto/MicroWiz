@@ -52,14 +52,6 @@ StringFieldMorph >> acceptEdits [
 
 ]
 
-{ #category : #accessing }
-StringFieldMorph >> acceptWhenFocusLost: aBoolean [
-	"If true, then accept my contents (as if the user hit the enter key) I lose the keyboard focus lost."
-
-	acceptWhenFocusLost := aBoolean.
-
-]
-
 { #category : #'text editing' }
 StringFieldMorph >> backspace [
 	"Delete the current selection. If there is no selection, delete the character before the cursor."

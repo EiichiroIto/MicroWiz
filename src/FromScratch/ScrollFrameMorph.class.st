@@ -108,13 +108,6 @@ ScrollFrameMorph >> growthFraction: aNumber [
 
 ]
 
-{ #category : #accessing }
-ScrollFrameMorph >> hBarInset: anInteger [
-
-	hbarInset := anInteger.
-
-]
-
 { #category : #layout }
 ScrollFrameMorph >> hResizing [
 
@@ -197,28 +190,12 @@ ScrollFrameMorph >> invalidRect: damageRect [
 
 ]
 
-{ #category : #layout }
-ScrollFrameMorph >> isAlignmentMorph [
-	"Answer true, since I can be laid out as if I were an AlignmentMorph. I pretend to be an AlignmentMorph so that I can be resized when I'm inside another AlignmentMorph."
-
-	^ true
-
-]
-
 { #category : #geometry }
 ScrollFrameMorph >> layoutChanged [
 	"If my contents morph's layout has changed, record that fact."
 
 	super layoutChanged.
 	contents mayNeedLayout ifTrue: [contentsChanged := true].
-
-]
-
-{ #category : #layout }
-ScrollFrameMorph >> layoutInWidth: w height: h [
-	"Resize myself to the given width and height. Called during when I am in an AlignmentMorph."
-
-	self extent: w@h.
 
 ]
 
@@ -241,25 +218,6 @@ ScrollFrameMorph >> minHeight [
 ScrollFrameMorph >> minWidth [
 
 	^ 60
-
-]
-
-{ #category : #scrolling }
-ScrollFrameMorph >> scrollSubmorphIntoView: aMorph [
-
-	| offset |
-	(contents submorphs includes: aMorph) ifFalse: [^ self].
-	(self bounds containsRect: aMorph fullBounds) ifTrue: [^ self].
-
-	(aMorph fullBounds bottom > self bottom) ifTrue: [
-		offset := aMorph fullBounds bottom - contents top.
-		contents top: (self bottom - 3) - offset].
-
-	(aMorph fullBounds top < self top) ifTrue: [
-		offset := aMorph fullBounds top - contents top.
-		contents top: (self top + 3) - offset].
-
-	self updateScrollbars.
 
 ]
 
@@ -351,13 +309,6 @@ ScrollFrameMorph >> updateScrollbars [
 		ifFalse: [
 			self showVerticalScrollbar: false.
 			vScrollbar value: 0].
-
-]
-
-{ #category : #accessing }
-ScrollFrameMorph >> vBarInset: anInteger [
-
-	vbarInset := anInteger.
 
 ]
 

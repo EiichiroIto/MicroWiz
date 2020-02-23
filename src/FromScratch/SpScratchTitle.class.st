@@ -42,5 +42,5 @@ SpScratchTitle >> projectName: aString [
 
 { #category : #private }
 SpScratchTitle >> setupButtons [
-	self subclassResponsibility
+	"self subclassResponsibility"
 ]

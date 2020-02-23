@@ -264,8 +264,8 @@ SpMicroWizFrame >> initializePresenters [
 	menu := self newMenuBar.
 	self setupMenu.
 	viewerPane := self instantiate: SpScratchListViewer.
-	editorPane := self instantiate: SpScratchEditor.
-	titlePane := self instantiate: SpMicroWizTitle.
+	editorPane := self instantiate: SpMicroWizEditor.
+	titlePane := self instantiate: SpScratchTitle.
 	libraryPane := self instantiate: SpMicroWizLibrary.
 	stageFrame := self instantiate: SpMicroWizStage.
 	self focusOrder add: editorPane
@@ -314,6 +314,7 @@ SpMicroWizFrame >> proxy [
 { #category : #accessing }
 SpMicroWizFrame >> proxy: aProxy [
 	stageFrame proxy: aProxy.
+	editorPane proxy: aProxy.
 	self updateViewer
 ]
 

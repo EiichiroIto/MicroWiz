@@ -195,13 +195,6 @@ ImageFrameMorph >> fullDrawOn: aCanvas [
 
 ]
 
-{ #category : #drawing }
-ImageFrameMorph >> hasTranslucentColor [
-
-	^ true
-
-]
-
 { #category : #intialization }
 ImageFrameMorph >> initFromForm: aForm [
 	"Initialize myself by cutting up the given Form. The corners are taken to extend to one pixel short of the center in each dimension. A one-pixel strip from the center of each edge will be replicated to stretch the edge. The color of the center pixel of the rectangle will be used as the fill color. (You can suppress color filling by setting my color to transparent after calling this method)."
@@ -221,22 +214,6 @@ ImageFrameMorph >> initFromForm: aForm [
 	bottomEdgeForm := (aForm copy: ((center x@(aForm height - cornerExtent y)) extent: (1 @ cornerExtent y))).
 
 	color := aForm colorAt: center.
-
-]
-
-{ #category : #intialization }
-ImageFrameMorph >> initFrontFromForm: aForm [
-	"Initialize myself so that my frame is drawn in front of my submorphs, like a picture frame."
-
-	| c f |
-	frameInFront := true.
-
-	c := (aForm colorAt: aForm extent // 2).
-	f := aForm deepCopy.
-	"f shapeFill: Color transparent interiorPoint: aForm extent // 2."
-	self initFromForm: f.
-	color := c.
-
 
 ]
 
@@ -264,9 +241,4 @@ ImageFrameMorph >> minExtent [
 
 	^ (topLeftForm width + topEdgeForm width + topRightForm width) @
 	  (topLeftForm height + leftEdgeForm height + bottomLeftForm height)
-]
-
-{ #category : #private }
-ImageFrameMorph >> orgMinExtent [
-	^ super minExtent
 ]

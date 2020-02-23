@@ -30,16 +30,6 @@ ResizableToggleButton2 >> action [
 
 ]
 
-{ #category : #layout }
-ResizableToggleButton2 >> centerLabelOffset: anInteger [
-	"Center the label horizontally with the given offset."
-
-	justification := #center.
-	hOffset := anInteger.
-	self updateLayout.
-
-]
-
 { #category : #accessing }
 ResizableToggleButton2 >> color [
 
@@ -182,16 +172,6 @@ ResizableToggleButton2 >> labelColorOn: onColor labelColorOff: offColor labelCol
 
 ]
 
-{ #category : #layout }
-ResizableToggleButton2 >> leftJustifyInset: anInteger [
-	"Left-justify the label with the given inset from the left edge."
-
-	justification := #left.
-	hOffset := anInteger.
-	self updateLayout.
-
-]
-
 { #category : #'event handling' }
 ResizableToggleButton2 >> mouseDown: evt [
 
@@ -319,15 +299,6 @@ ResizableToggleButton2 >> offForm: offForm onForm: onForm [
 
 ]
 
-{ #category : #initialization }
-ResizableToggleButton2 >> offForm: offForm onForm: onForm overForm: overForm [
-
-	self offForm: offForm onForm: onForm.
-	overForm ifNotNil: [over := ImageFrameMorph new initFromForm: overForm].
-
-
-]
-
 { #category : #accessing }
 ResizableToggleButton2 >> on [
 	"Turn myself on."
@@ -373,16 +344,6 @@ ResizableToggleButton2 >> pressed: aMorph [
 
 ]
 
-{ #category : #layout }
-ResizableToggleButton2 >> rightJustifyInset: anInteger [
-	"Right-justify the label with the given inset from the right edge."
-
-	justification := #right.
-	hOffset := anInteger.
-	self updateLayout.
-
-]
-
 { #category : #private }
 ResizableToggleButton2 >> setCurrent: aMorph [
 	"Make the given morph be the one currently displayed."
@@ -402,22 +363,6 @@ ResizableToggleButton2 >> setCurrent: aMorph [
 { #category : #initialization }
 ResizableToggleButton2 >> setDefaultLabel [
 	"Overridden to do nothing. I have no label by default, although a label can be added."
-
-]
-
-{ #category : #initialization }
-ResizableToggleButton2 >> setLabelColor: aColor [
-	"Sets all label colors to the given color."
-
-	self labelColorOn: aColor labelColorOff: aColor labelColorOver: aColor.
-
-]
-
-{ #category : #accessing }
-ResizableToggleButton2 >> toggleButtonMode: mode [
-	"If set to true, the button switches from on to off with a click, and the button remains in on mode until it is clicked again. If it is set to false, the button goes into on mode only when the mouse button is held down. toggleMode also disables changing the font color when in on mode."
-
-	toggleButtonMode := mode.
 
 ]
 

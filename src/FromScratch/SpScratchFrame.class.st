@@ -101,17 +101,19 @@ SpScratchFrame >> info: aString [
 SpScratchFrame >> initializeWindow: aWindow [
 	aWindow
 		initialExtent: self defaultExtent;
-		aboutText: application aboutAppString
+		aboutText: application aboutAppString.
+	application class stickyWindow
+		ifTrue: [ aWindow window beSticky ]
 ]
 
 { #category : #accessing }
 SpScratchFrame >> projectName [
-	^ titlePane projectName
+	^ titlePane ifNotNil: [ titlePane projectName ]
 ]
 
 { #category : #accessing }
 SpScratchFrame >> projectName: aString [
-	titlePane projectName: aString
+	titlePane ifNotNil: [ titlePane projectName: aString ]
 ]
 
 { #category : #accessing }

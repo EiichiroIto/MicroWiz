@@ -151,16 +151,20 @@ SpMicroWizStage >> initializePresenters [
 		yourself.
 	buttonReboot := self newButton
 		help: 'Reboot';
+		label: 'Reboot';
 		icon: (self iconNamed: #refresh).
 	buttonBreak := self newButton
 		help: 'Break';
+		label: 'Break';
 		icon: (ScratchTheme formAt: #stopButton).
 	buttonStart := self newButton
 		help: 'Start';
+		label: 'Start';
 		icon: (ScratchTheme formAt: #goButton).
 	buttonClear := self newButton
 		help: 'Clear output';
 		label: 'Clear';
+		icon: (self iconNamed: #remove);
 		yourself.
 	morphTimer := self newMorph.
 	labelStatus := self newLabel
