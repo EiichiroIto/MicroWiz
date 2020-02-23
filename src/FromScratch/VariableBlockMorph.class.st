@@ -22,6 +22,11 @@ VariableBlockMorph >> addLabel [
 ]
 
 { #category : #'code generation' }
+VariableBlockMorph >> argOf: aParser [
+	^ [ aParser variableArgString: self ]
+]
+
+{ #category : #'code generation' }
 VariableBlockMorph >> argString: aGenerator [
 	^ aGenerator variableArgString: self.
 ]
