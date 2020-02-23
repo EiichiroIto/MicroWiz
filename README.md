@@ -20,4 +20,6 @@ Metacello new
 MIT License
 
 ## Screenshot
-![Entire Screen2](https://raw.githubusercontent.com/EiichiroIto/MicroWiz/master/images/MicroWiz2.png)
+![Maix Py](https://raw.githubusercontent.com/EiichiroIto/MicroWiz/master/images/MicroWiz2.png)
+
+![ESP8266 with VL53L0X](https://raw.githubusercontent.com/EiichiroIto/MicroWiz/master/images/MicroWiz3.png)
