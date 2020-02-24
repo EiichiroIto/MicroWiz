@@ -80,25 +80,25 @@ MicroPythonBlockSpecs >> modulesBlocks [
 MicroPythonBlockSpecs >> operatorsBlocks [
 	^ #(
 		'operators'
-			('%n + %n'						r	plus:and: - -)
-			('%n - %n'						r	minus:with: - -)
-			('%n * %n'						r	multiply:and: - -)
-			('%n / %n'						r	divide:by: - -)
-			('%n mod %n'					r	mod:by: - -)
+			('%n + %n'						r	+ - -)
+			('%n - %n'						r	- - -)
+			('%n * %n'						r	* - -)
+			('%n / %n'						r	/ - -)
+			('- %n'								r	negated: 1)
 			-
 			('pick random %n to %n'		r	randomFrom:to: 1 10)
 			-
-			('%s < %s'							b	less:than: '' '')
-			('%s = %s'							b	equal:to: '' '')
-			('%s > %s'							b	more:than: '' '')
+			('%s < %s'							b	< '' '')
+			('%s = %s'							b	= '' '')
+			('%s > %s'							b	> '' '')
 			('%n between %n and %n'		b 	is:between:and: 20 10 30)
 			('%s is None'						b	isNone:)
 			-
-			('%b and %b'				b	and:with:)
-			('%b or %b'					b	or:with:)
-			('not %b'						b	not:)
-			('true'							b	getTrue)
-			('false'						b	getFalse)
+			('%b and %b'						b	&)
+			('%b or %b'							b	|)
+			('not %b'								b	not:)
+			('true'									b	getTrue)
+			('false'								b	getFalse)
 			-
 			('string of %n'			r	stringOf:	0)
 			('number of %s'			r	numberOf: '123')
@@ -107,6 +107,7 @@ MicroPythonBlockSpecs >> operatorsBlocks [
 			('length of %s'				r	stringLength: 'world')
 			('any of %s'					r	anyOf: )
 			-
+			('%n mod %n'					r	\\ - -)
 			('round %n'					r	rounded -)
 			('abs %n'						r	abs -)
 			('abs %n sign %n'			r	abs:sign:	- -)

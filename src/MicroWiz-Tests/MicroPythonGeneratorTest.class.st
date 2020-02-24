@@ -639,6 +639,13 @@ MicroPythonGeneratorTest >> testMultiplyAnd [
 ]
 
 { #category : #test }
+MicroPythonGeneratorTest >> testNegated [
+	| g |
+	g := self newGenerator.
+	self assert: (g negated: 5) equals: '0 - 5'
+]
+
+{ #category : #test }
 MicroPythonGeneratorTest >> testNeoPixel [
 	| g |
 	g := self newGenerator.

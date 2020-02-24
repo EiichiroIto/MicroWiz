@@ -92,7 +92,8 @@ MicroWizProject >> application: anApplication [
 { #category : #accessing }
 MicroWizProject >> assureExistsBreed: each [
 	((self scripts collect: #objName) includes: each)
-		ifFalse: [ self error: each ]
+		ifTrue: [ ^ self ].
+	self addScriptNamed: each
 ]
 
 { #category : #'block specs' }

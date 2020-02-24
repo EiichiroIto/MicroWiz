@@ -480,6 +480,11 @@ MicroPythonGenerator >> multiply: x and: y [
 	^ self binaryOperator: ' * ' arg1: x arg2: y
 ]
 
+{ #category : #'operators ops' }
+MicroPythonGenerator >> negated: x [
+	^ self minus: 0 with: x
+]
+
 { #category : #private }
 MicroPythonGenerator >> neoPixel: pin [
 	self import: 'neopixel'.
