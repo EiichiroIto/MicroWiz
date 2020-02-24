@@ -18,6 +18,15 @@ Metacello new
 
 To start MicroWiz, select [Tools] - [MicroWiz].
 
+## Prerequisites
+You need to install MicroPython program on your device before using MicroWiz.
+
+See,
+
+* micro:bit [https://microbit-micropython.readthedocs.io/en/v1.0.1/]
+* Maix Py [https://github.com/sipeed/MaixPy]
+* other device [https://micropython.org/download]
+
 ## Usage
 1. Select appropriate device from [Device] menu.
 2. Plug serial cable into PC and device.
