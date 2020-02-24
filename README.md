@@ -7,7 +7,7 @@ MicroWiz is built on Pharo Smalltalk 8.0. Almost all Model and UI are rewritten 
 
 [![Build Status](https://travis-ci.com/EiichiroIto/MicroWiz.svg?branch=master)](https://travis-ci.com/EiichiroIto/MicroWiz)
 
-Install repository on Pharo
+## Install repository on Pharo
 
 ```
 Metacello new
@@ -15,6 +15,15 @@ Metacello new
     repository: 'github://EiichiroIto/MicroWiz/src';
     load.
 ```
+
+To start MicroWiz, select [Tools] - [MicroWiz].
+
+## Usage
+1. Select appropriate device from [Device] menu.
+2. Plug serial cable into PC and device.
+3. Select port on top right pane then click Connect button.
+4. (make your program)
+5. Double click the top block then the program runs after sending the device.
 
 ## License
 MIT License
