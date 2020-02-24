@@ -301,9 +301,7 @@ BlockMorph >> copyRecordingIn: aDict [
 
 { #category : #'event handling' }
 BlockMorph >> delete [
-
 	self topBlock stopProcess.
-	SpScratchApp putInClipboard: self.
 	super delete
 
 ]

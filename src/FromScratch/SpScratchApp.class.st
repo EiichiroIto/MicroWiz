@@ -25,6 +25,16 @@ SpScratchApp class >> appName [
 ]
 
 { #category : #accessing }
+SpScratchApp class >> clipboard [
+	^ Clipboard
+]
+
+{ #category : #accessing }
+SpScratchApp class >> clipboard: anObject [
+	Clipboard := anObject
+]
+
+{ #category : #accessing }
 SpScratchApp class >> extension [
 	self subclassResponsibility
 ]
@@ -59,11 +69,6 @@ SpScratchApp class >> loadOptions [
 { #category : #private }
 SpScratchApp class >> options [
 	^ Options ifNil: [ Options := Dictionary new ]
-]
-
-{ #category : #accessing }
-SpScratchApp class >> putInClipboard: anObject [
-	Clipboard := anObject
 ]
 
 { #category : #accessing }
@@ -117,12 +122,12 @@ SpScratchApp >> addList: aScript [
 ]
 
 { #category : #'menu actions' }
-SpScratchApp >> addSubBlock: anEvent script: aScript [
+SpScratchApp >> addSubBlock: aPoint script: aScript [
 	| subName |
 	subName := UIManager default request: 'Sub name?'.
 	(subName isNil or: [ subName isEmpty ])
 		ifTrue: [ ^ self ].
-	aScript addSubBlock: anEvent cursorPoint name: subName
+	aScript addSubBlock: aPoint name: subName
 ]
 
 { #category : #'button actions' }
@@ -208,9 +213,22 @@ SpScratchApp >> confirmFileOverwriteIfExisting: aFileReference orCancel: aBlock 
 		ifFalse: [ nil ]
 ]
 
+{ #category : #'menu actions' }
+SpScratchApp >> copyBlock: aBlockMorph [
+	| code |
+	code := self serializeBlocks: aBlockMorph.
+	self class clipboard: code
+]
+
 { #category : #private }
 SpScratchApp >> createProject [
 	self subclassResponsibility
+]
+
+{ #category : #'menu actions' }
+SpScratchApp >> cutBlock: aBlockMorph [
+	self copyBlock: aBlockMorph.
+	aBlockMorph delete
 ]
 
 { #category : #'button actions' }
@@ -245,19 +263,25 @@ SpScratchApp >> deleteVariable: aScript [
 	presenter currentCategory: #variables
 ]
 
-{ #category : #'menu actions' }
-SpScratchApp >> duplicateBlock: aBlockMorph [
-	| code lex list obj |
-	code := ScratchSexpGenerator new parse: aBlockMorph initialIndent: 1.
-	aBlockMorph isHatBlock
-		ifFalse: [ code := '(' , code , ')' ].
-	lex := SexpLexer new read: code.
+{ #category : #private }
+SpScratchApp >> deserializeFrom: aString [
+	| lex list obj |
+	lex := SexpLexer new read: aString.
 	list := SexpParser new parse: lex.
 	obj := (ScratchSexpImporter appName: self appName)
 		importCode: list
 		into: self target.
-	obj ifNil: [ ^ self ].
+	obj ifNil: [ ^ nil ].
 	obj position: ActiveHand position.
+	^ obj
+]
+
+{ #category : #'menu actions' }
+SpScratchApp >> duplicateBlock: aBlockMorph [
+	| code obj |
+	code := self serializeBlocks: aBlockMorph.
+	obj := self deserializeFrom: code.
+	obj ifNil: [ ^ self ].
 	ActiveHand grabMorph: obj
 ]
 
@@ -456,6 +480,15 @@ SpScratchApp >> openScratchFileFor: aProject [
 	^ dialog selectedFile
 ]
 
+{ #category : #'menu actions' }
+SpScratchApp >> pasteBlock [
+	| code |
+	code := self class clipboard.
+	code ifNil: [ ^ self ].
+	code isString ifFalse: [ ^ self ].
+	self deserializeFrom: code
+]
+
 { #category : #accessing }
 SpScratchApp >> project [
 	^ project
@@ -586,6 +619,15 @@ SpScratchApp >> saveScriptsToImage [
 ]
 
 { #category : #private }
+SpScratchApp >> serializeBlocks: aTopBlock [
+	| code |
+	code := ScratchSexpGenerator new parse: aTopBlock initialIndent: 1.
+	aTopBlock isHatBlock
+		ifFalse: [ code := '(' , code , ')' ].
+	^ code
+]
+
+{ #category : #private }
 SpScratchApp >> setupView [
 	| viewTarget |
 	viewTarget := project scripts first.
@@ -601,6 +643,12 @@ SpScratchApp >> showBlockMenu: aBlockMorph event: anEvent [
 	(presenter
 		blockMenuFor: aBlockMorph
 		inScriptEditor: aBlockMorph isInScriptEditor)
+		openWithSpecAt: anEvent cursorPoint
+]
+
+{ #category : #'menu actions' }
+SpScratchApp >> showScriptMenu: aScript event: anEvent [
+	(presenter scriptMenuFor: aScript)
 		openWithSpecAt: anEvent cursorPoint
 ]
 

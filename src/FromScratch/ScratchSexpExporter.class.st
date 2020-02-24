@@ -40,12 +40,9 @@ ScratchSexpExporter >> writeHeader: aProject [
 	stream
 		nextPut: $(;
 		nextPutAll: appName;
-		nextPutAll: ' ('.
-	aProject scripts
-		do: [ :each | stream nextPutAll: each objName ]
-		separatedBy: [ stream nextPut: Character space ].
+		nextPut: Character space.
+	self writeScriptNames: aProject.
 	stream
-		nextPut: $);
 		nextPut: Character lf;
 		nextPut: Character space;
 		nextPut: $(
@@ -68,7 +65,7 @@ ScratchSexpExporter >> writeScript: aScript [
 		nextPutAll: aScript objName;
 		nextPut: Character space;
 		nextPut: $(.
-	self writetVarNames: aScript.
+	self writeVarNames: aScript.
 	stream nextPut: $).
 	self writeIndent.
 	stream nextPut: $(.
@@ -87,6 +84,15 @@ ScratchSexpExporter >> writeScript: aScript [
 ]
 
 { #category : #private }
+ScratchSexpExporter >> writeScriptNames: aProject [
+	stream nextPut: $(.
+	aProject scripts
+		do: [ :each | stream nextPutAll: each objName ]
+		separatedBy: [ stream nextPut: Character space ].
+	stream nextPut: $)
+]
+
+{ #category : #private }
 ScratchSexpExporter >> writeScriptSeparator [
 	stream
 		nextPut: Character lf;
@@ -95,7 +101,7 @@ ScratchSexpExporter >> writeScriptSeparator [
 ]
 
 { #category : #private }
-ScratchSexpExporter >> writetVarNames: aScript [
+ScratchSexpExporter >> writeVarNames: aScript [
 	aScript varNames
 		do: [ :each | 
 			stream

@@ -42,10 +42,18 @@ SpScratchFrame >> aboutTitle [
 ]
 
 { #category : #private }
-SpScratchFrame >> blockMenuFor: aBlockMorph inScriptEditor: aBoolean [
-	aBoolean
-		ifFalse: [ ^ self ].
-	^ self newMenu
+SpScratchFrame >> addBlockMenu: aMenu for: aBlockMorph [
+	aMenu
+		addGroup: [ :grp | 
+			grp
+				addItem: [ :item | 
+					item
+						name: 'copy';
+						action: [ application copyBlock: aBlockMorph ] ];
+				addItem: [ :item | 
+					item
+						name: 'cut';
+						action: [ application cutBlock: aBlockMorph ] ] ];
 		addGroup: [ :grp | 
 			grp
 				addItem: [ :item | 
@@ -55,8 +63,44 @@ SpScratchFrame >> blockMenuFor: aBlockMorph inScriptEditor: aBoolean [
 				addItem: [ :item | 
 					item
 						name: 'duplicate';
-						action: [ application duplicateBlock: aBlockMorph ] ] ];
-		yourself
+						action: [ application duplicateBlock: aBlockMorph ] ] ]
+]
+
+{ #category : #private }
+SpScratchFrame >> addScriptMenu: aMenu for: aScript [
+	SpScratchApp clipboard isString
+		ifTrue: [ aMenu
+				addItem: [ :item | 
+					item
+						name: 'paste';
+						action: [ application pasteBlock ] ] ].
+	aMenu
+		addGroup: [ :grp | 
+			grp
+				addItem: [ :item | 
+					item
+						name: 'add sub block';
+						action: [ application addSubBlock: ActiveHand cursorPoint script: aScript ] ] ];
+		addGroup: [ :grp | 
+			grp
+				addItem: [ :item | 
+					item
+						name: 'clean up';
+						action: [ aScript cleanUp ] ];
+				addItem: [ :item | 
+					item
+						name: 'save picture of scripts';
+						action: [ application saveScriptsToImage ] ] ]
+]
+
+{ #category : #accessing }
+SpScratchFrame >> blockMenuFor: aBlockMorph inScriptEditor: aBoolean [
+	| menu |
+	aBoolean
+		ifFalse: [ ^ self ].
+	menu := self newMenu.
+	self addBlockMenu: menu for: aBlockMorph.
+	^ menu
 ]
 
 { #category : #accessing }
@@ -119,6 +163,14 @@ SpScratchFrame >> projectName: aString [
 { #category : #accessing }
 SpScratchFrame >> scriptForm [
 	^ editorPane screenshot
+]
+
+{ #category : #accessing }
+SpScratchFrame >> scriptMenuFor: aScript [
+	| menu |
+	menu := self newMenu.
+	self addScriptMenu: menu for: aScript.
+	^ menu
 ]
 
 { #category : #private }

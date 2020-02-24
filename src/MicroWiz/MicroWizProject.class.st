@@ -38,6 +38,11 @@ MicroWizProject class >> availableModules: aDictionary [
 	AvailableModules := aDictionary
 ]
 
+{ #category : #testing }
+MicroWizProject class >> isAvailableModule: aString [
+	^ self availableModuleNames includes: aString
+]
+
 { #category : #accessing }
 MicroWizProject class >> modExtension [
 	^ 'mwm'
@@ -94,6 +99,15 @@ MicroWizProject >> assureExistsBreed: each [
 	((self scripts collect: #objName) includes: each)
 		ifTrue: [ ^ self ].
 	self addScriptNamed: each
+]
+
+{ #category : #accessing }
+MicroWizProject >> assureImportModule: aString [
+	(self class isAvailableModule: aString)
+		ifFalse: [ self error: 'not available module: ' localized, aString ].
+	(self moduleInUse: aString)
+		ifTrue: [ ^ self ].
+	self addModule: aString
 ]
 
 { #category : #'block specs' }

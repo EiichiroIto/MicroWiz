@@ -227,12 +227,12 @@ SpMicroWiz >> exportReplLog [
 
 { #category : #'menu actions' }
 SpMicroWiz >> exportSexpCode [
-	self export: (ScratchSexpExporter appName: self appName) extension: self sexpExtension
+	self export: (MicroWizSexpExporter appName: self appName) extension: self sexpExtension
 ]
 
 { #category : #'menu actions' }
 SpMicroWiz >> importSexpCode [
-	self import: (ScratchSexpImporter appName: self appName) extension: self sexpExtension
+	self import: (MicroWizSexpImporter appName: self appName) extension: self sexpExtension
 ]
 
 { #category : #private }

@@ -56,9 +56,19 @@ ScratchSexpExporterTest >> testWriteHeader [
 ]
 
 { #category : #test }
+ScratchSexpExporterTest >> testWriteIndent [
+	| ex |
+	ex := self newExporter.
+	ex privStream: '' writeStream.
+	ex writeIndent.
+	self assert: ex privStream contents equals: String lf, '   '
+]
+
+{ #category : #test }
 ScratchSexpExporterTest >> testWriteScript [
 	| ex sc |
 	sc := self newScript.
+	sc objName: 'test'.
 	ex := self newExporter.
 	ex privStream: '' writeStream.
 	ex writeScript: sc.
@@ -67,4 +77,45 @@ ScratchSexpExporterTest >> testWriteScript [
 		equals:
 			'(for test ((var a) (var "b c") (list d) (list "e f"))' , String lf
 				, '   (' , String lf , '   ))'
+]
+
+{ #category : #test }
+ScratchSexpExporterTest >> testWriteScriptNames [
+	| ex proj |
+	proj := self newProject.
+	proj
+		addScript:
+			(self newScript
+				objName: 'a';
+				yourself);
+		addScript:
+			(self newScript
+				objName: 'b';
+				yourself).
+	ex := self newExporter.
+	ex privStream: '' writeStream.
+	ex writeScriptNames: proj.
+	self assert: ex privStream contents equals: '(a b)'
+]
+
+{ #category : #test }
+ScratchSexpExporterTest >> testWriteScriptSeparator [
+	| ex |
+	ex := self newExporter.
+	ex privStream: '' writeStream.
+	ex writeScriptSeparator.
+	self assert: ex privStream contents equals: String lf, '  '
+]
+
+{ #category : #test }
+ScratchSexpExporterTest >> testWriteVarNames [
+	| ex sc |
+	sc := self newScript.
+	sc objName: 'test'.
+	ex := self newExporter.
+	ex privStream: '' writeStream.
+	ex writeVarNames: sc.
+	self
+		assert: ex privStream contents
+		equals: '(var a) (var "b c") (list d) (list "e f")'
 ]

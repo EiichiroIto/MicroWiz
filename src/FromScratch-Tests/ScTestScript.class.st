@@ -1,6 +1,9 @@
 Class {
 	#name : #ScTestScript,
 	#superclass : #ScratchScript,
+	#instVars : [
+		'objName'
+	],
 	#category : #'FromScratch-Tests'
 }
 
@@ -11,7 +14,12 @@ ScTestScript >> listVarNames [
 
 { #category : #accessing }
 ScTestScript >> objName [
-	^ 'test'
+	^ objName
+]
+
+{ #category : #accessing }
+ScTestScript >> objName: aString [
+	objName := aString
 ]
 
 { #category : #'arithmetic ops' }
