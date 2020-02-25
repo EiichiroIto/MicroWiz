@@ -75,7 +75,7 @@ MicroPythonGenerator >> binaryOperator: aSymbol arg1: anObject1 arg2: anObject2 
 	| a b |
 	a := self valueOf: anObject1.
 	b := self valueOf: anObject2.
-	^ a asString, aSymbol, b asString
+	^ '(' , a asString , aSymbol , b asString , ')'
 ]
 
 { #category : #'control ops' }
