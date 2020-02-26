@@ -7,9 +7,9 @@ Class {
 	#superclass : #ExpressionArgMorph,
 	#instVars : [
 		'menuMorph',
-		'getMenuSelector',
 		'specialValue',
-		'getMenuTarget'
+		'getOptionsSelector',
+		'getOptionsTarget'
 	],
 	#category : #'FromScratch-Blocks'
 }
@@ -72,6 +72,35 @@ ExpressionArgMorphWithMenu >> fixArgLayout [
 
 ]
 
+{ #category : #accessing }
+ExpressionArgMorphWithMenu >> getOptionsSelector [
+
+	^ getOptionsSelector
+
+
+]
+
+{ #category : #accessing }
+ExpressionArgMorphWithMenu >> getOptionsSelector: menuSelector [
+	"Add a drop-down menu button with the given selector. The selector should result in a menu whose action items are values that can be put into this type argument, typically numbers or strings."
+
+	menuMorph := ImageMorph new form: DropDownMenuForm.
+	getOptionsSelector := menuSelector.
+	self addMorphFront: menuMorph.
+	self fixArgLayout.
+
+]
+
+{ #category : #accessing }
+ExpressionArgMorphWithMenu >> getOptionsTarget [
+	^ getOptionsTarget
+]
+
+{ #category : #accessing }
+ExpressionArgMorphWithMenu >> getOptionsTarget: anObject [
+	getOptionsTarget := anObject
+]
+
 { #category : #'event handling' }
 ExpressionArgMorphWithMenu >> handlesMouseDown: evt [
 
@@ -97,46 +126,17 @@ ExpressionArgMorphWithMenu >> initFieldsFrom: anObjStream version: classVersion 
 
 ]
 
-{ #category : #accessing }
-ExpressionArgMorphWithMenu >> menuSelector [
-
-	^ getMenuSelector
-
-
-]
-
-{ #category : #accessing }
-ExpressionArgMorphWithMenu >> menuSelector: menuSelector [
-	"Add a drop-down menu button with the given selector. The selector should result in a menu whose action items are values that can be put into this type argument, typically numbers or strings."
-
-	menuMorph := ImageMorph new form: DropDownMenuForm.
-	getMenuSelector := menuSelector.
-	self addMorphFront: menuMorph.
-	self fixArgLayout.
-
-]
-
-{ #category : #accessing }
-ExpressionArgMorphWithMenu >> menuTarget [
-	^ getMenuTarget
-]
-
-{ #category : #accessing }
-ExpressionArgMorphWithMenu >> menuTarget: anObject [
-	getMenuTarget := anObject
-]
-
 { #category : #'event handling' }
 ExpressionArgMorphWithMenu >> mouseDown: evt [
 	| rcvr list choice ret |
 	menuMorph ifNil: [ ^ super mouseDown: evt ].
 	evt cursorPoint x < (menuMorph left - 1)
 		ifTrue: [ ^ super mouseDown: evt ].
-	rcvr := self menuTarget.
+	rcvr := self getOptionsTarget.
 	rcvr ifNil: [ rcvr := owner receiver ].
-	(self menuSelector isNil or: [ rcvr isNil ])
+	(self getOptionsSelector isNil or: [ rcvr isNil ])
 		ifTrue: [ ^ self beep ].
-	list := rcvr perform: self menuSelector.
+	list := rcvr perform: self getOptionsSelector.
 	list isEmpty
 		ifTrue: [ ^ self ].
 	ret := UIManager default chooseFrom: (list collect: #first).
@@ -144,7 +144,7 @@ ExpressionArgMorphWithMenu >> mouseDown: evt [
 		ifTrue: [ ^ self ].
 	choice := (list at: ret) second.
 	evt hand newKeyboardFocus: nil.
-	(#(listIndexNames listIndexForDeleteNames) includes: getMenuSelector)
+	(#(listIndexNames listIndexForDeleteNames) includes: getOptionsSelector)
 		ifTrue: [ ^ self specialValue: choice ].
 	isNumber
 		ifTrue: [ self numExpression: choice ]

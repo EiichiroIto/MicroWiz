@@ -4,6 +4,24 @@ Class {
 	#category : #'MicroWiz-MPython'
 }
 
+{ #category : #'argument menus' }
+MicroPythonBlockSpecs >> addArgBuilderTo: anArgBuilder [
+	anArgBuilder
+		addChoiceArg: $a selector: #allSubNames;
+		addChoiceArg: $d
+			selector: #digits
+			target: self
+			initialChoice: '0';
+		addNumberExpressArg: $i
+			selector: #listIndexMenu
+			target: self
+			initialExpression: '0';
+		addNumberExpressArg: $y
+			selector: #listIndexForDeleteNames
+			target: self
+			initialExpression: '0'
+]
+
 { #category : #'block specs' }
 MicroPythonBlockSpecs >> blocks [
 	^ self miscBlocks , self ioBlocks , self displayBlocks
@@ -133,27 +151,6 @@ MicroPythonBlockSpecs >> sensingBlocks [
 		'sensing'
 			('return value'				r	returnValue)
 		)
-]
-
-{ #category : #'argument menus' }
-MicroPythonBlockSpecs >> uncoloredArgMorphFor: specString ifAbsent: aBlock [
-	| code |
-	code := specString at: 2.
-	$a = code
-		ifTrue: [ ^ ChoiceArgMorph new
-				getOptionsSelector: #allSubNames;
-				choice: '' ].
-	$d = code
-		ifTrue: [ ^ ChoiceArgMorph new
-				getOptionsSelector: #digits;
-				getOptionsTarget: self;
-				choice: '0' ].
-	$y = code
-		ifTrue: [ ^ ExpressionArgMorphWithMenu new
-				numExpression: '0';
-				menuSelector: #listIndexForDeleteNames;
-				menuTarget: self ].
-	^ aBlock value
 ]
 
 { #category : #'block specs' }

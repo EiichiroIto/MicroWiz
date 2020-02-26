@@ -5,6 +5,52 @@ Class {
 }
 
 { #category : #'argument menus' }
+MicrobitBlockSpecs >> addArgBuilderTo: anArgBuilder [
+	super addArgBuilderTo: anArgBuilder.
+	anArgBuilder
+		addChoiceArg: $A
+			selector: #ledArrowNames
+			target: self
+			initialChoice: '';
+		addChoiceArg: $B
+			selector: #buttonNames
+			target: self
+			initialChoice: 'a';
+		addChoiceArg: $E
+			selector: #sensorNames
+			target: self
+			initialChoice: '';
+		addChoiceArg: $c
+			selector: #ledClockNames
+			target: self
+			initialChoice: '';
+		addChoiceArg: $g
+			selector: #gestureNames
+			target: self
+			initialChoice: '';
+		addNumberExpressArg: $G
+			selector: #ioPinNames
+			target: self
+			initialExpression: '0';
+		addChoiceArg: $H
+			selector: #ledShapeNames
+			target: self
+			initialChoice: '';
+		addChoiceArg: $I
+			selector: #ledCharacterNames
+			target: self
+			initialChoice: '';
+		addChoiceArg: $M
+			selector: #ledSymbolNames
+			target: self
+			initialChoice: '';
+		addChoiceArg: $P
+			selector: #neoPixelPinNames
+			target: self
+			initialChoice: ''
+]
+
+{ #category : #'argument menus' }
 MicrobitBlockSpecs >> buttonNames [
 	^ #(a b)
 ]
@@ -183,63 +229,4 @@ MicrobitBlockSpecs >> sensingBlocks [
 { #category : #'argument menus' }
 MicrobitBlockSpecs >> sensorNames [
 	^ #(accelX accelY accelZ - compassX compassY compassZ)
-]
-
-{ #category : #'argument menus' }
-MicrobitBlockSpecs >> uncoloredArgMorphFor: specString ifAbsent: aBlock [
-	| code |
-	code := specString at: 2.
-	$A = code
-		ifTrue: [ ^ ChoiceArgMorph new
-				getOptionsSelector: #ledArrowNames;
-				getOptionsTarget: self;
-				yourself ].
-	$B = code
-		ifTrue: [ ^ ChoiceArgMorph new
-				getOptionsSelector: #buttonNames;
-				getOptionsTarget: self;
-				yourself ].
-	$E = code
-		ifTrue: [ ^ ChoiceArgMorph new
-				getOptionsSelector: #sensorNames;
-				getOptionsTarget: self;
-				yourself ].
-	$c = code
-		ifTrue: [ ^ ChoiceArgMorph new
-				getOptionsSelector: #ledClockNames;
-				getOptionsTarget: self;
-				yourself ].
-	$g = code
-		ifTrue: [ ^ ChoiceArgMorph new
-				getOptionsSelector: #gestureNames;
-				getOptionsTarget: self;
-				yourself ].
-	$G = code
-		ifTrue: [ ^ ExpressionArgMorphWithMenu new
-				numExpression: '0';
-				menuSelector: #ioPinNames;
-				menuTarget: self ].
-	$H = code
-		ifTrue: [ ^ ChoiceArgMorph new
-				getOptionsSelector: #ledShapeNames;
-				getOptionsTarget: self;
-				yourself ].
-	$I = code
-		ifTrue: [ ^ ChoiceArgMorph new
-				getOptionsSelector: #ledCharacterNames;
-				getOptionsTarget: self;
-				yourself ].
-	$l = code
-		ifTrue: [ ^ self error: 'LedArgMorph new' ].
-	$M = code
-		ifTrue: [ ^ ChoiceArgMorph new
-				getOptionsSelector: #ledSymbolNames;
-				getOptionsTarget: self;
-				yourself ].
-	$P = code
-		ifTrue: [ ^ ChoiceArgMorph new
-				getOptionsSelector: #neoPixelPinNames;
-				getOptionsTarget: self;
-				yourself ].
-	^ super uncoloredArgMorphFor: specString ifAbsent: aBlock
 ]

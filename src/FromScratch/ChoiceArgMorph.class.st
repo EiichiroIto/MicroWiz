@@ -9,8 +9,6 @@ Class {
 	#superclass : #ArgMorph,
 	#instVars : [
 		'menuIconMorph',
-		'isBoolean',
-		'options',
 		'choice',
 		'getOptionsSelector',
 		'getOptionsTarget'
@@ -61,13 +59,11 @@ ChoiceArgMorph >> defaultValue: aString [
 
 ]
 
-{ #category : #other }
+{ #category : #evaluation }
 ChoiceArgMorph >> evaluate [
 	"Answer my value."
 
-	isBoolean ifTrue: [^ 'true' = choice].
 	^ choice
-
 ]
 
 { #category : #'object i/o' }
@@ -77,7 +73,7 @@ ChoiceArgMorph >> fieldsVersion [
 
 ]
 
-{ #category : #other }
+{ #category : #private }
 ChoiceArgMorph >> fixArgLayout [
 	"Set my color to my owner's color."
 
@@ -140,21 +136,17 @@ ChoiceArgMorph >> initFieldsFrom: anObjStream version: classVersion [
 
 { #category : #initialization }
 ChoiceArgMorph >> initialize [
-
 	super initialize.
 	self borderInset.
 	self borderWidth: 1.
 	self color: Color brown.
 	labelMorph := StringMorph new
-		font: (ScratchTheme argFont);
+		font: ScratchTheme argFont;
 		color: Color white.
 	self addMorph: labelMorph.
 	menuIconMorph := ImageMorph new form: DropDownMenuForm.
 	self addMorphFront: menuIconMorph.
-	isBoolean := false.
-	options := #(a b c d).
-	self choice: #a.
-
+	self choice: #a
 ]
 
 { #category : #'event handling' }
@@ -164,25 +156,17 @@ ChoiceArgMorph >> mouseDown: evt [
 
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 ChoiceArgMorph >> options [
 	"Answer my set of options. If getOptionsSelector is not nil and I'm in a CommandBlock with a non-nil receiver, fetch my set of options by sending getOptionsSelector to that receiver."
 
-	getOptionsSelector ifNil: [ ^ options ].
-	getOptionsTarget
-		ifNotNil: [ ^ getOptionsTarget perform: getOptionsSelector ].
-	^ owner receiver perform: getOptionsSelector
+	^ self getOptionsSelector
+		ifNil: [ #() ]
+		ifNotNil:
+			[ :selector | (self getOptionsTarget ifNil: [ owner receiver ]) perform: selector ]
 ]
 
-{ #category : #accessing }
-ChoiceArgMorph >> options: stringList [
-
-	options := stringList asArray.
-	(options includes: choice) ifFalse: [self choice: options first].
-
-]
-
-{ #category : #accessing }
+{ #category : #private }
 ChoiceArgMorph >> presentMenu [
 	"Pop up a menu of choices."
 
@@ -221,13 +205,5 @@ ChoiceArgMorph >> storeFieldsOn: anObjStream [
 		choice
 		getOptionsSelector
 	) on: anObjStream.
-
-]
-
-{ #category : #'event handling' }
-ChoiceArgMorph >> wantsKeyboardFocusFor: aSubmorph [
-	"Don't allow shift-click editing of block labels."
-
-	^ false
 
 ]

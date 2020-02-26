@@ -14,6 +14,12 @@ MicroWizScript class >> stonAllInstVarNames [
 	^ super stonAllInstVarNames , #(objName varNames listVarNames)
 ]
 
+{ #category : #'argument menus' }
+MicroWizScript >> addArgBuilder [
+	super addArgBuilder.
+	project addArgBuilderTo: argBuilder
+]
+
 { #category : #variables }
 MicroWizScript >> addList: aString [
 	listVarNames add: aString
@@ -127,13 +133,6 @@ MicroWizScript >> setupBlockCategory [
 MicroWizScript >> storeFieldsOn: anObjStream [
 	super storeFieldsOn: anObjStream.
 	self storeFieldsNamed: #(objName varNames listVarNames) on: anObjStream.
-]
-
-{ #category : #'argument menus' }
-MicroWizScript >> uncoloredArgMorphFor: specString [
-	^ project
-		uncoloredArgMorphFor: specString
-		ifAbsent: [ super uncoloredArgMorphFor: specString ]
 ]
 
 { #category : #testing }

@@ -71,6 +71,11 @@ MicroWizProject class >> setupAvailableModules [
 	self availableModules: dict
 ]
 
+{ #category : #'block specs' }
+MicroWizProject >> addArgBuilderTo: anArgBuilder [
+	self blockSpecs addArgBuilderTo: anArgBuilder
+]
+
 { #category : #accessing }
 MicroWizProject >> addModule: aSymbol [
 	modules := modules copyWith: aSymbol.
@@ -214,11 +219,6 @@ MicroWizProject >> toggleModule: aString [
 	(self moduleInUse: aString)
 		ifTrue: [ self deleteModule: aString ]
 		ifFalse: [ self addModule: aString ]
-]
-
-{ #category : #'block specs' }
-MicroWizProject >> uncoloredArgMorphFor: specString ifAbsent: aBlock [
-	^ self blockSpecs uncoloredArgMorphFor: specString ifAbsent: aBlock
 ]
 
 { #category : #accessing }

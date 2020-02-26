@@ -15,11 +15,15 @@ CommandBlockMorphTest >> newBlock [
 { #category : #private }
 CommandBlockMorphTest >> newScript [
 	^ ScratchScript new
+		setupArgBuilder;
+		yourself
 ]
 
 { #category : #private }
 CommandBlockMorphTest >> newTestScript [
 	^ ScTestScript new
+		setupArgBuilder;
+		yourself
 ]
 
 { #category : #test }

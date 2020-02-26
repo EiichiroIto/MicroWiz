@@ -5,6 +5,28 @@ Class {
 }
 
 { #category : #'argument menus' }
+MaixPyBlockSpecs >> addArgBuilderTo: anArgBuilder [
+	super addArgBuilderTo: anArgBuilder.
+	anArgBuilder
+		addChoiceArg: $P
+			selector: #gpioModeNames
+			target: self
+			initialChoice: '';
+		addChoiceArg: $p
+			selector: #pixFormatNames
+			target: self
+			initialChoice: '';
+		addChoiceArg: $F
+			selector: #frameSizeNames
+			target: self
+			initialChoice: '';
+		addChoiceArg: $c
+			selector: #colorNames
+			target: self
+			initialChoice: ''
+]
+
+{ #category : #'argument menus' }
 MaixPyBlockSpecs >> colorNames [
 	^ #(RED BLACK)
 ]
@@ -46,32 +68,4 @@ MaixPyBlockSpecs >> sensingBlocks [
 			('sensor run %n'						-		sensorRun: 					1)
 			('sensor snapshot'					r		sensorSnapshot)
 		)
-]
-
-{ #category : #'argument menus' }
-MaixPyBlockSpecs >> uncoloredArgMorphFor: specString ifAbsent: aBlock [
-	| code |
-	"exclude: befLmnSsv"
-	code := specString at: 2.
-	$P = code
-		ifTrue: [ ^ ChoiceArgMorph new
-				getOptionsSelector: #gpioModeNames;
-				getOptionsTarget: self;
-				yourself ].
-	$p = code
-		ifTrue: [ ^ ChoiceArgMorph new
-				getOptionsSelector: #pixFormatNames;
-				getOptionsTarget: self;
-				yourself ].
-	$F = code
-		ifTrue: [ ^ ChoiceArgMorph new
-				getOptionsSelector: #frameSizeNames;
-				getOptionsTarget: self;
-				yourself ].
-	$c = code
-		ifTrue: [ ^ ChoiceArgMorph new
-				getOptionsSelector: #colorNames;
-				getOptionsTarget: self;
-				yourself ].
-	^ super uncoloredArgMorphFor: specString ifAbsent: aBlock
 ]

@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'blocksBin',
 		'project',
-		'blockDef'
+		'blockDef',
+		'argBuilder'
 	],
 	#category : #'FromScratch-Project'
 }
@@ -12,6 +13,20 @@ Class {
 { #category : #'ston-core' }
 ScratchScript class >> stonAllInstVarNames [
 	^ #(blocksBin project)
+]
+
+{ #category : #'argument menus' }
+ScratchScript >> addArgBuilder [
+	argBuilder
+		addBooleanArg: $b;
+		addEventTitleArg: $e;
+		addChoiceArg: $f selector: #mathFunctionNames initialChoice: 'sqrt';
+		addChoiceArg: $L selector: #listVarNames;
+		addSpriteArg: $m;
+		addNumberExpressArg: $n initialExpression: '10';
+		addChoiceArg: $S selector: #subNames;
+		addStringExpressArg: $s;
+		addChoiceArg: $v selector: #varNames
 ]
 
 { #category : #accessing }
@@ -618,6 +633,12 @@ ScratchScript >> project: aProject [
 	blocksBin project: project
 ]
 
+{ #category : #'argument menus' }
+ScratchScript >> setupArgBuilder [
+	argBuilder := ArgMorphBuilder new.
+	self addArgBuilder
+]
+
 { #category : #'block specs' }
 ScratchScript >> setupBlockCategory [
 	blockDef
@@ -630,6 +651,7 @@ ScratchScript >> setupBlockCategory [
 
 { #category : #'block specs' }
 ScratchScript >> setupBlockDef [
+	self setupArgBuilder.
 	blockDef := ScratchBlockDef new.
 	self setupBlockCategory.
 	blockDef
@@ -692,33 +714,7 @@ ScratchScript >> toggleWatcher: aToggleButton for: aBlockMorph [
 
 { #category : #'argument menus' }
 ScratchScript >> uncoloredArgMorphFor: specString [
-	| code |
-	code := specString at: 2.
-	$b = code
-		ifTrue: [ ^ BooleanArgMorph new ].
-	$e = code
-		ifTrue: [ ^ EventTitleMorph new ].
-	$f = code
-		ifTrue: [ ^ ChoiceArgMorph new
-				getOptionsSelector: #mathFunctionNames;
-				choice: 'sqrt' ].
-	$L = code
-		ifTrue: [ ^ ChoiceArgMorph new getOptionsSelector: #listVarNames ].
-	$m = code
-		ifTrue: [ ^ SpriteArgMorph new ].
-	$n = code
-		ifTrue: [ ^ ExpressionArgMorph new numExpression: '10' ].
-	$S = code
-		ifTrue: [ ^ ChoiceArgMorph new
-				getOptionsSelector: #subNames;
-				choice: '' ].
-	$s = code
-		ifTrue: [ ^ ExpressionArgMorph new stringExpression: '' ].
-	$v = code
-		ifTrue: [ ^ ChoiceArgMorph new
-				getOptionsSelector: #varNames;
-				choice: '' ].
-	^ ExpressionArgMorph new numExpression: '10'
+	^ argBuilder uncoloredArgMorphFor: specString
 ]
 
 { #category : #accessing }

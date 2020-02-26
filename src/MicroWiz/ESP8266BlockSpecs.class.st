@@ -4,6 +4,24 @@ Class {
 	#category : #'MicroWiz-MPython'
 }
 
+{ #category : #'argument menus' }
+ESP8266BlockSpecs >> addArgBuilderTo: anArgBuilder [
+	super addArgBuilderTo: anArgBuilder.
+	anArgBuilder
+		addChoiceArg: $P
+			selector: #gpioModeNames
+			target: self
+			initialChoice: '';
+		addChoiceArg: $W
+			selector: #wifiConnectNames
+			target: self
+			initialChoice: '';
+		addChoiceArg: $w
+			selector: #wifiConfigNames
+			target: self
+			initialChoice: ''
+]
+
 { #category : #'block specs' }
 ESP8266BlockSpecs >> controlBlocks [
 	^ super controlBlocks , #(
@@ -109,28 +127,6 @@ ESP8266BlockSpecs >> miscBlocks [
 			('socket %d receive %n'			r		socket:receive:		0 1)
 			('socket %d close'					-		socketClose:			0)
 	)
-]
-
-{ #category : #'argument menus' }
-ESP8266BlockSpecs >> uncoloredArgMorphFor: specString ifAbsent: aBlock [
-	| code |
-	code := specString at: 2.
-	$P = code
-		ifTrue: [ ^ ChoiceArgMorph new
-				getOptionsSelector: #gpioModeNames;
-				getOptionsTarget: self;
-				yourself ].
-	$W = code
-		ifTrue: [ ^ ChoiceArgMorph new
-				getOptionsSelector: #wifiConnectNames;
-				getOptionsTarget: self;
-				yourself ].
-	$w = code
-		ifTrue: [ ^ ChoiceArgMorph new
-				getOptionsSelector: #wifiConfigNames;
-				getOptionsTarget: self;
-				yourself ].
-	^ super uncoloredArgMorphFor: specString ifAbsent: aBlock
 ]
 
 { #category : #'argument menus' }
