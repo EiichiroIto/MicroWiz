@@ -240,6 +240,83 @@ ESP8266GeneratorTest >> testSetWifi [
 ]
 
 { #category : #test }
+ESP8266GeneratorTest >> testSetupTcpSocket [
+	| g |
+	g := self newGenerator.
+	g setupTcpSocket: 1.
+	self
+		assert: g code
+		equals: '_sock1=socket.socket(socket.AF_INET,socket.SOCK_STREAM)' , String lf
+]
+
+{ #category : #test }
+ESP8266GeneratorTest >> testSetupUdpSocket [
+	| g |
+	g := self newGenerator.
+	g setupUdpSocket: 1.
+	self
+		assert: g code
+		equals: '_sock1=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)' , String lf
+]
+
+{ #category : #test }
+ESP8266GeneratorTest >> testSocket [
+	| g |
+	g := self newGenerator.
+	self assert: g socket equals: 'socket.'.
+	self assert: (g imports includes: 'socket').
+	self assert: (g socket: 1) equals: '_sock1'
+]
+
+{ #category : #test }
+ESP8266GeneratorTest >> testSocketBind [
+	| g |
+	g := self newGenerator.
+	g socket: 1 bind: 'abc'.
+	self assert: g code equals: '_sock1.bind(abc)' , String lf
+]
+
+{ #category : #test }
+ESP8266GeneratorTest >> testSocketConnect [
+	| g |
+	g := self newGenerator.
+	g socket: 1 connect: 'abc'.
+	self assert: g code equals: '_sock1.connect(abc)' , String lf
+]
+
+{ #category : #test }
+ESP8266GeneratorTest >> testSocketGetAddrPort [
+	| g |
+	g := self newGenerator.
+	self
+		assert: (g socketGetAddr: 'abc' port: 80)
+		equals: 'socket.getaddrinfo(abc,80)[0][-1]'
+]
+
+{ #category : #test }
+ESP8266GeneratorTest >> testSocketListen [
+	| g |
+	g := self newGenerator.
+	g socket: 1 listen: 2.
+	self assert: g code equals: '_sock1.listen(2)' , String lf
+]
+
+{ #category : #test }
+ESP8266GeneratorTest >> testSocketReceive [
+	| g |
+	g := self newGenerator.
+	self assert: (g socket: 1 receive: 5) equals: '_sock1.recv(5)'
+]
+
+{ #category : #test }
+ESP8266GeneratorTest >> testSocketSend [
+	| g |
+	g := self newGenerator.
+	g socket: 1 send: 'abc'.
+	self assert: g code equals: '_sock1.send(abc)' , String lf
+]
+
+{ #category : #test }
 ESP8266GeneratorTest >> testSpi [
 	| g |
 	g := self newGenerator.

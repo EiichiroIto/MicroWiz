@@ -231,6 +231,10 @@ SpMicroWizFrame >> helpMenu [
 			item
 				name: 'Inspect';
 				action: [ application inspect ] ];
+		addItem: [ :item | 
+			item
+				name: 'Settings';
+				subMenu: self settingsMenu ];
 		yourself
 ]
 
@@ -317,6 +321,44 @@ SpMicroWizFrame >> proxy: aProxy [
 { #category : #accessing }
 SpMicroWizFrame >> replLog [
 	^ stageFrame log
+]
+
+{ #category : #private }
+SpMicroWizFrame >> selectSetting: aSymbol [
+	| list choice |
+	list := SpMicroWiz optionsFor: aSymbol.
+	list isEmpty
+		ifTrue: [ ^ self ].
+	choice := UIManager default
+		chooseFrom: list
+		title: 'Select options for ' , aSymbol.
+	choice = 0
+		ifTrue: [ ^ self ].
+	SpMicroWiz perform: (aSymbol , ':') asSymbol with: (list at: choice)
+]
+
+{ #category : #private }
+SpMicroWizFrame >> settingsMenu [
+	| m |
+	m := self newMenu.
+	m
+		addGroup: [ :grp | 
+			SpMicroWiz settings keys sort
+				do: [ :key | 
+					grp
+						addItem: [ :item | 
+							item
+								name: [ key , ' = ' , (SpMicroWiz perform: key) asString ];
+								autoRefresh: true;
+								action: [ self selectSetting: key ] ] ] ].
+	m
+		addGroup: [ :grp | 
+			grp
+				addItem: [ :item | 
+					item
+						name: 'Save settings';
+						action: [ SpMicroWiz saveSettings ] ] ].
+	^ m
 ]
 
 { #category : #initialization }

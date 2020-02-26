@@ -9,7 +9,7 @@ Class {
 	],
 	#classVars : [
 		'Clipboard',
-		'Options'
+		'Settings'
 	],
 	#category : #'FromScratch-Spec2'
 }
@@ -51,34 +51,59 @@ SpScratchApp class >> icon [
 { #category : #'class initialization' }
 SpScratchApp class >> initialize [
 	Clipboard := nil.
-	Options := nil
+	Settings := nil
 ]
 
-{ #category : #private }
-SpScratchApp class >> loadOptions [
+{ #category : #accessing }
+SpScratchApp class >> loadSettings [
 	| fr dict |
-	fr := FileSystem workingDirectory / 'options.ston'.
+	fr := FileSystem workingDirectory / self settingsFilename.
 	fr isFile
 		ifFalse: [ ^ self ].
 	dict := STON fromString: fr contents.
 	dict isDictionary
 		ifFalse: [ ^ self ].
-	Options := dict
+	Settings := dict
+]
+
+{ #category : #accessing }
+SpScratchApp class >> optionsFor: aSymbol [
+	aSymbol = #stickyWindow
+		ifTrue: [ ^ #(true false) ].
+	aSymbol = #useErrorCatcher
+		ifTrue: [ ^ #(true false) ].
+	^ #()
+]
+
+{ #category : #accessing }
+SpScratchApp class >> saveSettings [
+	| fr stream |
+	fr := FileSystem workingDirectory / self settingsFilename.
+	fr isFile
+		ifTrue: [ fr delete ].
+	stream := fr writeStream.
+	STON put: self settings onStream: stream.
+	stream close
 ]
 
 { #category : #private }
-SpScratchApp class >> options [
-	^ Options ifNil: [ Options := Dictionary new ]
+SpScratchApp class >> settings [
+	^ Settings ifNil: [ Settings := Dictionary new ]
+]
+
+{ #category : #private }
+SpScratchApp class >> settingsFilename [
+	^ 'settings.ston'
 ]
 
 { #category : #accessing }
 SpScratchApp class >> stickyWindow [
-	^ self options at: #stickyWindow ifAbsent: [ false ]
+	^ self settings at: #stickyWindow ifAbsent: [ false ]
 ]
 
 { #category : #accessing }
 SpScratchApp class >> stickyWindow: aBoolean [
-	self options at: #stickyWindow put: aBoolean
+	self settings at: #stickyWindow put: aBoolean
 ]
 
 { #category : #private }
@@ -95,12 +120,12 @@ SpScratchApp class >> try: aBlock onFailure: anErrorBlock [
 
 { #category : #accessing }
 SpScratchApp class >> useErrorCatcher [
-	^ self options at: #useErrorCatcher ifAbsent: [ false ]
+	^ self settings at: #useErrorCatcher ifAbsent: [ false ]
 ]
 
 { #category : #accessing }
 SpScratchApp class >> useErrorCatcher: aBoolean [
-	self options at: #useErrorCatcher put: aBoolean
+	self settings at: #useErrorCatcher put: aBoolean
 ]
 
 { #category : #private }
@@ -386,6 +411,7 @@ SpScratchApp >> importFileWithExtension: aString [
 
 { #category : #initialization }
 SpScratchApp >> initialize [
+	self class loadSettings.
 	super initialize.
 	presenter := self newPresenter.
 	updateInfoCount := 0
@@ -436,7 +462,6 @@ SpScratchApp >> newProject [
 
 { #category : #accessing }
 SpScratchApp >> open [
-	self class loadOptions.
 	self open: presenter.
 	self newProject.
 	presenter window maximize.

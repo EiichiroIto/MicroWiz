@@ -389,6 +389,15 @@ MicroPythonProxyTest >> testPutFileNamedContents [
 ]
 
 { #category : #test }
+MicroPythonProxyTest >> testQuotedString [
+	| g |
+	g := self newProxy.
+	self assert: (g quotedString: 'abc') equals: '''abc'''.
+	self assert: (g quotedString: 'ab''c') equals: '''ab\''c'''.
+	self assert: (g quotedString: 'ab\c') equals: '''ab\\c'''
+]
+
+{ #category : #test }
 MicroPythonProxyTest >> testReadyToSend [
 	| p c |
 	p := self newProxy.

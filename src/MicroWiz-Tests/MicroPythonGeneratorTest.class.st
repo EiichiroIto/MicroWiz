@@ -56,7 +56,7 @@ MicroPythonGeneratorTest >> testAndWith [
 	g := self newGenerator.
 	self
 		assert: (g and: [ g getTrue ] with: [ g getFalse ])
-		equals: 'True and False'
+		equals: '(True and False)'
 ]
 
 { #category : #test }
@@ -98,7 +98,7 @@ MicroPythonGeneratorTest >> testBinaryOperatorArg1Arg2 [
 	g := self newGenerator.
 	self
 		assert: (g binaryOperator: '+' arg1: [ 10 ] arg2: [ 1 + 2 ])
-		equals: '10+3'
+		equals: '(10+3)'
 ]
 
 { #category : #test }
@@ -107,6 +107,15 @@ MicroPythonGeneratorTest >> testBreak [
 	g := self newGenerator.
 	g break.
 	self assert: g code equals: 'break' , String lf
+]
+
+{ #category : #test }
+MicroPythonGeneratorTest >> testBytesFromEncoding [
+	| g |
+	g := self newGenerator.
+	self
+		assert: (g bytesFrom: '''abc''' encoding: '''utf8''')
+		equals: 'bytes(''abc'',''utf8'')'
 ]
 
 { #category : #test }
@@ -155,7 +164,7 @@ MicroPythonGeneratorTest >> testComputeFunctionOf [
 MicroPythonGeneratorTest >> testConcatenateWith [
 	| g |
 	g := self newGenerator.
-	self assert: (g concatenate: 'x' with: 'y') equals: 'x + y'
+	self assert: (g concatenate: 'x' with: 'y') equals: '(x + y)'
 ]
 
 { #category : #test }
@@ -209,7 +218,7 @@ MicroPythonGeneratorTest >> testDeleteLineOfList [
 MicroPythonGeneratorTest >> testDivideBy [
 	| g |
 	g := self newGenerator.
-	self assert: (g divide: 1 by: 2) equals: '1 / 2'
+	self assert: (g divide: 1 by: 2) equals: '(1 / 2)'
 ]
 
 { #category : #test }
@@ -304,7 +313,7 @@ MicroPythonGeneratorTest >> testDoWhileEnd [
 MicroPythonGeneratorTest >> testEqualTo [
 	| g |
 	g := self newGenerator.
-	self assert: (g equal: 1 to: 2) equals: '1 == 2'
+	self assert: (g equal: 1 to: 2) equals: '(1 == 2)'
 ]
 
 { #category : #test }
@@ -535,7 +544,7 @@ MicroPythonGeneratorTest >> testIsNone [
 MicroPythonGeneratorTest >> testLessThan [
 	| g |
 	g := self newGenerator.
-	self assert: (g less: 1 than: 2) equals: '1 < 2'
+	self assert: (g less: 1 than: 2) equals: '(1 < 2)'
 ]
 
 { #category : #test }
@@ -606,14 +615,14 @@ MicroPythonGeneratorTest >> testMath [
 MicroPythonGeneratorTest >> testMinusWith [
 	| g |
 	g := self newGenerator.
-	self assert: (g minus: 1 with: 2) equals: '1 - 2'
+	self assert: (g minus: 1 with: 2) equals: '(1 - 2)'
 ]
 
 { #category : #test }
 MicroPythonGeneratorTest >> testModBy [
 	| g |
 	g := self newGenerator.
-	self assert: (g mod: 1 by: 2) equals: '1 % 2'
+	self assert: (g mod: 1 by: 2) equals: '(1 % 2)'
 ]
 
 { #category : #test }
@@ -628,21 +637,21 @@ MicroPythonGeneratorTest >> testModules [
 MicroPythonGeneratorTest >> testMoreThan [
 	| g |
 	g := self newGenerator.
-	self assert: (g more: 1 than: 2) equals: '1 > 2'
+	self assert: (g more: 1 than: 2) equals: '(1 > 2)'
 ]
 
 { #category : #test }
 MicroPythonGeneratorTest >> testMultiplyAnd [
 	| g |
 	g := self newGenerator.
-	self assert: (g multiply: 1 and: 2) equals: '1 * 2'
+	self assert: (g multiply: 1 and: 2) equals: '(1 * 2)'
 ]
 
 { #category : #test }
 MicroPythonGeneratorTest >> testNegated [
 	| g |
 	g := self newGenerator.
-	self assert: (g negated: 5) equals: '0 - 5'
+	self assert: (g negated: 5) equals: '(0 - 5)'
 ]
 
 { #category : #test }
@@ -738,14 +747,14 @@ MicroPythonGeneratorTest >> testOrWith [
 	g := self newGenerator.
 	self
 		assert: (g or: [ g getTrue ] with: [ g getFalse ])
-		equals: 'True or False'
+		equals: '(True or False)'
 ]
 
 { #category : #test }
 MicroPythonGeneratorTest >> testPlusAnd [
 	| g |
 	g := self newGenerator.
-	self assert: (g plus: 1 and: 2) equals: '1 + 2'
+	self assert: (g plus: 1 and: 2) equals: '(1 + 2)'
 ]
 
 { #category : #test }
@@ -762,7 +771,7 @@ MicroPythonGeneratorTest >> testQuotedString [
 	g := self newGenerator.
 	self assert: (g quotedString: 'abc') equals: '''abc'''.
 	self assert: (g quotedString: 'ab''c') equals: '''ab\''c'''.
-	self assert: (g quotedString: 'ab\c') equals: '''ab\\c'''
+	self assert: (g quotedString: 'ab\n') equals: '''ab\n'''
 ]
 
 { #category : #test }
@@ -835,11 +844,34 @@ MicroPythonGeneratorTest >> testSetVarTo [
 ]
 
 { #category : #test }
+MicroPythonGeneratorTest >> testSplitByLimitTo [
+	| g |
+	g := self newGenerator.
+	g
+		split: '''a,b,c'''
+		by: ''','''
+		limit: 3
+		to: 'list'.
+	self
+		assert: g code
+		equals: 'list=''a,b,c''.split('','',3)' , String lf
+]
+
+{ #category : #test }
 MicroPythonGeneratorTest >> testStopThread [
 	| g |
 	g := self newGenerator.
 	g stopThread.
 	self assert: g code equals: ''
+]
+
+{ #category : #test }
+MicroPythonGeneratorTest >> testStringFromEncoding [
+	| g |
+	g := self newGenerator.
+	self
+		assert: (g stringFrom: 'b''abc''' encoding: '''utf8''')
+		equals: 'str(b''abc'',''utf8'')'
 ]
 
 { #category : #test }

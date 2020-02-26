@@ -175,10 +175,91 @@ ESP8266Generator >> setSpiSck: sck mosi: mosi miso: miso [
 				, '),miso=Pin(' , (self valueOf: miso) , '))'
 ]
 
-{ #category : #'comm ops' }
+{ #category : #'misc ops' }
 ESP8266Generator >> setWifi: mode [
 	self
 		appendWithNewline: self wifi , '=network.WLAN(network.' , mode , ')'
+]
+
+{ #category : #'misc ops' }
+ESP8266Generator >> setupTcpSocket: num [
+	self
+		appendWithNewline:
+			(self socket: num) , '=' , self socket
+				,
+					(self
+						binaryFunction: 'socket'
+						arg1: self socket , 'AF_INET'
+						arg2: self socket , 'SOCK_STREAM')
+]
+
+{ #category : #'misc ops' }
+ESP8266Generator >> setupUdpSocket: num [
+	self
+		appendWithNewline:
+			(self socket: num) , '=' , self socket
+				,
+					(self
+						binaryFunction: 'socket'
+						arg1: self socket , 'AF_INET'
+						arg2: self socket , 'SOCK_DGRAM')
+]
+
+{ #category : #private }
+ESP8266Generator >> socket [
+	self import: 'socket'.
+	^ 'socket.'
+]
+
+{ #category : #private }
+ESP8266Generator >> socket: aNumber [
+	^ '_sock' , (self valueOf: aNumber)
+]
+
+{ #category : #'misc ops' }
+ESP8266Generator >> socket: num bind: addr [
+	self
+		appendWithNewline:
+			(self socket: num) , '.' , (self unaryFunction: 'bind' arg: addr)
+]
+
+{ #category : #'misc ops' }
+ESP8266Generator >> socket: num connect: addr [
+	self
+		appendWithNewline:
+			(self socket: num) , '.' , (self unaryFunction: 'connect' arg: addr)
+]
+
+{ #category : #'misc ops' }
+ESP8266Generator >> socket: num listen: backlog [
+	self
+		appendWithNewline:
+			(self socket: num) , '.' , (self unaryFunction: 'listen' arg: backlog)
+]
+
+{ #category : #'misc ops' }
+ESP8266Generator >> socket: num receive: size [
+	^ (self socket: num) , '.' , (self unaryFunction: 'recv' arg: size)
+]
+
+{ #category : #'misc ops' }
+ESP8266Generator >> socket: num send: data [
+	self
+		appendWithNewline:
+			(self socket: num) , '.' , (self unaryFunction: 'send' arg: data)
+]
+
+{ #category : #'misc ops' }
+ESP8266Generator >> socketClose: num [
+	self
+		appendWithNewline: (self socket: num) , '.' , (self nullaryFunction: 'close')
+]
+
+{ #category : #'misc ops' }
+ESP8266Generator >> socketGetAddr: str port: portno [
+	^ self socket
+		, (self binaryFunction: 'getaddrinfo' arg1: str arg2: portno)
+		, '[0][-1]'
 ]
 
 { #category : #private }
@@ -229,30 +310,30 @@ ESP8266Generator >> wifi [
 	^ '_wlan'
 ]
 
-{ #category : #'comm ops' }
+{ #category : #'misc ops' }
 ESP8266Generator >> wifiActive: aBoolean [
 	self
 		appendWithNewline: self wifi , '.' , (self unaryFunction: 'active' arg: aBoolean)
 ]
 
-{ #category : #'comm ops' }
+{ #category : #'misc ops' }
 ESP8266Generator >> wifiConnectId: id pw: pw [
 	self
 		appendWithNewline: self wifi , '.' , (self binaryFunction: 'connect' arg1: id arg2: pw)
 ]
 
-{ #category : #'comm ops' }
+{ #category : #'misc ops' }
 ESP8266Generator >> wifiDisconnect [
 	self
 		appendWithNewline: self wifi , '.' , (self nullaryFunction: 'disconnect')
 ]
 
-{ #category : #'comm ops' }
+{ #category : #'misc ops' }
 ESP8266Generator >> wifiGetConfig: mode [
 	^ self wifi , '.config(''' , mode , ''')'
 ]
 
-{ #category : #'comm ops' }
+{ #category : #'misc ops' }
 ESP8266Generator >> wifiIfconfigTo: list [
 	self
 		appendWithNewline:
@@ -260,25 +341,25 @@ ESP8266Generator >> wifiIfconfigTo: list [
 				, (self nullaryFunction: 'ifconfig')
 ]
 
-{ #category : #'comm ops' }
+{ #category : #'misc ops' }
 ESP8266Generator >> wifiIsConnected [
 	^ self wifi , '.' , (self nullaryFunction: 'isconnected')
 ]
 
-{ #category : #'comm ops' }
+{ #category : #'misc ops' }
 ESP8266Generator >> wifiScan [
 	self
 		appendWithNewline: self wifi , '.' , (self nullaryFunction: 'scan')
 ]
 
-{ #category : #'comm ops' }
+{ #category : #'misc ops' }
 ESP8266Generator >> wifiSetConfig: mode to: str [
 	self
 		appendWithNewline: self wifi , '.config(' , mode , '=' ,
 		 (self valueOf: str) , ')'
 ]
 
-{ #category : #'comm ops' }
+{ #category : #'misc ops' }
 ESP8266Generator >> wifiStatus [
 	^ self wifi , '.' , (self nullaryFunction: 'status')
 ]

@@ -31,6 +31,16 @@ SpMicroWiz class >> initialize [
 		setupThemeNamed: self appFolderName
 ]
 
+{ #category : #accessing }
+SpMicroWiz class >> inputFlowControlType [
+	^ self settings at: #inputFlowControlType ifAbsentPut: [ 0 ]
+]
+
+{ #category : #accessing }
+SpMicroWiz class >> inputFlowControlType: aNumber [
+	self settings at: #inputFlowControlType put: aNumber
+]
+
 { #category : #'world menu' }
 SpMicroWiz class >> menuCommandOn: aBuilder [
 	<worldMenu>
@@ -40,6 +50,25 @@ SpMicroWiz class >> menuCommandOn: aBuilder [
 		action: [self new open]; 
 		parent: #Tools;
 		icon: self icon
+]
+
+{ #category : #accessing }
+SpMicroWiz class >> optionsFor: aSymbol [
+	aSymbol = #inputFlowControlType
+		ifTrue: [ ^ #(0 1 2) ].
+	aSymbol = #outputFlowControlType
+		ifTrue: [ ^ #(0 1 2) ].
+	^ super optionsFor: aSymbol
+]
+
+{ #category : #accessing }
+SpMicroWiz class >> outputFlowControlType [
+	^ self settings at: #outputFlowControlType ifAbsentPut: [ 0 ]
+]
+
+{ #category : #accessing }
+SpMicroWiz class >> outputFlowControlType: aNumber [
+	self settings at: #outputFlowControlType put: aNumber
 ]
 
 { #category : #private }

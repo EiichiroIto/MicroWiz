@@ -33,6 +33,11 @@ MicroPythonBlockSpecs >> controlBlocks [
 	)
 ]
 
+{ #category : #'argument menus' }
+MicroPythonBlockSpecs >> digits [
+	^ (0 to: 9) collect: [ :each | each asString ]
+]
+
 { #category : #'block specs' }
 MicroPythonBlockSpecs >> displayBlocks [
 	^ #()
@@ -100,11 +105,17 @@ MicroPythonBlockSpecs >> operatorsBlocks [
 			('true'									b	getTrue)
 			('false'								b	getFalse)
 			-
-			('string of %n'			r	stringOf:	0)
-			('number of %s'			r	numberOf: '123')
-			('join %s %s'				r	concatenate:with: 'hello ' 'world')
+			('string of %n'				r	stringOf:	0)
+			('number of %s'				r	numberOf: '123')
+			('string from %s encoding %s'
+													r	stringFrom:encoding: '' 'utf8')
+			('bytes from %s encoding %s'
+													r	bytesFrom:encoding: 'abc' 'utf8')
+			('join %s %s'					r	concatenate:with: 'hello ' 'world')
 			('letter %n of %s'			r	letter:of: 0 'world')
 			('length of %s'				r	stringLength: 'world')
+			('split %s by %s limit %n to %L'		-
+														split:by:limit:to:		'a,b,c' , -1 'list')
 			('any of %s'					r	anyOf: )
 			-
 			('%n mod %n'					r	\\ - -)
@@ -132,6 +143,11 @@ MicroPythonBlockSpecs >> uncoloredArgMorphFor: specString ifAbsent: aBlock [
 		ifTrue: [ ^ ChoiceArgMorph new
 				getOptionsSelector: #allSubNames;
 				choice: '' ].
+	$d = code
+		ifTrue: [ ^ ChoiceArgMorph new
+				getOptionsSelector: #digits;
+				getOptionsTarget: self;
+				choice: '0' ].
 	$y = code
 		ifTrue: [ ^ ExpressionArgMorphWithMenu new
 				numExpression: '0';

@@ -98,21 +98,17 @@ ESP8266BlockSpecs >> miscBlocks [
 			('set wifi config %w to %s'	r		wifiSetConfig: 'essid' to: 'ESP-AP')
 			('wifi ifconfig to %L'			-		wifiIfconfigTo: 'list')
 			('wifi status'							r 		wifiStatus)
+			-
+			('getaddr of %s port %n'		r		socketGetAddr:port: 		'127.0.0.1' 80)
+			('setup TCP socket %d'			-		setupTcpSocket: 		0)
+			('setup UDP socket %d'			-		setupUdpSocket:		0)
+			('socket %d connect %s'			-		socket:connect:		0 '')
+			('socket %d bind %s'				-		socket:bind:			0 '')
+			('socket %d listen %n'			-		socket:listen:			0 1)
+			('socket %d send %s'				-		socket:send:			0 '')
+			('socket %d receive %n'			r		socket:receive:		0 1)
+			('socket %d close'					-		socketClose:			0)
 	)
-"
-wlan = network.WLAN(network.STA_IF) # create station interface
-wlan.active(True)       # activate the interface
-wlan.scan()             # scan for access points
-wlan.isconnected()      # check if the station is connected to an AP
-wlan.connect('essid', 'password') # connect to an AP
-wlan.config('mac')      # get the interface's MAC adddress
-wlan.ifconfig()         # get the interface's IP/netmask/gw/DNS addresses
-
-ap = network.WLAN(network.AP_IF) # create access-point interface
-ap.active(True)         # activate the interface
-ap.config(essid='ESP-AP') # set the ESSID of the access point
-"
-
 ]
 
 { #category : #'argument menus' }

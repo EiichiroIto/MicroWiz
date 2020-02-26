@@ -83,6 +83,11 @@ MicroPythonGenerator >> break [
 	self appendWithNewline: 'break'
 ]
 
+{ #category : #'operators ops' }
+MicroPythonGenerator >> bytesFrom: str encoding: encoding [
+	^ self binaryFunction: 'bytes' arg1: str arg2: encoding
+]
+
 { #category : #'control ops' }
 MicroPythonGenerator >> callSub: subName [
 	self
@@ -569,7 +574,7 @@ MicroPythonGenerator >> quotedString: aString [
 	[in atEnd]
 		whileFalse: 
 			[c := in next.
-			('\''' includes: c)
+			('''' includes: c)
 				ifTrue: [out nextPut: $\].
 			out nextPut: c].
 	out nextPut: $'.
@@ -629,9 +634,22 @@ MicroPythonGenerator >> setVar: var to: val [
 	self appendWithNewline: var , ' = ' , (self valueOf: val)
 ]
 
+{ #category : #'operators ops' }
+MicroPythonGenerator >> split: str by: delimiter limit: size to: list [
+	self
+		appendWithNewline:
+			(self valueOf: list) , '=' , (self valueOf: str) , '.'
+				, (self binaryFunction: 'split' arg1: delimiter arg2: size)
+]
+
 { #category : #'code generator' }
 MicroPythonGenerator >> stopThread [
 	"do nothing"
+]
+
+{ #category : #'operators ops' }
+MicroPythonGenerator >> stringFrom: str encoding: encoding [
+	^ self binaryFunction: 'str' arg1: str arg2: encoding
 ]
 
 { #category : #'operators ops' }

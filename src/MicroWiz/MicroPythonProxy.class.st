@@ -304,6 +304,22 @@ MicroPythonProxy >> putFileNamed: aString1 contents: aString2 [
 	self execute: str
 ]
 
+{ #category : #private }
+MicroPythonProxy >> quotedString: aString [ 
+	| in out c |
+	in := ReadStream on: aString.
+	out := WriteStream on: String new.
+	out nextPut: $'.
+	[in atEnd]
+		whileFalse: 
+			[c := in next.
+			('\''' includes: c)
+				ifTrue: [out nextPut: $\].
+			out nextPut: c].
+	out nextPut: $'.
+	^ out contents
+]
+
 { #category : #testing }
 MicroPythonProxy >> readyToSend [
 	^ (self isConnected and: [ self isPrompted ])
@@ -439,8 +455,7 @@ MicroPythonProxy >> stringOfFileNamed: aString [
 
 { #category : #private }
 MicroPythonProxy >> stringOfFileNamed: aFilename contents: aString [
-	| stream tmp gen |
-	gen := MicroPythonGenerator new.
+	| stream |
 	stream := WriteStream on: String new.
 	stream
 		nextPutAll: '_f=open(''';
@@ -449,10 +464,9 @@ MicroPythonProxy >> stringOfFileNamed: aFilename contents: aString [
 		nextPutAll: String lf.
 	aString lines
 		do: [ :each | 
-			tmp := gen quotedString: each.
 			stream
 				nextPutAll: '_f.write(';
-				nextPutAll: (gen quotedString: each);
+				nextPutAll: (self quotedString: each);
 				nextPutAll: '+''\n'')';
 				nextPutAll: String lf ].
 	stream

@@ -63,8 +63,8 @@ SerialComm >> open [
 		baudRate: self baudRate;
 		dataBits: 8;
 		parityType: 0;
-		outputFlowControlType: 0;
-		inputFlowControlType: 2.
+		outputFlowControlType: SpMicroWiz outputFlowControlType;
+		inputFlowControlType: SpMicroWiz inputFlowControlType.
 	[ port openPort: portName ]
 		on: Error
 		do: [ :err | 
