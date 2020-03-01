@@ -8,9 +8,7 @@ Class {
 	#superclass : #BlockMorph,
 	#instVars : [
 		'scriptNameMorph',
-		'indicatorMorph',
-		'scriptOwner',
-		'parameters'
+		'scriptOwner'
 	],
 	#category : #'FromScratch-Blocks'
 }
@@ -92,13 +90,6 @@ HatBlockMorph >> duplicate [
 
 ]
 
-{ #category : #'object i/o' }
-HatBlockMorph >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #private }
 HatBlockMorph >> fixBlockLayout [
 	"Update the positions of my submorphs."
@@ -138,25 +129,6 @@ HatBlockMorph >> fixBlockLayout [
 HatBlockMorph >> hatTopForm [
 
 	^ ScratchTheme formAt: #hatBlockTop
-
-]
-
-{ #category : #'object i/o' }
-HatBlockMorph >> initFieldsFrom: anObjStream version: classVersion [
-
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: #(
-		scriptNameMorph
-		indicatorMorph
-		scriptOwner
-		parameters
-	) from: anObjStream.
-	parameters := nil.  "procedures with parameters are no longer supported"
-
-	"remove the indicator morph when reading in an older project"
-	indicatorMorph ifNotNil: [
-		submorphs := submorphs copyWithout: indicatorMorph.
-		indicatorMorph := nil].
 
 ]
 
@@ -211,17 +183,4 @@ HatBlockMorph >> startProcess [
 	scriptOwner ifNil: [ ^ self ].
 	self applicationDo: [ :app | app startProcessFor: self ].
 	self changed
-]
-
-{ #category : #'object i/o' }
-HatBlockMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		scriptNameMorph
-		indicatorMorph
-		scriptOwner
-		parameters
-	) on: anObjStream.
-
 ]

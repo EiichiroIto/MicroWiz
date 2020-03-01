@@ -50,13 +50,6 @@ ExpressionArgMorphWithMenu >> evaluate [
 
 ]
 
-{ #category : #'object i/o' }
-ExpressionArgMorphWithMenu >> fieldsVersion [
-
-	^ 2
-
-]
-
 { #category : #private }
 ExpressionArgMorphWithMenu >> fixArgLayout [
 
@@ -108,24 +101,6 @@ ExpressionArgMorphWithMenu >> handlesMouseDown: evt [
 
 ]
 
-{ #category : #'object i/o' }
-ExpressionArgMorphWithMenu >> initFieldsFrom: anObjStream version: classVersion [
-
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: #(
-		menuMorph
-		getMenuSelector
-	) from: anObjStream.
-
-	classVersion = 1 ifTrue: [^ self].
-
-	"field added in version 2"
-	self initFieldsNamed: #(
-		specialValue
-	) from: anObjStream.
-
-]
-
 { #category : #'event handling' }
 ExpressionArgMorphWithMenu >> mouseDown: evt [
 	| rcvr list choice ret |
@@ -172,17 +147,5 @@ ExpressionArgMorphWithMenu >> specialValue: aString [
 		position: self position + (0@1).
 	self fixArgLayout.
 	specialValue := aString.
-
-]
-
-{ #category : #'object i/o' }
-ExpressionArgMorphWithMenu >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		menuMorph
-		getMenuSelector
-		specialValue
-	) on: anObjStream.
 
 ]

@@ -26,10 +26,7 @@ SpScratchListViewer >> categories: aCollection [
 SpScratchListViewer >> connectPresenters [
 	categories
 		display: [ :each | each asCamelCase ];
-		icons: [ :each | 
-			ScratchTheme
-				formAt: (each , 'Pressed') asSymbol
-				ifAbsent: [ ScratchTheme formAt: #unknownPressed ] ];
+		icons: [ :each | self markerFormFor: each ];
 		whenSelectionChangedDo: [ :each | self updateContents ]
 ]
 
@@ -51,6 +48,19 @@ SpScratchListViewer >> initializePresenters [
 	categories := self newList
 		beSingleSelection;
 		yourself
+]
+
+{ #category : #private }
+SpScratchListViewer >> markerFormFor: aString [
+	| color canvas |
+	color := self target blockColorFor: aString.
+	canvas := FormCanvas extent: 13 @ 13.
+	canvas
+		fillOval: (0 @ 0 corner: 12 @ 12)
+		color: color
+		borderWidth: 1
+		borderColor: color darker.
+	^ canvas form
 ]
 
 { #category : #private }

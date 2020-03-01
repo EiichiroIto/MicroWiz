@@ -17,31 +17,10 @@ SubHatMorph >> emitCode: aGenerator indent: indent [
 	aGenerator emitSubHatBlock: self indent: indent.
 ]
 
-{ #category : #'object i/o' }
-SubHatMorph >> fieldsVersion [
-	^ 1
-]
-
-{ #category : #'object i/o' }
-SubHatMorph >> initFieldsFrom: anObjStream version: classVersion [
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: #(
-		subName
-	) from: anObjStream
-]
-
 { #category : #initialization }
 SubHatMorph >> initialize [
 	super initialize.
 	subName := ''.
-]
-
-{ #category : #'object i/o' }
-SubHatMorph >> storeFieldsOn: anObjStream [
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		subName
-	) on: anObjStream
 ]
 
 { #category : #accessing }

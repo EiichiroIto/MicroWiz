@@ -1,61 +1,13 @@
 Class {
 	#name : #ExtModuleDef,
-	#superclass : #Object,
+	#superclass : #MicroWizModuleDef,
 	#instVars : [
 		'moduleName',
 		'varName',
-		'header',
-		'blockDefs'
+		'header'
 	],
 	#category : #'MicroWiz-Modules'
 }
-
-{ #category : #private }
-ExtModuleDef >> assignSelectors [
-	blockDefs
-		withIndexDo:
-			[ :each :index | each assignSelector: self moduleName id: index ]
-]
-
-{ #category : #accessing }
-ExtModuleDef >> blockDefAt: aSymbol [
-	^ self blockDefs at: aSymbol ifAbsent: [ nil ]
-]
-
-{ #category : #accessing }
-ExtModuleDef >> blockDefs [
-	^ blockDefs
-]
-
-{ #category : #accessing }
-ExtModuleDef >> blockDefs: aCollection [
-	blockDefs := aCollection
-]
-
-{ #category : #api }
-ExtModuleDef >> blockTuples [
-	blockDefs isDictionary
-		ifFalse: [ self error: 'need to setup' ].
-	^ blockDefs keys collect: [ :each | (blockDefs at: each) blockTuple ]
-]
-
-{ #category : #api }
-ExtModuleDef >> blocks [
-	blockDefs isDictionary
-		ifTrue: [ ^ (blockDefs keys collect: [ :each | (blockDefs at: each) block ])
-				joinUsing: String lf ].
-	blockDefs isCollection
-		ifTrue: [ ^ (blockDefs collect: #block) joinUsing: String lf ].
-	self error
-]
-
-{ #category : #private }
-ExtModuleDef >> convertToDictionary [
-	| dict |
-	dict := OrderedDictionary new.
-	blockDefs do: [ :each | dict at: each selector put: each ].
-	blockDefs := dict
-]
 
 { #category : #accessing }
 ExtModuleDef >> header [
@@ -93,11 +45,9 @@ ExtModuleDef >> printOn: aStream [
 		nextPut: $)
 ]
 
-{ #category : #api }
-ExtModuleDef >> setup [
-	self
-		assignSelectors;
-		convertToDictionary
+{ #category : #private }
+ExtModuleDef >> setupBlockDefs [
+	blockDefs do: [ :each | each moduleName: self moduleName ]
 ]
 
 { #category : #accessing }

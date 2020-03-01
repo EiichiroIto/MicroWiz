@@ -31,21 +31,6 @@ MaixPyBlockSpecs >> colorNames [
 	^ #(RED BLACK)
 ]
 
-{ #category : #'block specs' }
-MaixPyBlockSpecs >> displayBlocks [
-	^ super displayBlocks , #(
-		'display'
-			('init lcd'								-		lcdInit)
-			('lcd rotation %d'					-		lcdRotation: 2)
-			('lcd image %s'						-		lcdDisplay:)
-			('lcd text %s at %n , %n fg %c bg %c'
-															-		lcdDrawString:x:y:fg:bg:
-																	'hello' 100 100 'RED' 'BLACK')
-			('lcd clear'							-		lcdClear)
-			('deinit lcd'							-		lcdDeinit)
-	)
-]
-
 { #category : #'argument menus' }
 MaixPyBlockSpecs >> frameSizeNames [
 	^ #(QQCIF QCIF CIF QQSIF QSIF SIF QQQQVGA QQQVGA QQVGA QVGA VGA HQQQVGA HQQVGA HQVGA B64X32 B64X64 B128X64 B128X128 LCD QQVGA2 WVGA WVGA2 SVGA SXGA UXGA)
@@ -57,15 +42,14 @@ MaixPyBlockSpecs >> pixFormatNames [
 ]
 
 { #category : #'block specs' }
-MaixPyBlockSpecs >> sensingBlocks [
-	^ super sensingBlocks , #(
-		'sensing'
-			-
-			('reset sensor'						-		sensorReset)
-			('set pixformat %p'				-		sensorSetPixFormat:	'RGB565')
-			('set framesize %F'				-		sensorSetFrameSize:	'QVGA')
-			('set vflip %b'						-		sensorSetVFlip: 			)
-			('sensor run %n'						-		sensorRun: 					1)
-			('sensor snapshot'					r		sensorSnapshot)
-		)
+MaixPyBlockSpecs >> setupBlockCategoryTo: aBlockDef [
+	super setupBlockCategoryTo: aBlockDef.
+	aBlockDef
+		addCategory: 'display' color: (Color h: 264 s: 0.62 v: 0.89)
+]
+
+{ #category : #private }
+MaixPyBlockSpecs >> setupIntModuleDef [
+	super setupIntModuleDef.
+	self addIntModuleDefNamed: 'maixpy'
 ]

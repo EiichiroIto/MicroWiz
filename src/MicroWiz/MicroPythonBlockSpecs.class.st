@@ -1,6 +1,9 @@
 Class {
 	#name : #MicroPythonBlockSpecs,
 	#superclass : #Object,
+	#instVars : [
+		'intModuleDef'
+	],
 	#category : #'MicroWiz-MPython'
 }
 
@@ -22,11 +25,21 @@ MicroPythonBlockSpecs >> addArgBuilderTo: anArgBuilder [
 			initialExpression: '0'
 ]
 
+{ #category : #private }
+MicroPythonBlockSpecs >> addIntModuleDefNamed: aString [
+	| m |
+	m := MicroWizProject intModuleAt: aString.
+	m ifNil: [ ^ self ].
+	intModuleDef := intModuleDef
+		ifNil: [ m ]
+		ifNotNil: [ intModuleDef + m ]
+]
+
 { #category : #'block specs' }
 MicroPythonBlockSpecs >> blocks [
 	^ self miscBlocks , self ioBlocks , self displayBlocks
 		, self controlBlocks , self operatorsBlocks , self variablesBlocks
-		, self sensingBlocks , self modulesBlocks
+		, self sensingBlocks , self modulesBlocks, self intModuleBlocks
 ]
 
 { #category : #'block specs' }
@@ -40,14 +53,8 @@ MicroPythonBlockSpecs >> controlBlocks [
 			('while %b'					c	doWhile)
 			('repeat until %b'		c	doUntil)
 			-
-			('break'						-	break)
-			('continue'					-	continue)
-			-
 			('if %b'						c	doIf)
 			('if %b'						c	doIfElse)
-			-
-			('call %S'					s	callSub: '')
-			('return %n'				-	return: 0)
 	)
 ]
 
@@ -59,6 +66,25 @@ MicroPythonBlockSpecs >> digits [
 { #category : #'block specs' }
 MicroPythonBlockSpecs >> displayBlocks [
 	^ #()
+]
+
+{ #category : #initialization }
+MicroPythonBlockSpecs >> initialize [
+	self setupIntModuleDef
+]
+
+{ #category : #'block specs' }
+MicroPythonBlockSpecs >> intBlockDefOf: aSymbol [
+	^ intModuleDef
+		ifNil: [ nil ]
+		ifNotNil: [ :m | m blockDefAt: aSymbol ]
+]
+
+{ #category : #'block specs' }
+MicroPythonBlockSpecs >> intModuleBlocks [
+	^ intModuleDef
+		ifNil: [ #() ]
+		ifNotNil: [ :def | def blockTuples asArray ]
 ]
 
 { #category : #'block specs' }
@@ -81,12 +107,7 @@ MicroPythonBlockSpecs >> listIndexNames [
 
 { #category : #'block specs' }
 MicroPythonBlockSpecs >> miscBlocks [
-	^ #(
-		'misc'
-			('print %s'								-	print: 'hello')
-			('set random seed to %n'		-	setRandomSeed: 1234)
-			('file names into %L'				-	listDirInto: 'list')
-		)
+	^ #()
 ]
 
 { #category : #'block specs' }
@@ -147,10 +168,26 @@ MicroPythonBlockSpecs >> operatorsBlocks [
 
 { #category : #'block specs' }
 MicroPythonBlockSpecs >> sensingBlocks [
-	^ #(
-		'sensing'
-			('return value'				r	returnValue)
-		)
+	^ #()
+]
+
+{ #category : #'block specs' }
+MicroPythonBlockSpecs >> setupBlockCategoryTo: aBlockDef [
+	aBlockDef
+		"
+		addCategory: 'display' color: (Color h: 264 s: 0.62 v: 0.89);
+		addCategory: 'modules' color: (Color h: 296 s: 0.66 v: 0.85);
+		addCategory: 'network' color: (Color h: 165 s: 1 v: 0.63);
+		addCategory: 'io' color: (Color h: 225 s: 0.65 v: 0.83);
+		addCategory: 'i2c' color: (Color h: 225 s: 0.65 v: 0.83);
+		addCategory: 'spi' color: (Color h: 225 s: 0.65 v: 0.83);
+"
+		addCategory: 'misc' color: (Color h: 165 s: 1 v: 0.63)
+]
+
+{ #category : #private }
+MicroPythonBlockSpecs >> setupIntModuleDef [
+	self addIntModuleDefNamed: 'micropython'
 ]
 
 { #category : #'block specs' }

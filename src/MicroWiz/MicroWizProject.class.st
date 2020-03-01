@@ -8,7 +8,8 @@ Class {
 		'modules'
 	],
 	#classVars : [
-		'AvailableModules'
+		'AvailableModules',
+		'IntModules'
 	],
 	#category : #'MicroWiz-Project'
 }
@@ -38,14 +39,62 @@ MicroWizProject class >> availableModules: aDictionary [
 	AvailableModules := aDictionary
 ]
 
+{ #category : #accessing }
+MicroWizProject class >> extModExtension [
+	^ 'mwm'
+]
+
+{ #category : #private }
+MicroWizProject class >> intModExtension [
+	^ 'mwi'
+]
+
+{ #category : #accessing }
+MicroWizProject class >> intModuleAt: aString [
+	^ self intModules at: aString ifAbsent: [ nil ]
+]
+
+{ #category : #accessing }
+MicroWizProject class >> intModules [
+	^ IntModules ifNil: [ #() ]
+]
+
+{ #category : #accessing }
+MicroWizProject class >> intModules: aDictionary [
+	IntModules := aDictionary
+]
+
 { #category : #testing }
 MicroWizProject class >> isAvailableModule: aString [
 	^ self availableModuleNames includes: aString
 ]
 
-{ #category : #accessing }
-MicroWizProject class >> modExtension [
-	^ 'mwm'
+{ #category : #private }
+MicroWizProject class >> loadAvailableModules [
+	| dict |
+	dict := Dictionary new.
+	self loadModuleExtension: self extModExtension into: dict.
+	self availableModules: dict
+]
+
+{ #category : #private }
+MicroWizProject class >> loadIntModules [
+	"self loadIntModules"
+	| dict |
+	dict := Dictionary new.
+	self loadModuleExtension: self intModExtension into: dict.
+	self intModules: dict
+]
+
+{ #category : #private }
+MicroWizProject class >> loadModuleExtension: ext into: aDictionary [
+	(self moduleDirectory filesMatching: '*.' , ext)
+		do: [ :each | 
+			each
+				readStreamDo: [ :stream | 
+					aDictionary
+						at: each base
+						put: (ModuleImporter new import: stream contents) setup ] ]
 ]
 
 { #category : #private }
@@ -55,20 +104,6 @@ MicroWizProject class >> moduleDirectory [
 	dir isDirectory
 		ifFalse: [ dir createDirectory ].
 	^ dir
-]
-
-{ #category : #private }
-MicroWizProject class >> setupAvailableModules [
-	| dict |
-	dict := Dictionary new.
-	(self moduleDirectory filesMatching: '*.' , self modExtension)
-		do: [ :each | 
-			each
-				readStreamDo: [ :stream | 
-					dict
-						at: each base
-						put: (ExtModuleImporter new import: stream contents) setup ] ].
-	self availableModules: dict
 ]
 
 { #category : #'block specs' }
@@ -173,6 +208,11 @@ MicroWizProject >> initialize [
 	modules := Array new
 ]
 
+{ #category : #'block specs' }
+MicroWizProject >> intBlockDefOf: aSymbol [
+	^ blockSpecs intBlockDefOf: aSymbol
+]
+
 { #category : #accessing }
 MicroWizProject >> moduleFileFor: aString [
 	| file |
@@ -206,6 +246,11 @@ MicroWizProject >> proxyClass [
 MicroWizProject >> proxyClass: aSymbol [
 	proxyClass := aSymbol.
 	blockSpecs := nil
+]
+
+{ #category : #'block specs' }
+MicroWizProject >> setupBlockCategoryTo: aBlockDef [
+	self blockSpecs setupBlockCategoryTo: aBlockDef
 ]
 
 { #category : #'object i/o' }

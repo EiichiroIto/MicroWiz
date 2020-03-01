@@ -2,7 +2,6 @@ Class {
 	#name : #MicroPythonGenerator,
 	#superclass : #Object,
 	#instVars : [
-		'parser',
 		'imports',
 		'stream',
 		'varNo',
@@ -11,7 +10,8 @@ Class {
 		'newlineString',
 		'modules',
 		'inits',
-		'extModules'
+		'extModules',
+		'indent'
 	],
 	#category : #'MicroWiz-MPython'
 }
@@ -57,6 +57,7 @@ MicroPythonGenerator >> append: arg toList: var [
 
 { #category : #private }
 MicroPythonGenerator >> appendWithNewline: aString [
+	self generateIndent: indent.
 	stream
 		nextPutAll: aString;
 		nextPutAll: newlineString
@@ -78,20 +79,9 @@ MicroPythonGenerator >> binaryOperator: aSymbol arg1: anObject1 arg2: anObject2 
 	^ '(' , a asString , aSymbol , b asString , ')'
 ]
 
-{ #category : #'control ops' }
-MicroPythonGenerator >> break [
-	self appendWithNewline: 'break'
-]
-
 { #category : #'operators ops' }
 MicroPythonGenerator >> bytesFrom: str encoding: encoding [
 	^ self binaryFunction: 'bytes' arg1: str arg2: encoding
-]
-
-{ #category : #'control ops' }
-MicroPythonGenerator >> callSub: subName [
-	self
-		appendWithNewline: self returnValue , '=' , (self valueOf: subName) , '()'
 ]
 
 { #category : #'variable ops' }
@@ -131,11 +121,6 @@ MicroPythonGenerator >> concatenate: x with: y [
 { #category : #'list ops' }
 MicroPythonGenerator >> contentsOfList: var [
 	^ self getList: var
-]
-
-{ #category : #'control ops' }
-MicroPythonGenerator >> continue [
-	self appendWithNewline: 'continue'
 ]
 
 { #category : #'control ops' }
@@ -279,6 +264,7 @@ MicroPythonGenerator >> generateFrom: aString1 import: aString2 [
 { #category : #'code generator' }
 MicroPythonGenerator >> generateHeader [
 	self
+		indent: 0;
 		generateInitModules;
 		generateInitVars;
 		generateInitLists
@@ -318,6 +304,17 @@ MicroPythonGenerator >> generateInitVars [
 ]
 
 { #category : #'code generator' }
+MicroPythonGenerator >> generateIntCode: aSymbol arguments: aCollection for: aScript [
+	| blockDef code |
+	blockDef := aScript intBlockDefOf: aSymbol.
+	code := blockDef codeWithArgs: aCollection.
+	blockDef imports do: [ :each | self import: each ].
+	blockDef isReporter
+		ifTrue: [ ^ code ].
+	code linesDo: [ :each | self appendWithNewline: each ]
+]
+
+{ #category : #'code generator' }
 MicroPythonGenerator >> generatePass [
 	self appendWithNewline: 'pass'
 ]
@@ -353,13 +350,28 @@ MicroPythonGenerator >> header [
 ]
 
 { #category : #private }
-MicroPythonGenerator >> import: aSymbol [ 
-	imports add: aSymbol
+MicroPythonGenerator >> import: anObject [
+	anObject isString
+		ifTrue: [ imports add: anObject.
+			^ self ].
+	anObject isArray
+		ifTrue: [ ^ self from: anObject first import: anObject second ].
+	self error: 'invalid import'
 ]
 
 { #category : #private }
 MicroPythonGenerator >> imports [
 	^ imports
+]
+
+{ #category : #accessing }
+MicroPythonGenerator >> indent [
+	^ indent
+]
+
+{ #category : #accessing }
+MicroPythonGenerator >> indent: anInteger [
+	indent := anInteger
 ]
 
 { #category : #initialization }
@@ -373,6 +385,7 @@ MicroPythonGenerator >> initialize [
 	listVars := Set new.
 	vars := Set new.
 	inits := Set new.
+	indent := 0.
 	self newlineLF
 ]
 
@@ -421,13 +434,6 @@ MicroPythonGenerator >> lineCountOfList: var [
 { #category : #'list ops' }
 MicroPythonGenerator >> list: var contains: val [
 	^ (self valueOf: val), ' in ', (self getList: var)
-]
-
-{ #category : #'misc ops' }
-MicroPythonGenerator >> listDirInto: var [
-	self import: 'os'.
-	self
-		appendWithNewline: (self getList: var) , '=' , (self nullaryFunction: 'os.listdir')
 ]
 
 { #category : #private }
@@ -491,25 +497,6 @@ MicroPythonGenerator >> negated: x [
 ]
 
 { #category : #private }
-MicroPythonGenerator >> neoPixel: pin [
-	self import: 'neopixel'.
-	^ '_np' , (self valueOf: pin)
-]
-
-{ #category : #'io ops' }
-MicroPythonGenerator >> neoPixel: pin no: no r: r g: g b: b [
-	self
-		appendWithNewline:
-			(self neoPixel: pin) , '[' , (self valueOf: no) , ']='
-				,
-					(self
-						ternaryFunction: ''
-						arg1: r
-						arg2: g
-						arg3: b)
-]
-
-{ #category : #private }
 MicroPythonGenerator >> newVariable [
 	varNo := varNo + 1.
 	^ '_v', varNo asString
@@ -560,11 +547,6 @@ MicroPythonGenerator >> plus: x and: y [
 	^ self binaryOperator: ' + ' arg1: x arg2: y
 ]
 
-{ #category : #'misc ops' }
-MicroPythonGenerator >> print: arg [
-	self appendWithNewline: (self unaryFunction: 'print' arg: arg)
-]
-
 { #category : #private }
 MicroPythonGenerator >> quotedString: aString [ 
 	| in out c |
@@ -598,16 +580,6 @@ MicroPythonGenerator >> replaceAllList: var with: val [
 		appendWithNewline: (self getList: var) , ' = (' , (self valueOf: val) , ').split()'
 ]
 
-{ #category : #'control ops' }
-MicroPythonGenerator >> return: anInteger [
-	self appendWithNewline: 'return ' , (self valueOf: anInteger)
-]
-
-{ #category : #'sensing ops' }
-MicroPythonGenerator >> returnValue [
-	^ '_r'
-]
-
 { #category : #'operators ops' }
 MicroPythonGenerator >> rounded: aNumber [
 	^ self unaryFunction: 'round' arg: aNumber
@@ -621,11 +593,6 @@ MicroPythonGenerator >> setLine: pos ofList: var to: val [
 		ifFalse: [ self listPosition: pos ].
 	self
 		appendWithNewline: (self getList: var) , '[' , p , '] = ' , (self valueOf: val)
-]
-
-{ #category : #'misc ops' }
-MicroPythonGenerator >> setRandomSeed: aNumber [
-	self appendWithNewline: (self unaryFunction: self random , 'seed' arg: aNumber)
 ]
 
 { #category : #'variable ops' }

@@ -297,7 +297,8 @@ SpMicroWiz >> newCode [
 
 { #category : #private }
 SpMicroWiz >> newPresenter [
-	MicroWizProject setupAvailableModules.
+	MicroWizProject loadIntModules.
+	MicroWizProject loadAvailableModules.
 	^ SpMicroWizFrame basicNew
 		application: self;
 		initialize;

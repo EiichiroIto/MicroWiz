@@ -405,13 +405,6 @@ CommandBlockMorph >> evaluateWithArgs: rawArgs [
 	^ receiver perform: selector withArguments: args
 ]
 
-{ #category : #'object i/o' }
-CommandBlockMorph >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #private }
 CommandBlockMorph >> fixBlockLayout [
 	"Update the positions of my submorphs."
@@ -463,19 +456,6 @@ CommandBlockMorph >> fixBlockLayout [
 		ifNotNil: [ self isCBlock
 				ifFalse: [ nextB position: self left @ (self bottom - 4) ].
 			nextB fixBlockLayout ]
-]
-
-{ #category : #'object i/o' }
-CommandBlockMorph >> initFieldsFrom: anObjStream version: classVersion [
-
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: #(
-		commandSpec
-		argMorphs
-		receiver
-		selector
-		isTimed
-	) from: anObjStream.
 ]
 
 { #category : #initialization }
@@ -676,20 +656,6 @@ CommandBlockMorph >> startProcess [
 	self receiver ifNil: [ ^ self ].
 	self applicationDo: [ :app | app startProcessFor: self ].
 	self changed
-]
-
-{ #category : #'object i/o' }
-CommandBlockMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		commandSpec
-		argMorphs
-		receiver
-		selector
-		isTimed
-	) on: anObjStream.
-
 ]
 
 { #category : #menus }

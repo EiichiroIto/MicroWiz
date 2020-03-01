@@ -194,6 +194,11 @@ ScratchScript >> blockCategories [
 ]
 
 { #category : #accessing }
+ScratchScript >> blockColorFor: aCategory [
+	^ self blockDef blockColorFor: aCategory
+]
+
+{ #category : #accessing }
 ScratchScript >> blockDef [
 	^ blockDef ifNil: [ self setupBlockDef ]
 ]
@@ -427,7 +432,9 @@ ScratchScript >> convertTuplesToStacks [
 	blocksBin isArray
 		ifFalse: [ ^ self ].
 	tuplesList := blocksBin.
-	blocksBin := ScratchScriptsMorph new.
+	blocksBin := ScratchScriptsMorph new
+		project: self project;
+		yourself.
 	tuplesList
 		do: [ :pair | 
 			stack := self stackFromTupleList: pair second receiver: self.

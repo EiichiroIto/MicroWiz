@@ -54,13 +54,6 @@ VariableBlockMorph >> evaluateWithArgs: args [
 
 ]
 
-{ #category : #'object i/o' }
-VariableBlockMorph >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #initialization }
 VariableBlockMorph >> initialize [
 

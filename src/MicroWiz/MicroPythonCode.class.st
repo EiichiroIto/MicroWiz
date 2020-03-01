@@ -75,7 +75,7 @@ MicroPythonCode >> generateCode: aSymbol morph: aMorph [
 
 { #category : #'code generator' }
 MicroPythonCode >> generateIndent: anInteger [
-	generator generateIndent: anInteger
+	generator indent: anInteger
 ]
 
 { #category : #'code generator' }
@@ -142,12 +142,17 @@ MicroPythonCode >> parseHats: aCollection [
 MicroPythonCode >> rawGenerateCode: aSymbol morph: aMorph [
 	| args |
 	args := self argsOf: aMorph.
-	^ (aSymbol beginsWith: 'ext')
-		ifTrue: [ generator
+	(aSymbol beginsWith: 'ext')
+		ifTrue: [ ^ generator
 				generateExtCode: aSymbol asSymbol
 				arguments: args
-				for: aMorph script ]
-		ifFalse: [ generator perform: aSymbol asSymbol withArguments: args ]
+				for: aMorph script ].
+	(aSymbol beginsWith: 'int')
+		ifTrue: [ ^ generator
+				generateIntCode: aSymbol asSymbol
+				arguments: args
+				for: aMorph script ].
+	^ generator perform: aSymbol asSymbol withArguments: args
 ]
 
 { #category : #private }

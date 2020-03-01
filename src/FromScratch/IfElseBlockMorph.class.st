@@ -281,13 +281,6 @@ IfElseBlockMorph >> falseBlock: aBlockMorph [
 
 ]
 
-{ #category : #'object i/o' }
-IfElseBlockMorph >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #private }
 IfElseBlockMorph >> fixBlockLayout [
 	"Update the positions of my submorphs."
@@ -334,18 +327,6 @@ IfElseBlockMorph >> fixBlockLayout [
 						+
 							((ScratchTranslator
 								centerOffsetForButtonWithFont: ScratchTheme labelFont) // 4))
-]
-
-{ #category : #'object i/o' }
-IfElseBlockMorph >> initFieldsFrom: anObjStream version: classVersion [
-
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: #(
-		trueBlock
-		falseBlock
-		nextBlock
-	) from: anObjStream.
-
 ]
 
 { #category : #initialization }
@@ -402,18 +383,6 @@ IfElseBlockMorph >> nonControlFlowSubmorphs [
 		(m ~~ trueBlock) &
 		(m ~~ falseBlock) &
 		(m ~~ nextBlock)]
-
-]
-
-{ #category : #'object i/o' }
-IfElseBlockMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		trueBlock
-		falseBlock
-		nextBlock
-	) on: anObjStream.
 
 ]
 

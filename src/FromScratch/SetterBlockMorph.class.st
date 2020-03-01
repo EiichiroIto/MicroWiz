@@ -5,9 +5,6 @@ I am a block for setting a variable.
 Class {
 	#name : #SetterBlockMorph,
 	#superclass : #CommandBlockMorph,
-	#instVars : [
-		'variable'
-	],
 	#category : #'FromScratch-Blocks'
 }
 
@@ -40,13 +37,6 @@ SetterBlockMorph >> expressionArg [
 	^ nil
 ]
 
-{ #category : #'object i/o' }
-SetterBlockMorph >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #initialization }
 SetterBlockMorph >> initChangerForVar: varName [
 	self commandSpec: 'change %v by %n'.
@@ -55,17 +45,6 @@ SetterBlockMorph >> initChangerForVar: varName [
 		withTranslation: commandSpec.
 	self selector: #changeVar:by:.
 	self variable: varName
-]
-
-{ #category : #'object i/o' }
-SetterBlockMorph >> initFieldsFrom: anObjStream version: classVersion [
-
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: #(
-		variable
-	) from: anObjStream.
-	self variable: variable.
-
 ]
 
 { #category : #initialization }
@@ -105,17 +84,6 @@ SetterBlockMorph >> receiver: anObject [
 
 	receiver := anObject.
 	self color: ScratchTheme variableBlockColor
-]
-
-{ #category : #'object i/o' }
-SetterBlockMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	variable := self variable.
-	self storeFieldsNamed: #(
-		variable
-	) on: anObjStream.
-
 ]
 
 { #category : #accessing }

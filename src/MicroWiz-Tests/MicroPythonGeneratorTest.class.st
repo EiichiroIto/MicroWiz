@@ -102,28 +102,12 @@ MicroPythonGeneratorTest >> testBinaryOperatorArg1Arg2 [
 ]
 
 { #category : #test }
-MicroPythonGeneratorTest >> testBreak [
-	| g |
-	g := self newGenerator.
-	g break.
-	self assert: g code equals: 'break' , String lf
-]
-
-{ #category : #test }
 MicroPythonGeneratorTest >> testBytesFromEncoding [
 	| g |
 	g := self newGenerator.
 	self
 		assert: (g bytesFrom: '''abc''' encoding: '''utf8''')
 		equals: 'bytes(''abc'',''utf8'')'
-]
-
-{ #category : #test }
-MicroPythonGeneratorTest >> testCallSub [
-	| g |
-	g := self newGenerator.
-	g callSub: 'a'.
-	self assert: g code equals: '_r=a()' , String lf
 ]
 
 { #category : #test }
@@ -172,14 +156,6 @@ MicroPythonGeneratorTest >> testContentsOfList [
 	| g |
 	g := self newGenerator.
 	self assert: (g contentsOfList: 'x') equals: 'x'
-]
-
-{ #category : #test }
-MicroPythonGeneratorTest >> testContinue [
-	| g |
-	g := self newGenerator.
-	g continue.
-	self assert: g code equals: 'continue' , String lf
 ]
 
 { #category : #test }
@@ -499,6 +475,17 @@ MicroPythonGeneratorTest >> testImports [
 ]
 
 { #category : #test }
+MicroPythonGeneratorTest >> testIndent [
+	| g |
+	g := self newGenerator.
+	self assert: g indent equals: 0.
+	g indent: 1.
+	self assert: g indent equals: 1.
+	g indent: 2.
+	self assert: g indent equals: 2
+]
+
+{ #category : #test }
 MicroPythonGeneratorTest >> testInitialize [
 	| g |
 	g := self newGenerator.
@@ -566,14 +553,6 @@ MicroPythonGeneratorTest >> testListContains [
 	| g |
 	g := self newGenerator.
 	self assert: (g list: 'x' contains: 5) equals: '5 in x'
-]
-
-{ #category : #test }
-MicroPythonGeneratorTest >> testListDirInto [
-	| g |
-	g := self newGenerator.
-	g listDirInto: 'a'.
-	self assert: g code equals: 'a=os.listdir()' , String lf
 ]
 
 { #category : #test }
@@ -652,27 +631,6 @@ MicroPythonGeneratorTest >> testNegated [
 	| g |
 	g := self newGenerator.
 	self assert: (g negated: 5) equals: '(0 - 5)'
-]
-
-{ #category : #test }
-MicroPythonGeneratorTest >> testNeoPixel [
-	| g |
-	g := self newGenerator.
-	self assert: (g neoPixel: 3) equals: '_np3'.
-	self assert: (g imports includes: 'neopixel')
-]
-
-{ #category : #test }
-MicroPythonGeneratorTest >> testNeoPixelNoRGB [
-	| g |
-	g := self newGenerator.
-	g
-		neoPixel: 1
-		no: 2
-		r: 3
-		g: 4
-		b: 5.
-	self assert: g code equals: '_np1[2]=(3,4,5)' , String lf
 ]
 
 { #category : #test }
@@ -758,14 +716,6 @@ MicroPythonGeneratorTest >> testPlusAnd [
 ]
 
 { #category : #test }
-MicroPythonGeneratorTest >> testPrint [
-	| g |
-	g := self newGenerator.
-	g print: 10.
-	self assert: g code equals: 'print(10)' , String lf
-]
-
-{ #category : #test }
 MicroPythonGeneratorTest >> testQuotedString [
 	| g |
 	g := self newGenerator.
@@ -798,21 +748,6 @@ MicroPythonGeneratorTest >> testReplaceAllListWith [
 ]
 
 { #category : #test }
-MicroPythonGeneratorTest >> testReturn [
-	| g |
-	g := self newGenerator.
-	g return: [ 0 ].
-	self assert: g code equals: 'return 0' , String lf
-]
-
-{ #category : #test }
-MicroPythonGeneratorTest >> testReturnValue [
-	| g |
-	g := self newGenerator.
-	self assert: g returnValue equals: '_r'
-]
-
-{ #category : #test }
 MicroPythonGeneratorTest >> testRounded [
 	| g |
 	g := self newGenerator.
@@ -825,14 +760,6 @@ MicroPythonGeneratorTest >> testSetLineOfListTo [
 	g := self newGenerator.
 	g setLine: 4 ofList: 'x' to: 5.
 	self assert: g code equals: 'x[4] = 5' , String lf
-]
-
-{ #category : #test }
-MicroPythonGeneratorTest >> testSetRandomSeed [
-	| g |
-	g := self newGenerator.
-	g setRandomSeed: 123.
-	self assert: g code equals: 'random.seed(123)' , String lf
 ]
 
 { #category : #test }

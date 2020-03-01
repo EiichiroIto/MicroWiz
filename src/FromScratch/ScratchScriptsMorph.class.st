@@ -55,11 +55,6 @@ ScratchScriptsMorph >> drawOn: aCanvas [
 			y := y + patchF height ]
 ]
 
-{ #category : #'object i/o' }
-ScratchScriptsMorph >> fieldsVersion [
-	^ 1
-]
-
 { #category : #'event handling' }
 ScratchScriptsMorph >> handlesMouseDown: evt [
 	

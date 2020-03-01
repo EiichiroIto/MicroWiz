@@ -22,27 +22,6 @@ ESP8266BlockSpecs >> addArgBuilderTo: anArgBuilder [
 			initialChoice: ''
 ]
 
-{ #category : #'block specs' }
-ESP8266BlockSpecs >> controlBlocks [
-	^ super controlBlocks , #(
-		'control'
-			-
-			('wait %n millisecs'			-	waitMsecs: 1000)
-			('wait %n microsecs'			-	waitUSecs: 1000)
-		)
-]
-
-{ #category : #'block specs' }
-ESP8266BlockSpecs >> displayBlocks [
-	^ super displayBlocks , #(
-		'display'
-			('set neopixel pin %n num %n'		-		setNeoPixelPin:num:	0 1)
-			('pin %n no %n r %n g %n b %n'
-																	-		neoPixel:no:r:g:b: 0 0 255 255 255)
-			('show neopixel pin %n'					-		neoPixelShow: 0)
-	)
-]
-
 { #category : #'argument menus' }
 ESP8266BlockSpecs >> gpioModeNames [
 	^ #(IN OUT PULL_UP)
@@ -51,82 +30,26 @@ ESP8266BlockSpecs >> gpioModeNames [
 { #category : #'block specs' }
 ESP8266BlockSpecs >> ioBlocks [
 	^ super ioBlocks , #(
-		'io'
-			('set digital pin %n for %P'		- 		setGpioPin:for: 0 'INPUT')
-			('digital read pin %n'				r		readDigital: 0)
-			('turn on pin %n'						- 		gpioOn: 0)
-			('turn off pin %n'						- 		gpioOff: 0)
-			('digital write pin %n to %n'	-		writeDigital:to: 0 0)
-			-
-			('set pwm pin %n freq %n duty %n'
-																- 		setPwmPin:freq:duty: 0 1000 200)
-			('analog write pin %n to %n'		- 		writeAnalog:to: 0 0)
-			('deinit pwm pin %n'					- 		deinitPwm: 0)
-			-
-			('set adc pin %n'						-		setAdcPin: 0)
-			('analog read pin %n'					r		readAnalog: 0)
-			-
-			('set spi sck %n mosi %n miso %n'
-																-		setSpiSck:mosi:miso: 0 2 4)
-			('set spi baudrate %n'				-		setSpiBaudrate: 200000)
-			('spi read %n bytes into %L'		-		spiRead:into: 10 'list')
-			('spi write %s'							-		spiWriteString: '12345')
-			('spi write %L'							-		spiWriteList: 'list')
-			('set hard spi baud %n'				-		setHardSpiBaud: 80000000)
-			-
-			('set i2c freq %n sda %n scl %n'
-																-		i2cInitFreq:sda:scl: 100000 20 19)
-			('i2c read %n bytes from %n into %L'
-																-		i2cRead:from:into:		4 10 'list')
-			('i2c write %n to %n'					-		i2cWriteData:to: 		100 10)
-			('i2c write %s to %n'					-		i2cWrite:to: 				'[1,2,3]' 0)
-			('i2c write %L to %n'					-		i2cWriteList:to:			'list' 10)
+		'i2c'
+			('i2c write %s to %n'					-		i2cWrite:to: 				'[1,2,3]' 10)
 		)
-"			('button %B is pressed'			b		buttonIsPressed:)
-			('button %B was pressed'		b		buttonWasPressed:)
-			('count of button %B pressed'		r		countOfButtonPressed:)
-			-
-			('analog set period pin %n to %n msec'	- setAnalogPeriod:msec: 0 500)
-			('pin %n is touched'					b		pinIsTouched: 0)
-			-
-			('servo write pin %G to %n degrees'		-		writeServo:to: 0 180)
-			('servo set pin %G %n msec %n to %n'	-		setServo:msec:min:max:	0	5	100	500)
-			-
-			('i2c read addr %n'					r	i2cRead:	0)
-			('i2c write addr %n data %L'	-	i2cWrite:list:		0 'list')
-		'neoPixel'
-			('set %n to R %n G %n B %n of NeoPixel pin %P'		-		setNo:r:g:b:neoPixel: 0 255 255 255 '')
-			('show NeoPixel of pin %P'								-		showNeoPixel:)
-			('clear NeoPixel of pin %P'								-		clearNeoPixel:)
-		)"
 ]
 
 { #category : #'block specs' }
-ESP8266BlockSpecs >> miscBlocks [
-	^ super miscBlocks , #(
-		'misc'
-			-
-			('setup wifi %W'						-		setWifi: 'STA_IF')
-			('wifi active %b'					-		wifiActive:)
-			('wifi scan'							-		wifiScan)
-			('wifi connect id %s pw %s'	-		wifiConnectId:pw:		'abc'	'def')
-			('wifi disconnect'					-		wifiDisconnect)
-			('wifi is connected'				b		wifiIsConnected)
-			('wifi config of %w'				r		wifiGetConfig: 'mac')
-			('set wifi config %w to %s'	r		wifiSetConfig: 'essid' to: 'ESP-AP')
-			('wifi ifconfig to %L'			-		wifiIfconfigTo: 'list')
-			('wifi status'							r 		wifiStatus)
-			-
-			('getaddr of %s port %n'		r		socketGetAddr:port: 		'127.0.0.1' 80)
-			('setup TCP socket %d'			-		setupTcpSocket: 		0)
-			('setup UDP socket %d'			-		setupUdpSocket:		0)
-			('socket %d connect %s'			-		socket:connect:		0 '')
-			('socket %d bind %s'				-		socket:bind:			0 '')
-			('socket %d listen %n'			-		socket:listen:			0 1)
-			('socket %d send %s'				-		socket:send:			0 '')
-			('socket %d receive %n'			r		socket:receive:		0 1)
-			('socket %d close'					-		socketClose:			0)
-	)
+ESP8266BlockSpecs >> setupBlockCategoryTo: aBlockDef [
+	super setupBlockCategoryTo: aBlockDef.
+	aBlockDef
+		addCategory: 'neopixel' color: (Color h: 264 s: 0.62 v: 0.89);
+		addCategory: 'network' color: (Color h: 165 s: 1 v: 0.63);
+		addCategory: 'io' color: (Color h: 225 s: 0.65 v: 0.83);
+		addCategory: 'i2c' color: (Color h: 225 s: 0.65 v: 0.83);
+		addCategory: 'spi' color: (Color h: 225 s: 0.65 v: 0.83)
+]
+
+{ #category : #private }
+ESP8266BlockSpecs >> setupIntModuleDef [
+	super setupIntModuleDef.
+	self addIntModuleDefNamed: 'esp8266'
 ]
 
 { #category : #'argument menus' }

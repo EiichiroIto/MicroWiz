@@ -284,13 +284,6 @@ CBlockMorph >> emitCode: aGenerator indent: indent [
 	aGenerator emitCBlock: self indent: indent.
 ]
 
-{ #category : #'object i/o' }
-CBlockMorph >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #private }
 CBlockMorph >> firstBlockList [
 	"Answer an array containing the block sequence for my first (and only) nested block. (An if-then-else block would have a second block list.)"
@@ -353,17 +346,6 @@ CBlockMorph >> fixBlockLayout [
 		ifNotNil: [ nextBlock position: self left @ (self bottom - 4) ]
 ]
 
-{ #category : #'object i/o' }
-CBlockMorph >> initFieldsFrom: anObjStream version: classVersion [
-
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: #(
-		nestedBlock
-		nextBlock
-	) from: anObjStream.
-
-]
-
 { #category : #initialization }
 CBlockMorph >> initialize [
 
@@ -413,17 +395,6 @@ CBlockMorph >> nonControlFlowSubmorphs [
 	"Answer a collection of submorphs minus any blocks that are part of the control flow. For example, command blocks omit their submorph that is the next block in the block sequence, C-blocks omit both their next block and the first block of their nested block list, etc."
 
 	^ submorphs select: [:m | (m ~~ nestedBlock) & (m ~~ nextBlock)]
-
-]
-
-{ #category : #'object i/o' }
-CBlockMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		nestedBlock
-		nextBlock
-	) on: anObjStream.
 
 ]
 

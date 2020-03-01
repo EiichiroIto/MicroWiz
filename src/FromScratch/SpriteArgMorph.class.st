@@ -64,13 +64,6 @@ SpriteArgMorph >> evaluate [
 	^ morph
 ]
 
-{ #category : #'object i/o' }
-SpriteArgMorph >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #other }
 SpriteArgMorph >> fixArgLayout [
 	"Set my color to my owner's color."
@@ -83,16 +76,6 @@ SpriteArgMorph >> fixArgLayout [
 SpriteArgMorph >> handlesMouseDown: evt [
 	^ (self topRight - (14 @ 0) corner: self bottomRight)
 		containsPoint: evt cursorPoint
-]
-
-{ #category : #'object i/o' }
-SpriteArgMorph >> initFieldsFrom: anObjStream version: classVersion [
-
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: #(
-		morph
-	) from: anObjStream.
-
 ]
 
 { #category : #initialize }
@@ -151,16 +134,6 @@ SpriteArgMorph >> step [
 SpriteArgMorph >> stepTime [
 
 	^ 500
-
-]
-
-{ #category : #'object i/o' }
-SpriteArgMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		morph
-	) on: anObjStream.
 
 ]
 

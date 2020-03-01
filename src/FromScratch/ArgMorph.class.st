@@ -79,26 +79,9 @@ ArgMorph >> drawHLineFrom: startX to: endX y: yOffset color: c on: aCanvas [
 
 ]
 
-{ #category : #'object i/o' }
-ArgMorph >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #other }
 ArgMorph >> fixArgLayout [
 	"Fix my layout. This default implementation does nothing."
-]
-
-{ #category : #'object i/o' }
-ArgMorph >> initFieldsFrom: anObjStream version: classVersion [
-
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: #(
-		labelMorph
-	) from: anObjStream.
-
 ]
 
 { #category : #testing }
@@ -152,14 +135,4 @@ ArgMorph >> project [
 ArgMorph >> rootMorph [
 	owner ifNil: [ ^ self ].
 	^ self rootMorph
-]
-
-{ #category : #'object i/o' }
-ArgMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		labelMorph
-	) on: anObjStream.
-
 ]

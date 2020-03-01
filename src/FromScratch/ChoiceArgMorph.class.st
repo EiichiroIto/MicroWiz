@@ -66,13 +66,6 @@ ChoiceArgMorph >> evaluate [
 	^ choice
 ]
 
-{ #category : #'object i/o' }
-ChoiceArgMorph >> fieldsVersion [
-
-	^ 2
-
-]
-
 { #category : #private }
 ChoiceArgMorph >> fixArgLayout [
 	"Set my color to my owner's color."
@@ -113,24 +106,6 @@ ChoiceArgMorph >> handlesMouseDown: evt [
 		["
 		(self topRight - (14@0) corner: self bottomRight) containsPoint: evt cursorPoint
 		"]"
-
-]
-
-{ #category : #'object i/o' }
-ChoiceArgMorph >> initFieldsFrom: anObjStream version: classVersion [
-
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: #(
-		isBoolean
-		options
-		choice
-	) from: anObjStream.
-	classVersion = 1 ifTrue: [^ self].
-
-	"fields added in version 2"
-	self initFieldsNamed: #(
-		getOptionsSelector
-	) from: anObjStream.
 
 ]
 
@@ -193,17 +168,4 @@ ChoiceArgMorph >> presentMenu [
 		lines: lines.
 	pos = 0 ifTrue: [ ^ self ].
 	self choice: (list at: pos)
-]
-
-{ #category : #'object i/o' }
-ChoiceArgMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		isBoolean
-		options
-		choice
-		getOptionsSelector
-	) on: anObjStream.
-
 ]

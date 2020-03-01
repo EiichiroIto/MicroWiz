@@ -104,6 +104,11 @@ MicroWizScript >> initialize [
 	listVarNames := OrderedCollection new
 ]
 
+{ #category : #'block specs' }
+MicroWizScript >> intBlockDefOf: aSymbol [
+	^ project intBlockDefOf: aSymbol
+]
+
 { #category : #'argument menus' }
 MicroWizScript >> listVarNames [
 	^ listVarNames
@@ -122,11 +127,7 @@ MicroWizScript >> objName: aString [
 { #category : #'block specs' }
 MicroWizScript >> setupBlockCategory [
 	super setupBlockCategory.
-	blockDef
-		addCategory: 'io' color: (Color h: 225 s: 0.65 v: 0.83);
-		addCategory: 'display' color: (Color h: 264 s: 0.62 v: 0.89);
-		addCategory: 'modules' color: (Color h: 296 s: 0.66 v: 0.85);
-		addCategory: 'misc' color: (Color h: 165 s: 1 v: 0.63)
+	project setupBlockCategoryTo: blockDef
 ]
 
 { #category : #'object i/o' }
