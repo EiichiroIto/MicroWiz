@@ -1,0 +1,24 @@
+(MicroWiz
+ (module:var:headers:blocks:
+  "vl53l0x"
+  "_vl"
+  ("from vl53l0x import VL53L0X")
+  ((commandBlock:args:code:imports:
+    "set vl53l0x"
+    ()
+    "_vl=VL53L0X(_i2c)"
+    (i2c)
+    1)
+   (commandBlock:args:code:imports:
+    "vl start"
+    ()
+    "_vl.start()"
+    ()
+    2)
+   (reporterBlock:args:return:code:imports:
+    "vl read"
+    ()
+    r
+    "_vl.read()"
+    ()
+    3))))

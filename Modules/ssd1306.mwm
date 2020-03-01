@@ -1,0 +1,49 @@
+(MicroWiz
+ (module:var:headers:blocks:
+  "ssd1306"
+  "_oled"
+  ("from ssd1306 import SSD1306_I2C")
+  ((commandBlock:args:code:imports:
+    "set oled w %n h %n"
+    (128 64)
+    "_oled=SSD1306_I2C(%n,%n,_i2c)"
+    (i2c)
+    1)
+   (commandBlock:args:code:imports:
+    "oled show"
+    ()
+    "_oled.show()"
+    ()
+    2)
+   (commandBlock:args:code:imports:
+    "oled text %s x %n y %n"
+    (hello 0 0)
+    "_oled.text(%s,%n,%n)"
+    ()
+    3)
+   (commandBlock:args:code:imports:
+    "oled fill %n"
+    (0)
+    "_oled.fill(%n)"
+    ()
+    4)
+   (commandBlock:args:code:imports:
+    "oled line %n , %n to %n , %n color %n"
+    (0 0 100 10 1)
+    "_oled.line(%n,%n,%n,%n,%n)"
+    ()
+    5)
+   (commandBlock:args:code:imports:
+    "oled rect %n , %n to %n , %n color %n"
+    (0 0 100 10 1)
+    "_oled.rect(%n,%n,%n,%n,%n)"
+    ()
+    6)
+   (commandBlock:args:code:imports:
+    "oled fill rect %n , %n to %n , %n color %n"
+    (0 0 100 10 1)
+    "_oled.fill_rect(%n,%n,%n,%n,%n)"
+    ()
+    7)
+
+)))
