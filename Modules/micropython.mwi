@@ -1,0 +1,55 @@
+(MicroWiz
+ (proxy:blocks:
+  "MicroPython"
+
+  ((category: "misc")
+   (separator)
+   (commandBlock:args:code:imports:
+    "print %s"
+    ("hello")
+    "print(%s)"
+    ())
+   (commandBlock:args:code:imports:
+    "set random seed to %n"
+    (1234)
+    "random.seed(%n)"
+    (random))
+   (commandBlock:args:code:imports:
+    "file names into %L"
+    ("list")
+    "%L=os.listdir()"
+    (os))
+
+   (category: "sensing")
+   (reporterBlock:args:return:code:imports:
+    "return value"
+    ()
+    r
+    "_r"
+    ())
+
+   (category: "control")
+   (separator)
+   (commandBlock:args:code:imports:
+    "break"
+    ("")
+    "break"
+    ())
+   (commandBlock:args:code:imports:
+    "continue"
+    ("")
+    "continue"
+    ())
+   (separator)
+   (commandBlock:args:code:imports:
+    "call %S"
+    ("")
+    "_r=%S()"
+    ())
+   (commandBlock:args:code:imports:
+    "return %n"
+    (0)
+    "return %n"
+    ())
+
+   )))

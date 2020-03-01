@@ -1,0 +1,252 @@
+(MicroWiz
+ (proxy:blocks:
+  "MicroPython"
+
+  ((category: "control")
+   (separator)
+   (commandBlock:args:code:imports:
+    "wait %n millisecs"
+    (1000)
+    "time.sleep_ms()"
+    (time))
+   (commandBlock:args:code:imports:
+    "wait %n microsecs"
+    (1000)
+    "time.sleep_us()"
+    (time))
+
+   (category: "network")
+   (separator)
+   (commandBlock:args:code:imports:
+    "setup wifi %W"
+    ("STA_IF")
+    "_wlan=network.WLAN(network.%W)"
+    (network))
+   (commandBlock:args:code:imports:
+    "wifi active %b"
+    ()
+    "_wlan.active(%b)"
+    ())
+   (commandBlock:args:code:imports:
+    "wifi scan"
+    ()
+    "_wlan.scan()"
+    ())
+   (commandBlock:args:code:imports:
+    "wifi connect id %s pw %s"
+    ("abc" "def")
+    "_wlan.connect(%s,%s)"
+    ())
+   (commandBlock:args:code:imports:
+    "wifi disconnect"
+    ()
+    "_wlan.disconnect()"
+    ())
+   (reporterBlock:args:return:code:imports:
+    "wifi is connected"
+    ()
+    b
+    "_wlan.isconnected()"
+    ())
+   (reporterBlock:args:return:code:imports:
+    "wifi config of %w"
+    ("mac")
+    r
+    "_wlan.config('%w')"
+    ())
+   (commandBlock:args:code:imports:
+    "set wifi config %w to %s"
+    ("essid" "ESP-AP")
+    "_wlan.config('%w'=%s)"
+    ())
+   (commandBlock:args:code:imports:
+    "wifi ifconfig to %L"
+    ("list")
+    "%L=_wlan.ifconfig()"
+    ())
+   (reporterBlock:args:return:code:imports:
+    "wifi status"
+    ()
+    r
+    "_wlan.status()"
+    ())
+   (separator)
+   (reporterBlock:args:return:code:imports:
+    "getaddr of %s port %n"
+    ("127.0.0.1" 80)
+    r
+    "socket.getaddrinfo(%s,%n)[0][-1]"
+    (socket))
+   (commandBlock:args:code:imports:
+    "setup TCP socket %d"
+    (0)
+    "_sock%d=socket.socket(socket.AF_INET,socket.SOCK_STREAM)"
+    (socket))
+   (commandBlock:args:code:imports:
+    "setup UDP socket %d"
+    (0)
+    "_sock%d=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)"
+    (socket))
+   (commandBlock:args:code:imports:
+    "socket %d connect %s"
+    (0)
+    "_sock%d.connect(%s)"
+    ())
+   (commandBlock:args:code:imports:
+    "socket %d bind %s"
+    (0)
+    "_sock%d.bind(%s)"
+    ())
+   (commandBlock:args:code:imports:
+    "socket %d listen %n"
+    (0 1)
+    "_sock%d.listen(%n)"
+    ())
+   (commandBlock:args:code:imports:
+    "socket %d send %s"
+    (0)
+    "_sock%d.send(%s)"
+    (socket))
+   (reporterBlock:args:return:code:imports:
+    "socket %d receive %n"
+    (0 10)
+    r
+    "_sock%d.recv(%n)"
+    ())
+   (commandBlock:args:code:imports:
+    "socket %d close"
+    (0)
+    "_sock%d.close()"
+    ())
+
+   (category: "i2c")
+   (separator)
+   (commandBlock:args:code:imports:
+    "set i2c freq %n sda %n scl %n"
+    (100000 20 19)
+    "_i2c=I2C(scl=Pin(%n3),sda=Pin(%n2),freq=%n1)"
+    ((machine I2C) (machine Pin)))
+   (commandBlock:args:code:imports:
+    "i2c read %n bytes from %n into %L"
+    (4 10 "list")
+    "%L=_i2c.readfrom(%n2,%n1)"
+    ())
+   (commandBlock:args:code:imports:
+    "i2c write %n to %n"
+    (100 10)
+    "_i2c.writeto(%n2,%n1)"
+    ())
+   (commandBlock:args:code:imports:
+    "i2c write %L to %n"
+    ("list" 10)
+    "_i2c.writeto(%n,bytes(%L))"
+    ())
+
+   (category: "spi")
+   (commandBlock:args:code:imports:
+    "set spi sck %n mosi %n miso %n"
+    (0 2 4)
+    "_spi=SPI(-1,baudrate=100000,polarity=1,phase=0,sck=Pin(%n),mosi=Pin(%n),miso=Pin(%n)"
+    ((machine Pin) (machine SPI)))
+   (commandBlock:args:code:imports:
+    "set spi baudrate %n"
+    (200000)
+    "_spi.init(baudrate=%n)"
+    ())
+   (commandBlock:args:code:imports:
+    "spi read %n bytes into %L"
+    (10 "list")
+    "%L=_spi.read(%n)"
+    ())
+   (commandBlock:args:code:imports:
+    "spi write %s"
+    ("abcde")
+    "_spi.write(b%s)"
+    ())
+   (commandBlock:args:code:imports:
+    "spi write %L"
+    ("list")
+    "_spi.write(bytes(%L))"
+    ())
+   (commandBlock:args:code:imports:
+    "set hard spi baud %n"
+    (80000000)
+    "_spi=SPI(1,baudrate=%n,polarity=0,phase=0)"
+    ())
+
+   (category: "io")
+   (separator)
+   (commandBlock:args:code:imports:
+    "set digital pin %n for %P"
+    (0 "INPUT")
+    "_pin%n1=Pin(%n1,Pin.%P)"
+    ((machine Pin)))
+   (reporterBlock:args:return:code:imports:
+    "digital read pin %n"
+    (0)
+    r
+    "_pin%n.value()"
+    ())
+   (commandBlock:args:code:imports:
+    "digital write pin %n to %n"
+    (0 0)
+    "_pin%n.value(%n)"
+    ())
+   (commandBlock:args:code:imports:
+    "turn on pin %n"
+    (0)
+    "_pin%n.on()"
+    ())
+   (commandBlock:args:code:imports:
+    "turn off pin %n"
+    (0)
+    "_pin%n.off()"
+    ())
+   (separator)
+   (commandBlock:args:code:imports:
+    "set pwm pin %n freq %n duty %n"
+    (0 1000 200)
+    "_pwm%n1=PWM(Pin(%n1),freq=%n2,duty=%n3)"
+    ((machine Pin) (machine PWM)))
+   (commandBlock:args:code:imports:
+    "analog write pin %n to %n"
+    (0 0)
+    "_pwm%n.duty(%n)"
+    ())
+   (commandBlock:args:code:imports:
+    "deinit pwm pin %n"
+    (0)
+    "_pwm%n.deinit()"
+    ())
+   (separator)
+   (commandBlock:args:code:imports:
+    "set adc pin %n"
+    (0)
+    "_adc%n1=ADC(%n1)"
+    ((machine ADC)))
+   (reporterBlock:args:return:code:imports:
+    "analog read pin %n"
+    (0)
+    r
+    "_adc%n.read()"
+    ())
+
+   (category: "neopixel")
+   (commandBlock:args:code:imports:
+    "set neopixel pin %n num %n"
+    (0 5)
+    "_pin%n1=Pin(%n1,Pin.OUT)
+_np%n1=neopixel.NeoPixel(_pin%n1,%n2)"
+    (neopixel (machine Pin)))
+   (commandBlock:args:code:imports:
+    "pin %n no %n r %n g %n b %n"
+    (0 0 255 255 255)
+    "_np%n[%n]=(%n,%n,%n)"
+    ())
+   (commandBlock:args:code:imports:
+    "show neopixel pin %n"
+    (0)
+    "_np%n.write()"
+    ())
+
+   )))

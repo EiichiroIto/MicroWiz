@@ -1,0 +1,71 @@
+(MicroWiz
+ (proxy:blocks:
+  "MaixPy"
+
+  ((category: "sensing")
+   (separator)
+   (commandBlock:args:code:imports:
+    "reset sensor"
+    ()
+    "sensor.reset()"
+    (sensor))
+   (commandBlock:args:code:imports:
+    "set pixformat %p"
+    (RGB565)
+    "sensor.set_pixformat(sensor.%p)"
+    (sensor))
+   (commandBlock:args:code:imports:
+    "set framesize %F"
+    (QVGA)
+    "sensor.set_framesize(sensor.%F)"
+    (sensor))
+   (commandBlock:args:code:imports:
+    "set vflip %b"
+    ()
+    "sensor.set_vflip(%b)"
+    (sensor))
+   (commandBlock:args:code:imports:
+    "sensor run %n"
+    (1)
+    "sensor.run(%n)"
+    (sensor))
+   (reporterBlock:args:return:code:imports:
+    "sensor snapshot"
+    ()
+    r
+    "sensor.snapshot()"
+    (sensor))
+
+   (category: "display")
+   (separator)
+   (commandBlock:args:code:imports:
+    "init lcd"
+    ()
+    "lcd.init()"
+    (lcd))
+   (commandBlock:args:code:imports:
+    "lcd rotation %d"
+    (2)
+    "lcd.rotation(%d)"
+    (lcd))
+   (commandBlock:args:code:imports:
+    "lcd image %s"
+    ()
+    "lcd.display(%s)"
+    (lcd))
+   (commandBlock:args:code:imports:
+    "lcd text %s at %n , %n fg %c bg %c"
+    ("hello" 101 102 "RED" "BLACK")
+    "lcd.draw_string(%n1,%n2,%s,lcd.%c1,lcd.%c2)"
+    (lcd))
+   (commandBlock:args:code:imports:
+    "lcd clear"
+    ()
+    "lcd.clear()"
+    (lcd))
+   (commandBlock:args:code:imports:
+    "deinit lcd"
+    ()
+    "lcd.deinit()"
+    (lcd))
+   )))

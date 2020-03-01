@@ -1,0 +1,353 @@
+(MicroWiz
+ (proxy:blocks:
+  "Microbit"
+  ((category: "control")
+   (separator)
+   (commandBlock:args:code:imports:
+    "wait %n msecs"
+    (1000)
+    "utime.sleep_ms(%n)"
+    (utime))
+   (commandBlock:args:code:imports:
+    "panic %n"
+    (0)
+    "microbit.panic(%n)"
+    (microbit))
+
+   (category: "sensing")
+   (separator)
+   (reporterBlock:args:return:code:imports:
+    "running time"
+    ()
+    r
+    "microbit.running_time()"
+    (microbit))
+   (reporterBlock:args:return:code:imports:
+    "temperature"
+    ()
+    r
+    "microbit.temperature()"
+    (microbit))
+   (separator)
+   (reporterBlock:args:return:code:imports:
+    "current gesture"
+    ()
+    r
+    "microbit.accelerometer.current_gesture()"
+    (microbit))
+   (reporterBlock:args:return:code:imports:
+    "is gesture %g ?"
+    ("up")
+    b
+    "microbit.accelerometer.is_gesture('%g')"
+    (microbit))
+   (reporterBlock:args:return:code:imports:
+    "was gesture %g ?"
+    ("up")
+    b
+    "microbit.accelerometer.was_gesture('%g')"
+    (microbit))
+   (reporterBlock:args:return:code:imports:
+    "gestures"
+    ()
+    r
+    "' '.join(accelerometer.get_gestures())"
+    (microbit))
+
+   (category: "compass")
+   (separator)
+   (commandBlock:args:code:imports:
+    "calibrate compass"
+    ()
+    "microbit.compass.calibrate()"
+    (microbit))
+   (reporterBlock:args:return:code:imports:
+    "is calibrated"
+    ()
+    b
+    "microbit.compass.is_calibrated()"
+    (microbit))
+   (reporterBlock:args:return:code:imports:
+    "heading"
+    ()
+    r
+    "microbit.compass.heading()"
+    (microbit))
+   (commandBlock:args:code:imports:
+    "clear calibration"
+    ()
+    "microbit.compass.clear_calibration()"
+    (microbit))
+   (reporterBlock:args:return:code:imports:
+    "field strength"
+    ()
+    r
+    "microbit.compass.get_field_strength()"
+    (microbit))
+
+   (category: "radio")
+   (commandBlock:args:code:imports:
+    "radio on"
+    ()
+    "radio.on()"
+    (radio))
+   (commandBlock:args:code:imports:
+    "radio off"
+    ()
+    "radio.off()"
+    (radio))
+   (commandBlock:args:code:imports:
+    "config radio group %n"
+    (0)
+    "radio.config(group=%n)"
+    (radio))
+   (commandBlock:args:code:imports:
+    "send a radio message %s"
+    ("Hello!")
+    "radio.send(%s)"
+    (radio))
+   (reporterBlock:args:return:code:imports:
+    "received radio message"
+    ()
+    r
+    "radio.receive()"
+    (radio))
+   (commandBlock:args:code:imports:
+    "radio reset"
+    ()
+    "radio.reset()"
+    (radio))
+
+   (category: "music")
+   (commandBlock:args:code:imports:
+    "play music %s"
+    ("c1:4 e:2 g c2:4")
+    "music.play(%s.split(' '))"
+    (music))
+   (commandBlock:args:code:imports:
+    "play music %s loop %b wait %b"
+    ("c1:4 e:2 g c2:4")
+    "music.play(%s.split(' '),loop=%b1,wait=%b2)"
+    (music))
+   (commandBlock:args:code:imports:
+    "stop music"
+    ()
+    "music.stop()"
+    (music))
+   (separator)
+   (commandBlock:args:code:imports:
+    "set tempo to %n ticks"
+    (4)
+    "music.set_tempo(ticks=%n)"
+    (music))
+   (commandBlock:args:code:imports:
+    "set tempo to %n bpm"
+    (120)
+    "music.set_tempo(bpm=%n)"
+    (music))
+   (reporterBlock:args:return:code:imports:
+    "tempo"
+    ()
+    r
+    "music.get_tempo()"
+    (music))
+   (commandBlock:args:code:imports:
+    "play pitch %n Hz for %n msec"
+    (440 1000)
+    "music.pitch(%n1,duration=%n2)"
+    (music))
+   (commandBlock:args:code:imports:
+    "reset music settings"
+    ()
+    "music.reset()"
+    (music))
+
+   (category: "misc")
+   (reporterBlock:args:return:code:imports:
+    "count of %s"
+    ("")
+    r
+    "%s.count()"
+    ())
+   (reporterBlock:args:return:code:imports:
+    "copy of %s"
+    ("")
+    r
+    "%s.copy()"
+    ())
+   (commandBlock:args:code:imports:
+    "clear %s"
+    ("")
+    "%s.clear()"
+    ())
+
+   (category: "io")
+   (separator)
+   (reporterBlock:args:return:code:imports:
+    "digital read pin %n"
+    (0)
+    r
+    "microbit.pin%n.read_digital()"
+    (microbit))
+   (commandBlock:args:code:imports:
+    "digital write pin %n to %n"
+    (0 0)
+    "microbit.pin%n.write_digital(%n)"
+    (microbit))
+   (reporterBlock:args:return:code:imports:
+    "analog read pin %n"
+    (0)
+    r
+    "microbit.pin%n.read_analog()"
+    (microbit))
+   (commandBlock:args:code:imports:
+    "analog write pin %n to %n"
+    (0 0)
+    "microbit.pin%n.write_analog(%n)"
+    (microbit))
+   (commandBlock:args:code:imports:
+    "analog set period pin %n to %n msec"
+    (0 500)
+    "microbit.pin%n.set_analog_period_microseconds(%n)"
+    (microbit))
+   (reporterBlock:args:return:code:imports:
+    "pin %n is touched"
+    (0)
+    b
+    "microbit.pin%n.is_touched()"
+    (microbit))
+
+   (category: "display")
+   (separator)
+   (commandBlock:args:code:imports:
+    "scroll %s"
+    ("Hello")
+    "display.scroll(str(%s))"
+    ((microbit display)))
+   (commandBlock:args:code:imports:
+    "scroll %s no wait"
+    ("World!")
+    "display.scroll(str(%s),wait=False)"
+    ((microbit display)))
+   (commandBlock:args:code:imports:
+    "show %s"
+    ("A")
+    "display.show(%s)"
+    ((microbit display)))
+   (reporterBlock:args:return:code:imports:
+    "point x %n y %n"
+    (0 0)
+    r
+    "display.get_pixel(%n,%n)"
+    ((microbit display)))
+   (commandBlock:args:code:imports:
+    "set x %n y %n to %n"
+    (0 0 0)
+    "display.set_pixel(%n,%n,%n)"
+    ((microbit display)))
+   (commandBlock:args:code:imports:
+    "clear"
+    ()
+    "display.clear()"
+    ((microbit display)))
+   (separator)
+   (reporterBlock:args:return:code:imports:
+    "clock image at %n"
+    (0)
+    r
+    "Image.ALL_CLOCKS[%n]"
+    ((microbit Image)))
+   (reporterBlock:args:return:code:imports:
+    "arrow image at %n"
+    (0)
+    r
+    "Image.ALL_ARROWS[%n]"
+    ((microbit Image)))
+   (reporterBlock:args:return:code:imports:
+    "image of %s"
+    ()
+    r
+    "Image(%s)"
+    ((microbit Image)))
+   (reporterBlock:args:return:code:imports:
+    "images of %L"
+    ("list")
+    r
+    "%L"
+    ())
+   (reporterBlock:args:return:code:imports:
+    "image width %n height %n"
+    (5 5)
+    r
+    "Image(%n,%n)"
+    ((microbit Image)))
+   (reporterBlock:args:return:code:imports:
+    "inverted image of %s"
+    ()
+    r
+    "%s.invert()"
+    ())
+   (separator)
+   (reporterBlock:args:return:code:imports:
+    "point x %n y %n of %s"
+    (0 0 "")
+    r
+    "%s.get_pixel(%n1,%n2)"
+    ())
+   (commandBlock:args:code:imports:
+    "set x %n y %n to %n of %s"
+    (0 1 2 "")
+    "%s.set_pixel(%n1,%n2,%n3)"
+    ())
+   (commandBlock:args:code:imports:
+    "fill %s with %n"
+    ("" 0)
+    "%s.fill(%n)"
+    ())
+   (commandBlock:args:code:imports:
+    "crop area x %n y %n w %n h %n of %s"
+    (0 0 5 5 "")
+    "%s.crop(%n1,%n2,%n3,%n4)"
+    ())
+   (separator)
+   (commandBlock:args:code:imports:
+    "led on"
+    ()
+    "display.on()"
+    ((microbit display)))
+   (commandBlock:args:code:imports:
+    "led off"
+    ()
+    "display.off()"
+    ((microbit display)))
+   (reporterBlock:args:return:code:imports:
+    "led is on"
+    ()
+    b
+    "display.is_on()"
+    ((microbit display)))
+
+   (category: "neopixel")
+   (commandBlock:args:code:imports:
+    "set neopixel pin %n num %n"
+    (0 5)
+    "_np%n1=neopixel.NeoPixel(microbit.pin%n1,%n2)"
+    (neopixel microbit))
+   (commandBlock:args:code:imports:
+    "pin %n no %n r %n g %n b %n"
+    (0 0 255 255 255)
+    "_np%n[%n]=(%n,%n,%n)"
+    ())
+   (commandBlock:args:code:imports:
+    "show neopixel pin %n"
+    (0)
+    "_np%n.show()"
+    ())
+   (commandBlock:args:code:imports:
+    "clear neopixel pin %n"
+    (0)
+    "_np%n.clear()"
+    ())
+
+
+   )))
