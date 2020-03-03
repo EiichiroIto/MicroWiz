@@ -28,14 +28,6 @@ ESP8266BlockSpecs >> gpioModeNames [
 ]
 
 { #category : #'block specs' }
-ESP8266BlockSpecs >> ioBlocks [
-	^ super ioBlocks , #(
-		'i2c'
-			('i2c write %s to %n'					-		i2cWrite:to: 				'[1,2,3]' 10)
-		)
-]
-
-{ #category : #'block specs' }
 ESP8266BlockSpecs >> setupBlockCategoryTo: aBlockDef [
 	super setupBlockCategoryTo: aBlockDef.
 	aBlockDef

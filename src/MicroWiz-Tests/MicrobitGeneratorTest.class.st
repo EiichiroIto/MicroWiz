@@ -101,59 +101,6 @@ MicrobitGeneratorTest >> testDelServo [
 ]
 
 { #category : #test }
-MicrobitGeneratorTest >> testI2c [
-	| g |
-	g := self newGenerator.
-	self assert: g i2c equals: '_i2c.'.
-	self assert: ((g modules at: 'microbit') includes: 'i2c').
-	self assert: (g inits includes: #i2c)
-]
-
-{ #category : #test }
-MicrobitGeneratorTest >> testI2cInit [
-	| g |
-	g := self newGenerator.
-	g i2cInit.
-	self assert: g code equals: '_i2c.init()' , String lf.
-	self deny: (g inits includes: #i2c)
-]
-
-{ #category : #test }
-MicrobitGeneratorTest >> testI2cInitFreqSdaScl [
-	| g |
-	g := self newGenerator.
-	g i2cInitFreq: 100000 sda: 20 scl: 19.
-	self
-		assert: g code
-		equals: '_i2c.init(freq=100000,sda=microbit.pin20,scl=microbit.pin19)' , String lf.
-	self deny: (g inits includes: #i2c)
-]
-
-{ #category : #test }
-MicrobitGeneratorTest >> testI2cReadFromInto [
-	| g |
-	g := self newGenerator.
-	g i2cRead: 4 from: 10 into: 'x'.
-	self assert: g code equals: 'x=_i2c.read(10,4)' , String lf
-]
-
-{ #category : #test }
-MicrobitGeneratorTest >> testI2cWriteListTo [
-	| g |
-	g := self newGenerator.
-	g i2cWriteList: 'x' to: [10].
-	self assert: g code equals: '_i2c.write(10,bytes(x))' , String lf
-]
-
-{ #category : #test }
-MicrobitGeneratorTest >> testI2cWriteTo [
-	| g |
-	g := self newGenerator.
-	g i2cWrite: '1,2,3' to: [10].
-	self assert: g code equals: '_i2c.write(10,bytes(1,2,3))' , String lf
-]
-
-{ #category : #test }
 MicrobitGeneratorTest >> testImage [
 	| g |
 	g := self newGenerator.

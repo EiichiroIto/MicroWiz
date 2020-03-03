@@ -384,7 +384,7 @@ MicroPythonProxyTest >> testPutFileNamedContents [
 	c isConnected: true.
 	p putFileNamed: 'abc' contents: 'def'.
 	self assert: p sendingQueue first equals: '_f=open(''abc'',''w'')'.
-	self assert: p sendingQueue second equals: '_f.write(''def''+''\n'')'.
+	self assert: p sendingQueue second equals: '_=_f.write(''def''+''\n'')'.
 	self assert: p sendingQueue third equals: '_f.close()'
 ]
 
@@ -628,9 +628,9 @@ MicroPythonProxyTest >> testStringOfFileNamedContents [
 g''hi
 j\akl')
 		equals:
-			'_f=open(''abc'',''w'')' , String lf , '_f.write(''def''+''\n'')'
-				, String lf , '_f.write(''g\''hi''+''\n'')' , String lf
-				, '_f.write(''j\\akl''+''\n'')' , String lf , '_f.close()' , String lf
+			'_f=open(''abc'',''w'')' , String lf , '_=_f.write(''def''+''\n'')'
+				, String lf , '_=_f.write(''g\''hi''+''\n'')' , String lf
+				, '_=_f.write(''j\\akl''+''\n'')' , String lf , '_f.close()' , String lf
 ]
 
 { #category : #test }

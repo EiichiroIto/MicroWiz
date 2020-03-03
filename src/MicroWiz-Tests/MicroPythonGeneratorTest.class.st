@@ -834,16 +834,6 @@ MicroPythonGeneratorTest >> testUnaryFunctionArg [
 ]
 
 { #category : #test }
-MicroPythonGeneratorTest >> testUnquoteString [
-	| g |
-	g := self newGenerator.
-	self assert: (g unquoteString: 'abc') equals: 'abc'.
-	self assert: (g unquoteString: '''abc') equals: '''abc'.
-	self assert: (g unquoteString: 'abc''') equals: 'abc'''.
-	self assert: (g unquoteString: '''abc''') equals: 'abc'
-]
-
-{ #category : #test }
 MicroPythonGeneratorTest >> testUseListVar [
 	| g |
 	g := self newGenerator.

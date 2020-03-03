@@ -84,13 +84,6 @@ MicrobitBlockSpecs >> ioBlocks [
 																	-		writeServo:to: 0 180)
 			('servo set pin %G %n msec %n to %n'
 																	-		setServo:msec:min:max:	0	5	100	500)
-		'i2c'
-			('set i2c freq %n sda %n scl %n'
-																	-		i2cInitFreq:sda:scl: 100000 20 19)
-			('i2c read %n bytes from %n into %L'
-																	-		i2cRead:from:into:		4 0 'list')
-			('i2c write %s to %n'						-		i2cWrite:to: 				'[1,2,3]' 0)
-			('i2c write %L to %n'						-		i2cWriteList:to:			'list' 0)
 		)
 ]
 

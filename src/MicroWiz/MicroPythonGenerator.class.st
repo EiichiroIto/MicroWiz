@@ -249,7 +249,7 @@ MicroPythonGenerator >> generateExtCode: aSymbol arguments: aCollection for: aSc
 	| blockDef code |
 	blockDef := aScript extBlockDefOf: aSymbol.
 	code := blockDef codeWithArgs: aCollection.
-	blockDef imports do: [ :each | self perform: each asSymbol ].
+	blockDef imports do: [ :each | self import: each ].
 	blockDef isReporter
 		ifTrue: [ ^ code ].
 	code linesDo: [ :each | self appendWithNewline: each ].
@@ -643,13 +643,6 @@ MicroPythonGenerator >> unaryFunction: aString arg: anObject [
 	| arg |
 	arg := self valueOf: anObject.
 	^ aString, '(', arg, ')'
-]
-
-{ #category : #private }
-MicroPythonGenerator >> unquoteString: aString [
-	(aString first = $' and: [ aString last = $' ])
-		ifFalse: [ ^ aString ].
-	^ aString copyFrom: 2 to: aString size - 1
 ]
 
 { #category : #private }

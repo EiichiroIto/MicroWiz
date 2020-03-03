@@ -79,7 +79,14 @@ BlockDefTest >> testCodeWithArgs [
 	d block: 'set pwm pin %n freq %n duty %n'.
 	d code: '_pwm%n1=PWM(Pin(%n1),freq=%n2,duty=%n3)'.
 	ret := d codeWithArgs: { '3' . '123' . '456' }.
-	self assert: ret equals: '_pwm3=PWM(Pin(3),freq=123,duty=456)'
+	self assert: ret equals: '_pwm3=PWM(Pin(3),freq=123,duty=456)'.
+	d block: 'i2c write %s to %n'.
+	d code: 'i2c.write(%n,bytes(%''s))'.
+	ret := d
+		codeWithArgs:
+			{[ '''[1,2,3]''' ].
+			[ 5 ]}.
+	self assert: ret equals: 'i2c.write(5,bytes([1,2,3]))'
 ]
 
 { #category : #test }
@@ -104,7 +111,9 @@ BlockDefTest >> testEvaluatedArgs [
 			[ '102' ].
 			[ 'RED' ].
 			[ 'BLACK' ]}.
-	self assertCollection: ret equals: #('101' '102' 'hello' 'RED' 'BLACK').
+	self
+		assertCollection: ret
+		equals: #('101' '102' 'hello' 'RED' 'BLACK').
 	d block: 'set digital pin %n for %P'.
 	d code: '_pin%n1=Pin(%n1,Pin.%P)'.
 	ret := d
@@ -112,6 +121,20 @@ BlockDefTest >> testEvaluatedArgs [
 			{[ 5 ].
 			[ 'OUTPUT' ]}.
 	self assertCollection: ret equals: #('5' '5' 'OUTPUT').
+	d block: 'abc %s def %n'.
+	d code: 'x%''sy%n'.
+	ret := d
+		evaluatedArgs:
+			{[ '''OUTPUT''' ].
+			[ 5 ]}.
+	self assertCollection: ret equals: #('OUTPUT' '5').
+	d block: 'i2c write %s to %n'.
+	d code: 'i2c.write(%n,bytes(%''s))'.
+	ret := d
+		evaluatedArgs:
+			{[ '''[1,2,3]''' ].
+			[ 0 ]}.
+	self assertCollection: ret equals: #('0' '[1,2,3]')
 ]
 
 { #category : #test }
@@ -153,6 +176,16 @@ BlockDefTest >> testImports [
 ]
 
 { #category : #test }
+BlockDefTest >> testIsArgSpec [
+	| d |
+	d := self newDef.
+	self assert: (d isArgSpec: '%a').
+	self assert: (d isArgSpec: '%b').
+	self deny: (d isArgSpec: '%').
+	self deny: (d isArgSpec: 'x')
+]
+
+{ #category : #test }
 BlockDefTest >> testIsBlockDef [
 	| d |
 	d := self newDef.
@@ -177,6 +210,40 @@ BlockDefTest >> testIsSeparator [
 	| d |
 	d := self newDef.
 	self deny: d isSeparator
+]
+
+{ #category : #test }
+BlockDefTest >> testIsUnquoteArg [
+	| d |
+	d := self newDef.
+	self deny: (d isUnquoteArg: '%a').
+	self deny: (d isUnquoteArg: '%b').
+	self deny: (d isUnquoteArg: '%').
+	self deny: (d isUnquoteArg: '%''').
+	self deny: (d isUnquoteArg: 'x').
+	self assert: (d isUnquoteArg: '%''a').
+	self assert: (d isUnquoteArg: '%''b')
+]
+
+{ #category : #test }
+BlockDefTest >> testParseCommandSpec [
+	| d |
+	d := self newDef.
+	self
+		assertCollection: (d parseCommandSpec: 'abc %n')
+		equals: #(abc '%n').
+	self
+		assertCollection: (d parseCommandSpec: 'abc %n    def %s')
+		equals: #(abc '%n' def '%s').
+	self
+		assertCollection: (d parseCommandSpec: 'abc%n1def%s23gh')
+		equals: #(abc '%n1' def '%s23' gh).
+	self
+		assertCollection: (d parseCommandSpec: 'abc% def%')
+		equals: #(abc '%' def '%').
+	self
+		assertCollection: (d parseCommandSpec: 'abc%''a def%')
+		equals: #(abc '%''a' def '%')
 ]
 
 { #category : #test }
@@ -228,4 +295,27 @@ BlockDefTest >> testSelector2 [
 	d block: 'this %s is %n a %x pen'.
 	d id: 10.
 	self assert: d selector equals: #int10arg1:arg2:arg3:
+]
+
+{ #category : #test }
+BlockDefTest >> testSplitArg [
+	| d |
+	d := self newDef.
+	self assert: (d splitArg: '%') equals: #('%' '').
+	self assert: (d splitArg: '%a') equals: #('%a' '').
+	self assert: (d splitArg: '%a1') equals: #('%a1' '').
+	self assert: (d splitArg: '%''a1') equals: #('%''a1' '').
+	self assert: (d splitArg: '%ab') equals: #('%a' 'b').
+	self assert: (d splitArg: '%%') equals: #('%' '%').
+	self assert: (d splitArg: '%$') equals: #('%' '$')
+]
+
+{ #category : #test }
+BlockDefTest >> testUnquoteString [
+	| g |
+	g := self newDef.
+	self assert: (g unquoteString: 'abc') equals: 'abc'.
+	self assert: (g unquoteString: '''abc') equals: '''abc'.
+	self assert: (g unquoteString: 'abc''') equals: 'abc'''.
+	self assert: (g unquoteString: '''abc''') equals: 'abc'
 ]

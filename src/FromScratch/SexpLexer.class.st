@@ -6,9 +6,7 @@ Class {
 
 { #category : #acccessing }
 SexpLexer class >> quotedString: aString [
-	^ (aString includes: Character space)
-		ifTrue: [ '"' , aString , '"' ]
-		ifFalse: [ aString ]
+	^ '"' , aString , '"'
 ]
 
 { #category : #private }

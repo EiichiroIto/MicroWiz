@@ -17,6 +17,6 @@ MaixPyProxy >> newBlockSpecs [
 { #category : #api }
 MaixPyProxy >> newCode [
 	^ MicroPythonCode new
-		generator: MaixPyGenerator new;
+		generator: MicroPythonGenerator new;
 		yourself
 ]

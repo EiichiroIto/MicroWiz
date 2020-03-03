@@ -119,24 +119,26 @@ ScratchProject >> deleteScript: aScript [
 
 { #category : #'file read/write' }
 ScratchProject >> extractInfoFrom: aByteArray [
-	| s version |
+	| s version obj |
+	obj := self newObjStream.
 	s := ReadStream on: aByteArray.
-	version := ObjStream fileVersion: self class from: s.
+	version := obj class fileVersion: self class from: s.
 	version = self class appVersion
 		ifFalse: [ ^ self inform: 'Invalid version' ].
 	s skip: 4.
-	info := self newObjStream readObjFrom: s showProgress: false
+	info := obj readObjFrom: s showProgress: false
 ]
 
 { #category : #'file read/write' }
 ScratchProject >> extractProjectFrom: aByteArray [
-	| s version proj |
+	| s version proj obj |
+	obj := self newObjStream.
 	s := ReadStream on: aByteArray.
-	version := ObjStream fileVersion: self class from: s.
+	version := obj class fileVersion: self class from: s.
 	version = self class appVersion
 		ifFalse: [ ^ self inform: 'Invalid app version' ].
 	s skip: s uint32.
-	proj := self newObjStream readObjFrom: s showProgress: true.
+	proj := obj readObjFrom: s showProgress: true.
 	proj isProject
 		ifFalse: [ ^ self error: 'Invalid project format :' , proj class asString ].
 	proj scripts
@@ -159,17 +161,18 @@ ScratchProject >> findObjName: aString [
 	^ self scripts detect: [ :each | each objName = aString ] ifNone: [ nil ]
 ]
 
-{ #category : #accessing }
+{ #category : #'file read/write' }
 ScratchProject >> getScratchInfoFrom: aFileReference [
-	| result f version buf |
+	| result f version buf obj |
+	obj := self newObjStream.
 	result := Dictionary new.
 	SpScratchApp
 		try: [ f := aFileReference binaryReadStream.
-			version := ObjStream fileVersion: self class from: f.
+			version := obj class fileVersion: self class from: f.
 			version = self class appVersion
 				ifFalse: [ self inform: 'invalid app version'. ^ nil ].
 			buf := f next: f uint32.
-			result := ObjStream new readObjFrom: (ReadStream on: buf).
+			result := obj readObjFrom: (ReadStream on: buf).
 			f close ]
 		onFailure: [ ^ nil ].
 	^ result
@@ -270,7 +273,7 @@ ScratchProject >> storeProjectInfoOn: aBinaryStream [
 	aBinaryStream nextPutAll: s contents
 ]
 
-{ #category : #accessing }
+{ #category : #'file read/write' }
 ScratchProject >> thumbnailForm: aForm [
 	info at: 'thumbnail' put: aForm
 ]

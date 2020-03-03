@@ -106,6 +106,11 @@ MicroWizProject class >> moduleDirectory [
 	^ dir
 ]
 
+{ #category : #'ston-core' }
+MicroWizProject class >> stonAllInstVarNames [
+	^ super stonAllInstVarNames , #(proxyClass commClass modules)
+]
+
 { #category : #'block specs' }
 MicroWizProject >> addArgBuilderTo: anArgBuilder [
 	self blockSpecs addArgBuilderTo: anArgBuilder
@@ -194,6 +199,15 @@ MicroWizProject >> fieldsVersion [
 	^ 1
 ]
 
+{ #category : #'file read/write' }
+MicroWizProject >> getScratchInfoFrom: aFileReference [
+	| dict icon |
+	dict := super getScratchInfoFrom: aFileReference.
+	icon := (Smalltalk at: (dict at: 'proxy')) new icon.
+	dict at: 'thumbnail' put: icon.
+	^ dict
+]
+
 { #category : #'object i/o' }
 MicroWizProject >> initFieldsFrom: anObjStream version: classVersion [
 	self
@@ -257,6 +271,13 @@ MicroWizProject >> setupBlockCategoryTo: aBlockDef [
 MicroWizProject >> storeFieldsOn: anObjStream [
 	self storeFieldsNamed: #(proxyClass commClass modules) on: anObjStream.
 	super storeFieldsOn: anObjStream
+]
+
+{ #category : #'file read/write' }
+MicroWizProject >> storeProjectInfoOn: aBinaryStream [
+	info removeKey: 'thumbnail'.
+	info at: 'proxy' put: proxyClass.
+	super storeProjectInfoOn: aBinaryStream
 ]
 
 { #category : #accessing }

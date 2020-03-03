@@ -27,7 +27,6 @@ Class {
 		'heightPadding',
 		'doResizing',
 		'isNumeric',
-		'isEditable',
 		'acceptWhenFocusLost',
 		'isKeyboardFocus',
 		'selectionColor',
@@ -377,8 +376,7 @@ StringFieldMorph >> handlesKeyboard: evt [
 { #category : #'event handling' }
 StringFieldMorph >> handlesMouseDown: evt [
 
-	^ self isEditable "& evt hand toolType isNil"
-
+	^ true
 ]
 
 { #category : #initialization }
@@ -395,7 +393,6 @@ StringFieldMorph >> initialize [
 	self textColor: ScratchTheme dialogBoxTextColor.
 	doResizing := false.
 	isNumeric := false.
-	isEditable := true.
 	isKeyboardFocus := false.
 	acceptWhenFocusLost := false.
 	self keyboardFocusChange: false.
@@ -427,22 +424,6 @@ StringFieldMorph >> insertCharacter: unicodeChar [
 	selectionEnd := selectionStart := self leftSelection + 1.
 	stringMorph contentsClipped: newStr.
 	self stringChanged.
-
-]
-
-{ #category : #accessing }
-StringFieldMorph >> isEditable [
-	"Answer true if I am editable."
-
-	isEditable ifNil: [isEditable := true].
-	^ isEditable
-
-]
-
-{ #category : #accessing }
-StringFieldMorph >> isEditable: aBoolean [
-
-	isEditable := aBoolean.
 
 ]
 

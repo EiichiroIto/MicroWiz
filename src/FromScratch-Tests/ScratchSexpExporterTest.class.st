@@ -75,7 +75,7 @@ ScratchSexpExporterTest >> testWriteScript [
 	self
 		assert: ex privStream contents
 		equals:
-			'(for test ((var a) (var "b c") (list d) (list "e f"))' , String lf
+			'(for test ((var "a") (var "b c") (list "d") (list "e f"))' , String lf
 				, '   (' , String lf , '   ))'
 ]
 
@@ -117,5 +117,5 @@ ScratchSexpExporterTest >> testWriteVarNames [
 	ex writeVarNames: sc.
 	self
 		assert: ex privStream contents
-		equals: '(var a) (var "b c") (list d) (list "e f")'
+		equals: '(var "a") (var "b c") (list "d") (list "e f")'
 ]

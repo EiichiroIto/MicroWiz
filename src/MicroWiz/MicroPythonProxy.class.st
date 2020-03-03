@@ -465,7 +465,7 @@ MicroPythonProxy >> stringOfFileNamed: aFilename contents: aString [
 	aString lines
 		do: [ :each | 
 			stream
-				nextPutAll: '_f.write(';
+				nextPutAll: '_=_f.write(';
 				nextPutAll: (self quotedString: each);
 				nextPutAll: '+''\n'')';
 				nextPutAll: String lf ].

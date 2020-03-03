@@ -18,3 +18,17 @@ MicroWizObjStream class >> userClasses [
 		(112		MicroWizScript)
 	)
 ]
+
+{ #category : #'entry points' }
+MicroWizObjStream >> readObjFrom: aStream showProgress: aBoolean [
+	| str |
+	str := aStream upToEnd asString.
+	^ STON fromString: str
+]
+
+{ #category : #'entry points' }
+MicroWizObjStream >> storeObj: anObject on: aStream [
+	| str |
+	str := STON toString: anObject.
+	aStream nextPutAll: str asByteArray
+]

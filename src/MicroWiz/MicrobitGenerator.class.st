@@ -155,53 +155,6 @@ MicrobitGenerator >> delServo: num [
 ]
 
 { #category : #private }
-MicrobitGenerator >> i2c [
-	self addInit: #i2c.
-	self from: 'microbit' import: 'i2c'.
-	^ '_i2c.'
-]
-
-{ #category : #'io ops' }
-MicrobitGenerator >> i2cInit [
-	self
-		appendWithNewline: self i2c , (self nullaryFunction: 'init').
-	self delInit: #i2c
-]
-
-{ #category : #'io ops' }
-MicrobitGenerator >> i2cInitFreq: freq sda: sda scl: scl [
-	self
-		appendWithNewline:
-			self i2c , 'init(freq=' , (self valueOf: freq) , ',sda='
-				, (self pin: sda) , ',scl=' , (self pin: scl) , ')'.
-	self delInit: #i2c
-]
-
-{ #category : #'io ops' }
-MicrobitGenerator >> i2cRead: bytes from: addr into: list [
-	self
-		appendWithNewline:
-			(self getList: list) , '=' , self i2c
-				, (self binaryFunction: 'read' arg1: addr arg2: bytes)
-]
-
-{ #category : #'io ops' }
-MicrobitGenerator >> i2cWrite: str to: addr [
-	self
-		appendWithNewline:
-			self i2c , 'write(' , (self valueOf: addr) , ',bytes('
-				, (self unquoteString: (self valueOf: str)) , '))'
-]
-
-{ #category : #'io ops' }
-MicrobitGenerator >> i2cWriteList: list to: addr [
-	self
-		appendWithNewline:
-			self i2c , 'write(' , (self valueOf: addr) , ',bytes('
-				, (self getList: list) , '))'
-]
-
-{ #category : #private }
 MicrobitGenerator >> image [
 	self from: 'microbit' import: 'Image'.
 	^ 'Image.'

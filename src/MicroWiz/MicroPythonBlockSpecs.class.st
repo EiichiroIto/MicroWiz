@@ -37,7 +37,7 @@ MicroPythonBlockSpecs >> addIntModuleDefNamed: aString [
 
 { #category : #'block specs' }
 MicroPythonBlockSpecs >> blocks [
-	^ self miscBlocks , self ioBlocks , self displayBlocks
+	^ self ioBlocks , self displayBlocks
 		, self controlBlocks , self operatorsBlocks , self variablesBlocks
 		, self sensingBlocks , self modulesBlocks, self intModuleBlocks
 ]
@@ -103,11 +103,6 @@ MicroPythonBlockSpecs >> listIndexForDeleteNames [
 { #category : #'argument menus' }
 MicroPythonBlockSpecs >> listIndexNames [
 	^ #('0' any last) collect: [ :s | {s localized. s} ]
-]
-
-{ #category : #'block specs' }
-MicroPythonBlockSpecs >> miscBlocks [
-	^ #()
 ]
 
 { #category : #'block specs' }
