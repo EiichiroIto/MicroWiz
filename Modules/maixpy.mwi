@@ -49,7 +49,7 @@
     "lcd.rotation(%d)"
     (lcd))
    (commandBlock:args:code:imports:
-    "lcd image %s"
+    "lcd display %s"
     ()
     "lcd.display(%s)"
     (lcd))

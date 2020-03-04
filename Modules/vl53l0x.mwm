@@ -7,7 +7,7 @@
     "set vl53l0x"
     ()
     "_vl=VL53L0X(_i2c)"
-    (i2c)
+    ()
     1)
    (commandBlock:args:code:imports:
     "vl start"

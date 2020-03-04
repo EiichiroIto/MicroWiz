@@ -7,7 +7,7 @@
     "set oled w %n h %n"
     (128 64)
     "_oled=SSD1306_I2C(%n,%n,_i2c)"
-    (i2c)
+    ()
     1)
    (commandBlock:args:code:imports:
     "oled show"

@@ -1,6 +1,7 @@
 (MicroWiz
  (proxy:blocks:
   "Microbit"
+
   ((category: "control")
    (separator)
    (commandBlock:args:code:imports:
@@ -349,5 +350,26 @@
     "_np%n.clear()"
     ())
 
+   (category: "i2c")
+   (commandBlock:args:code:imports:
+    "set i2c freq %n sda %n scl %n"
+    (100000 20 19)
+    "i2c.init(freq=%n,sda=microbit.pin%n,scl=microbit.pin%n)"
+    ((microbit i2c) microbit))
+   (commandBlock:args:code:imports:
+    "i2c read %n bytes from %n into %L"
+    (4 0 "list")
+    "%L=i2c.read(%n2,%n1)"
+    ())
+   (commandBlock:args:code:imports:
+    "i2c write %s to %n"
+    ("[1,2,3]" 0)
+    "i2c.write(%n,bytes(%'s))"
+    ())
+   (commandBlock:args:code:imports:
+    "i2c write %L to %n"
+    ("list" 0)
+    "i2c.write(%n,bytes(%L))"
+    ())
 
    )))

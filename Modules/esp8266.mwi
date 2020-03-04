@@ -1,18 +1,18 @@
 (MicroWiz
  (proxy:blocks:
-  "MicroPython"
+  "ESP8266"
 
   ((category: "control")
    (separator)
    (commandBlock:args:code:imports:
     "wait %n millisecs"
     (1000)
-    "time.sleep_ms()"
+    "time.sleep_ms(%n)"
     (time))
    (commandBlock:args:code:imports:
     "wait %n microsecs"
     (1000)
-    "time.sleep_us()"
+    "time.sleep_us(%n)"
     (time))
 
    (category: "network")
@@ -135,6 +135,11 @@
     "i2c write %n to %n"
     (100 10)
     "_i2c.writeto(%n2,%n1)"
+    ())
+   (commandBlock:args:code:imports:
+    "i2c write %s to %n"
+    ("[1,2,3]" 10)
+    "_i2c.writeto(%n,bytes(%'s))"
     ())
    (commandBlock:args:code:imports:
     "i2c write %L to %n"
