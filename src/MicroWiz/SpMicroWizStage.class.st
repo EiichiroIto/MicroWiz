@@ -53,9 +53,13 @@ SpMicroWizStage >> addInputShortcutsTo: anObject [
 
 { #category : #private }
 SpMicroWizStage >> addOutput: aString [
+	| str |
 	aString isEmpty
 		ifTrue: [ ^ self ].
-	output text: output text , (aString copyWithout: Character lf).
+	str := self filterOutput: (aString copyWithout: Character lf).
+	str isEmpty
+		ifTrue: [ ^ self ].
+	output text: output text , str.
 	output textArea moveCursorToIndex: output text size
 ]
 
@@ -132,6 +136,28 @@ SpMicroWizStage >> defaultStepTime [
 	^ 100
 ]
 
+{ #category : #private }
+SpMicroWizStage >> filterOutput: aString [
+	| out |
+	out := WriteStream on: String new.
+	aString
+		lineIndicesDo: [ :start :end1 :end2 | 
+			| line ignore |
+			line := aString copyFrom: start to: end1.
+			ignore := false.
+			(owner application suppressPaste
+				and: [ line beginsWith: MicroPythonProxy pasteResponse asString ])
+				ifTrue: [ ignore := true ].
+			(owner application plotData and: [ end2 > end1 ])
+				ifTrue: [ (self plotDataFromString: line)
+						ifNotEmpty: [ :list | 
+							ignore := true.
+							owner ifNotNil: [ owner addPlots: list ] ] ].
+			ignore
+				ifFalse: [ out nextPutAll: (aString copyFrom: start to: end2) ] ].
+	^ out contents
+]
+
 { #category : #initialization }
 SpMicroWizStage >> initializePresenters [
 	input := self newTextInput.
@@ -202,7 +228,7 @@ SpMicroWizStage >> openPort [
 		commOption: #portName to: portName;
 		commOption: #baudRate to: buttonBaudRate label asString asInteger.
 	proxy open
-		ifFalse: [ ^ self confirm: 'cannot open open:' , portName ]
+		ifFalse: [ ^ self inform: 'cannot open open:' , portName ]
 ]
 
 { #category : #private }
@@ -217,6 +243,18 @@ SpMicroWizStage >> pickupOutput [
 		selectAll;
 		takeKeyboardFocus;
 		hasUnacceptedEdits: true
+]
+
+{ #category : #private }
+SpMicroWizStage >> plotDataFromString: aString [
+	| tokens |
+	tokens := ([ :c | c isSeparator or: [ c = $, ] ] split: aString)
+		select: [ :each | each notEmpty ].
+	(tokens allSatisfy: [ :each | each isNumberString ])
+		ifFalse: [ ^ #() ].
+	^ tokens
+		withIndexCollect:
+			[ :each :index | ScratchPlot channel: index data: each asNumberNoError ]
 ]
 
 { #category : #accessing }

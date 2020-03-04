@@ -2,7 +2,9 @@ Class {
 	#name : #SpMicroWiz,
 	#superclass : #SpScratchApp,
 	#instVars : [
-		'withHeader'
+		'withHeader',
+		'suppressPaste',
+		'plotData'
 	],
 	#category : #'MicroWiz-Spec2'
 }
@@ -311,6 +313,16 @@ SpMicroWiz >> otherScriptNames [
 ]
 
 { #category : #accessing }
+SpMicroWiz >> plotData [
+	^ plotData ifNil: [ false ]
+]
+
+{ #category : #accessing }
+SpMicroWiz >> plotData: aBoolean [
+	plotData := aBoolean
+]
+
+{ #category : #accessing }
 SpMicroWiz >> proxy [
 	^ presenter proxy
 ]
@@ -352,6 +364,22 @@ SpMicroWiz >> quit [
 { #category : #private }
 SpMicroWiz >> restoreProject [
 	"do nothing"
+]
+
+{ #category : #'menu actions' }
+SpMicroWiz >> savePlotImage: aPlotter [
+	| fName saveForm pngExt |
+	pngExt := 'png'.
+	saveForm := presenter formFrom: aPlotter extent: 400 @ 400.
+	saveForm ifNil: [ ^ self ].
+	fName := self
+		chooseNewFileDefault: ''
+		extension: pngExt
+		title: 'Save Plots Snapshot'
+		type: #scriptsSnapshot.
+	fName ifNil: [ ^ self ].
+	fName := fName withExtension: pngExt.
+	saveForm writePNGFileNamed: fName pathString
 ]
 
 { #category : #'menu actions' }
@@ -401,6 +429,31 @@ SpMicroWiz >> selectScript [
 		target: script
 ]
 
+{ #category : #'menu actions' }
+SpMicroWiz >> setMaxPlotSize: aPlotter [
+	| ret |
+	ret := UIManager default
+		request: 'number of max plots?'
+		initialAnswer: (aPlotter maxSize ifNil: [ '' ]) asString.
+	ret ifNil: [ ^ self ].
+	ret := ret isEmpty
+		ifTrue: [ nil ]
+		ifFalse: [ ret asNumberNoError ].
+	aPlotter maxSize: ret
+]
+
+{ #category : #'menu actions' }
+SpMicroWiz >> setPlotPeriod: aPlotter [
+	| ret |
+	ret := UIManager default
+		request: 'update plot period? (in milliseconds)'
+		initialAnswer: (aPlotter updatePeriod ifNil: [ '' ]) asString.
+	(ret isNil or: [ ret isEmpty ])
+		ifTrue: [ ^ self ].
+	ret := ret asNumberNoError.
+	aPlotter updatePeriod: ret
+]
+
 { #category : #private }
 SpMicroWiz >> setupView [
 	super setupView.
@@ -441,6 +494,16 @@ SpMicroWiz >> startProgram [
 	code := self confirmCode: code title: 'OK to send, or cancel' localized.
 	code ifNil: [ ^ self ].
 	self execute: code
+]
+
+{ #category : #accessing }
+SpMicroWiz >> suppressPaste [
+	^ suppressPaste ifNil: [ false ]
+]
+
+{ #category : #accessing }
+SpMicroWiz >> suppressPaste: aBoolean [
+	suppressPaste := aBoolean
 ]
 
 { #category : #'menu actions' }

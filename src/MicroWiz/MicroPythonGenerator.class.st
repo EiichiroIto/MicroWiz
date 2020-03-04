@@ -115,7 +115,7 @@ MicroPythonGenerator >> computeFunction: aSymbol of: aNumber [
 
 { #category : #'operators ops' }
 MicroPythonGenerator >> concatenate: x with: y [
-	^ self binaryOperator: ' + ' arg1: x arg2: y
+	^ 'str(' , (self valueOf: x) , ')+str(' , (self valueOf: y) , ')'
 ]
 
 { #category : #'list ops' }

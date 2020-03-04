@@ -50,6 +50,11 @@ SpMicroWizFrame class >> libraryPaneHeight [
 ]
 
 { #category : #accessing }
+SpMicroWizFrame >> addPlots: aCollection [
+	editorPane addPlots: aCollection
+]
+
+{ #category : #accessing }
 SpMicroWizFrame >> blockMenuFor: aBlockMorph inScriptEditor: aBoolean [
 	| m |
 	m := self newMenu.
@@ -80,7 +85,9 @@ SpMicroWizFrame >> connectPresenters [
 		whenOtherButtonPressed: [ :name | application selectOther: name ];
 		whenAddButtonPressed: [ application addScript ];
 		whenDeleteButtonPressed: [ application deleteScript ];
-		whenSelectButtonPressed: [ application selectScript ]
+		whenSelectButtonPressed: [ application selectScript ].
+	editorPane
+		whenPlotterClicked: [ :plotter :event | self showMenuForPlotter: plotter event: event ]
 ]
 
 { #category : #private }
@@ -129,6 +136,22 @@ SpMicroWizFrame >> deviceMenu [
 						name: 'Generate header';
 						action: [ application withHeader: application withHeader not ];
 						icon: [ application withHeader
+								ifTrue: [ checked ]
+								ifFalse: [ unchecked ] ];
+						autoRefresh: true ];
+				addItem: [ :item | 
+					item
+						name: 'Suppress Paste';
+						action: [ application suppressPaste: application suppressPaste not ];
+						icon: [ application suppressPaste
+								ifTrue: [ checked ]
+								ifFalse: [ unchecked ] ];
+						autoRefresh: true ];
+				addItem: [ :item | 
+					item
+						name: 'Plot data';
+						action: [ application plotData: application plotData not ];
+						icon: [ application plotData
 								ifTrue: [ checked ]
 								ifFalse: [ unchecked ] ];
 						autoRefresh: true ];
@@ -377,6 +400,45 @@ SpMicroWizFrame >> setupMenu [
 				name: 'Help';
 				subMenu: self helpMenu ].
 	menu applyTo: self
+]
+
+{ #category : #private }
+SpMicroWizFrame >> showMenuForPlotter: aPlotter event: anEvent [
+	| m checked unchecked |
+	checked := Smalltalk ui iconNamed: #smallOk.
+	unchecked := Smalltalk ui iconNamed: #blank.
+	m := self newMenu.
+	m
+		title: 'Plotter menu';
+		addItem: [ :item | 
+			item
+				name: 'Plot data';
+				action: [ application plotData: application plotData not ];
+				icon: [ application plotData
+						ifTrue: [ checked ]
+						ifFalse: [ unchecked ] ];
+				autoRefresh: true ].
+	m
+		addItem: [ :item | 
+			item
+				name: 'Clear plots' localized;
+				action: [ aPlotter clearPlots ] ].
+	m
+		addItem: [ :item | 
+			item
+				name: 'Set max plots' localized;
+				action: [ application setMaxPlotSize: aPlotter ] ].
+	m
+		addItem: [ :item | 
+			item
+				name: 'Set update period' localized;
+				action: [ application setPlotPeriod: aPlotter ] ].
+	m
+		addItem: [ :item | 
+			item
+				name: 'Save plot data' localized;
+				action: [ application savePlotImage: aPlotter ] ].
+	m openWithSpecAt: anEvent cursorPoint
 ]
 
 { #category : #private }

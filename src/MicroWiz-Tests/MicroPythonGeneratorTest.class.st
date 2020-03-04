@@ -148,7 +148,7 @@ MicroPythonGeneratorTest >> testComputeFunctionOf [
 MicroPythonGeneratorTest >> testConcatenateWith [
 	| g |
 	g := self newGenerator.
-	self assert: (g concatenate: 'x' with: 'y') equals: '(x + y)'
+	self assert: (g concatenate: 'x' with: 'y') equals: 'str(x)+str(y)'
 ]
 
 { #category : #test }

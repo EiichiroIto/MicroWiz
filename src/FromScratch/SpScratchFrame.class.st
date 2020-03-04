@@ -150,6 +150,16 @@ SpScratchFrame >> initializeWindow: aWindow [
 		ifTrue: [ aWindow window beSticky ]
 ]
 
+{ #category : #private }
+SpScratchFrame >> privEditor [
+	^ editorPane
+]
+
+{ #category : #private }
+SpScratchFrame >> privStage [
+	^ stageFrame
+]
+
 { #category : #accessing }
 SpScratchFrame >> projectName [
 	^ titlePane ifNotNil: [ titlePane projectName ]
