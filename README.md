@@ -45,7 +45,7 @@ To start MicroWiz, select [Tools] - [MicroWiz].
 MIT License
 
 ## Demo and Screenshots
-![Youtube](https://www.youtube.com/watch?v=SF__SnhBmW4)
+https://www.youtube.com/watch?v=SF__SnhBmW4
 
 ![Maix Py](https://raw.githubusercontent.com/EiichiroIto/MicroWiz/master/images/MicroWiz2.png)
 
