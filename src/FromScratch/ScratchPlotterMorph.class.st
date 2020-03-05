@@ -11,10 +11,21 @@ Class {
 		'lastUpdateTime',
 		'updatePeriod',
 		'whenMouseClicked',
-		'maxSize'
+		'maxSize',
+		'acceptPlots'
 	],
 	#category : #'FromScratch-Plotter'
 }
+
+{ #category : #accessing }
+ScratchPlotterMorph >> acceptPlots [
+	^ acceptPlots ifNil: [ true ]
+]
+
+{ #category : #accessing }
+ScratchPlotterMorph >> acceptPlots: aBoolean [
+	acceptPlots := aBoolean
+]
 
 { #category : #accessing }
 ScratchPlotterMorph >> addPen: anInteger color: aColor [
@@ -24,6 +35,8 @@ ScratchPlotterMorph >> addPen: anInteger color: aColor [
 
 { #category : #api }
 ScratchPlotterMorph >> addPlots: aCollection [
+	self acceptPlots
+		ifFalse: [ ^ self ].
 	aCollection do: [ :each | self plot: each ].
 	self updateDisplay
 ]
@@ -100,10 +113,16 @@ ScratchPlotterMorph >> drawOn: aCanvas [
 
 { #category : #drawing }
 ScratchPlotterMorph >> drawPlotDataOn: aCanvas [
-	| from x p2 y c |
+	| from x p2 y c drawMarker |
 	from := Array new: pens size.
 	x := self plottingBounds left.
 	y := self plottingBounds bottom.
+	drawMarker := self useMarker
+		ifTrue: [ [ :p :c1 | 
+			aCanvas
+				fillRectangle: (Rectangle center: p extent: self markerExtent)
+				color: c1 ] ]
+		ifFalse: [ [ :p :c1 |  ] ].
 	cache
 		do: [ :list | 
 			list
@@ -111,9 +130,7 @@ ScratchPlotterMorph >> drawPlotDataOn: aCanvas [
 					each
 						ifNotNil: [ p2 := x @ (y - each).
 							c := pens at: index.
-							aCanvas
-								fillRectangle: (Rectangle center: p2 extent: 5 @ 5)
-								color: c.
+							drawMarker cull: p2 cull: c.
 							(from at: index)
 								ifNotNil: [ :p1 | aCanvas line: p1 to: p2 color: c ].
 							from at: index put: p2 ] ].
@@ -142,8 +159,7 @@ ScratchPlotterMorph >> initialize [
 	self color: ScratchTheme plotterPaneColor.
 	self reset.
 	self ensurePenExists: 1.
-	lastUpdateTime := Time now.
-	updatePeriod := 1000
+	lastUpdateTime := Time now
 ]
 
 { #category : #accessing }
@@ -166,6 +182,11 @@ ScratchPlotterMorph >> listOf: anInteger [
 			(each size >= anInteger and: [ (value := each at: anInteger) notNil ])
 				ifTrue: [ stream nextPut: value ] ].
 	^ stream contents
+]
+
+{ #category : #private }
+ScratchPlotterMorph >> markerExtent [
+	^ 5 @ 5
 ]
 
 { #category : #accessing }
@@ -302,7 +323,7 @@ ScratchPlotterMorph >> plottingData [
 	data isEmpty
 		ifTrue: [ ^ Array new ].
 	stream := WriteStream on: Array new.
-	w := rest := self plottingBounds width truncated.
+	w := rest := self plottingWidth.
 	data size > rest
 		ifTrue: [ 1 to: rest do: [ :each | 
 				stream
@@ -322,7 +343,7 @@ ScratchPlotterMorph >> plottingData [
 { #category : #private }
 ScratchPlotterMorph >> plottingDataAt: anInteger [
 	| ret min1 max1 list ratio h |
-	h := self plottingBounds height.
+	h := self plottingHeight.
 	min1 := min ifNil: [ self minData ].
 	max1 := max ifNil: [ self maxData ].
 	(min1 isNil or: [ max1 isNil ])
@@ -340,6 +361,16 @@ ScratchPlotterMorph >> plottingDataAt: anInteger [
 					ret := 0 max: ret.
 					ret := h min: ret.
 					ret ] ]
+]
+
+{ #category : #private }
+ScratchPlotterMorph >> plottingHeight [
+	^ self plottingBounds height truncated
+]
+
+{ #category : #private }
+ScratchPlotterMorph >> plottingWidth [
+	^ self plottingBounds width truncated
 ]
 
 { #category : #private }
@@ -380,7 +411,7 @@ ScratchPlotterMorph >> updateCache [
 { #category : #accessing }
 ScratchPlotterMorph >> updateDisplay [
 	(Time now asDuration - lastUpdateTime asDuration) totalSeconds
-		< (updatePeriod / 1000)
+		< (self updatePeriod / 1000)
 		ifTrue: [ ^ self ].
 	lastUpdateTime := Time now.
 	self
@@ -390,12 +421,17 @@ ScratchPlotterMorph >> updateDisplay [
 
 { #category : #accessing }
 ScratchPlotterMorph >> updatePeriod [
-	^ updatePeriod
+	^ updatePeriod ifNil: [ 1000 ]
 ]
 
 { #category : #accessing }
 ScratchPlotterMorph >> updatePeriod: anInteger [
 	updatePeriod := anInteger
+]
+
+{ #category : #testing }
+ScratchPlotterMorph >> useMarker [
+	^ self numData * 6 < self plottingWidth
 ]
 
 { #category : #accessing }

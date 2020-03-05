@@ -31,7 +31,7 @@ SpMicroWizStageTest >> testFilterOutput [
 	plotter := fr privEditor plotter.
 	self assert: (plotter isKindOf: ScratchPlotterMorph).
 	app suppressPaste: false.
-	app plotData: false.
+	plotter acceptPlots: false.
 	ret := s filterOutput: 'abc'.
 	self assert: ret equals: 'abc'.
 	ret := s filterOutput: '123' , String cr , '456'.
@@ -45,7 +45,7 @@ SpMicroWizStageTest >> testFilterOutput [
 	self assert: ret equals: 'def' , String cr.
 	ret := s filterOutput: '=== 123' , String cr , 'def'.
 	self assert: ret equals: 'def'.
-	app plotData: true.
+	plotter acceptPlots: true.
 	self assert: plotter numData equals: 0.
 	ret := s filterOutput: '123' , String cr , '456'.
 	self assert: ret equals: '456'.
@@ -54,6 +54,17 @@ SpMicroWizStageTest >> testFilterOutput [
 	ret := s filterOutput: '123' , String cr , '456' , String cr.
 	self assert: ret isEmpty.
 	self assert: plotter numData equals: 2
+]
+
+{ #category : #test }
+SpMicroWizStageTest >> testInPasteMode [
+	| s |
+	s := self newStage.
+	self deny: s inPasteMode.
+	s inPasteMode: true.
+	self assert: s inPasteMode.
+	s inPasteMode: false.
+	self deny: s inPasteMode
 ]
 
 { #category : #test }

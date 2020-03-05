@@ -13,7 +13,8 @@ Class {
 		'buttonClear',
 		'morphTimer',
 		'buttonBaudRate',
-		'labelStatus'
+		'labelStatus',
+		'inPasteMode'
 	],
 	#category : #'MicroWiz-Spec2'
 }
@@ -145,10 +146,15 @@ SpMicroWizStage >> filterOutput: aString [
 			| line ignore |
 			line := aString copyFrom: start to: end1.
 			ignore := false.
+			self inPasteMode
+				ifTrue: [ ignore := true.
+					self inPasteMode: false ].
 			(owner application suppressPaste
 				and: [ line beginsWith: MicroPythonProxy pasteResponse asString ])
-				ifTrue: [ ignore := true ].
-			(owner application plotData and: [ end2 > end1 ])
+				ifTrue: [ ignore := true.
+					end2 = end1
+						ifTrue: [ self inPasteMode: true ] ].
+			(owner plotter acceptPlots and: [ end2 > end1 ])
 				ifTrue: [ (self plotDataFromString: line)
 						ifNotEmpty: [ :list | 
 							ignore := true.
@@ -156,6 +162,16 @@ SpMicroWizStage >> filterOutput: aString [
 			ignore
 				ifFalse: [ out nextPutAll: (aString copyFrom: start to: end2) ] ].
 	^ out contents
+]
+
+{ #category : #private }
+SpMicroWizStage >> inPasteMode [
+	^ inPasteMode ifNil: [ false ]
+]
+
+{ #category : #private }
+SpMicroWizStage >> inPasteMode: aBoolean [
+	inPasteMode := aBoolean
 ]
 
 { #category : #initialization }

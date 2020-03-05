@@ -64,6 +64,8 @@ SpMicroWizEditor >> initializePresenters [
 SpMicroWizEditor >> newPlotter [
 	^ ScratchPlotterMorph new
 		maxSize: 100;
+		updatePeriod: 100;
+		acceptPlots: false;
 		yourself
 ]
 

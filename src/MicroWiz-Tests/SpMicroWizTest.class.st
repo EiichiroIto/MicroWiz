@@ -13,17 +13,6 @@ SpMicroWizTest >> newApplication [
 ]
 
 { #category : #test }
-SpMicroWizTest >> testPlotData [
-	| a |
-	a := self newApplication.
-	self deny: a plotData.
-	a plotData: true.
-	self assert: a withHeader.
-	a plotData: false.
-	self deny: a plotData
-]
-
-{ #category : #test }
 SpMicroWizTest >> testWithHeader [
 	| a |
 	a := self newApplication.

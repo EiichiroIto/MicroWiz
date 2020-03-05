@@ -457,7 +457,8 @@ SpScratchApp >> newProject [
 	self
 		projectDirectory: (ScratchDirectory current getDefaultFolderForType: #project).
 	self projectName: 'New Project'.
-	self installNewProject: self createProject
+	self installNewProject: self createProject.
+	presenter plotter clearPlots
 ]
 
 { #category : #accessing }
@@ -486,7 +487,8 @@ SpScratchApp >> openProject [
 	newProj ifNil: [ ^ self ].
 	self projectDirectory: response parent.
 	self projectName: response base.
-	self installNewProject: newProj
+	self installNewProject: newProj.
+	presenter plotter clearPlots
 ]
 
 { #category : #private }
@@ -652,6 +654,31 @@ SpScratchApp >> serializeBlocks: aTopBlock [
 	^ code
 ]
 
+{ #category : #'menu actions' }
+SpScratchApp >> setMaxPlotSize: aPlotter [
+	| ret |
+	ret := UIManager default
+		request: 'number of max plots?'
+		initialAnswer: (aPlotter maxSize ifNil: [ '' ]) asString.
+	ret ifNil: [ ^ self ].
+	ret := ret isEmpty
+		ifTrue: [ nil ]
+		ifFalse: [ ret asNumberNoError ].
+	aPlotter maxSize: ret
+]
+
+{ #category : #'menu actions' }
+SpScratchApp >> setPlotPeriod: aPlotter [
+	| ret |
+	ret := UIManager default
+		request: 'update plot period? (in milliseconds)'
+		initialAnswer: (aPlotter updatePeriod ifNil: [ '' ]) asString.
+	(ret isNil or: [ ret isEmpty ])
+		ifTrue: [ ^ self ].
+	ret := ret asNumberNoError.
+	aPlotter updatePeriod: ret
+]
+
 { #category : #private }
 SpScratchApp >> setupView [
 	| viewTarget |
@@ -719,4 +746,9 @@ SpScratchApp >> updateContents [
 { #category : #processes }
 SpScratchApp >> updateInfo [
 	self subclassResponsibility
+]
+
+{ #category : #private }
+SpScratchApp >> windowClosing [
+	"do nothing"
 ]

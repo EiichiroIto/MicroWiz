@@ -149,14 +149,6 @@ SpMicroWizFrame >> deviceMenu [
 						autoRefresh: true ];
 				addItem: [ :item | 
 					item
-						name: 'Plot data';
-						action: [ application plotData: application plotData not ];
-						icon: [ application plotData
-								ifTrue: [ checked ]
-								ifFalse: [ unchecked ] ];
-						autoRefresh: true ];
-				addItem: [ :item | 
-					item
 						name: 'Upload program';
 						action: [ application uploadProgram ] ] ];
 		addGroup: [ :grp | 
@@ -330,6 +322,11 @@ SpMicroWizFrame >> otherLabel: aString [
 ]
 
 { #category : #accessing }
+SpMicroWizFrame >> plotter [
+	^ editorPane plotter
+]
+
+{ #category : #accessing }
 SpMicroWizFrame >> proxy [
 	^ stageFrame proxy
 ]
@@ -413,8 +410,8 @@ SpMicroWizFrame >> showMenuForPlotter: aPlotter event: anEvent [
 		addItem: [ :item | 
 			item
 				name: 'Plot data';
-				action: [ application plotData: application plotData not ];
-				icon: [ application plotData
+				action: [ aPlotter acceptPlots: aPlotter acceptPlots not ];
+				icon: [ aPlotter acceptPlots
 						ifTrue: [ checked ]
 						ifFalse: [ unchecked ] ];
 				autoRefresh: true ].

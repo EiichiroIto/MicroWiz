@@ -3,8 +3,7 @@ Class {
 	#superclass : #SpScratchApp,
 	#instVars : [
 		'withHeader',
-		'suppressPaste',
-		'plotData'
+		'suppressPaste'
 	],
 	#category : #'MicroWiz-Spec2'
 }
@@ -313,16 +312,6 @@ SpMicroWiz >> otherScriptNames [
 ]
 
 { #category : #accessing }
-SpMicroWiz >> plotData [
-	^ plotData ifNil: [ false ]
-]
-
-{ #category : #accessing }
-SpMicroWiz >> plotData: aBoolean [
-	plotData := aBoolean
-]
-
-{ #category : #accessing }
 SpMicroWiz >> proxy [
 	^ presenter proxy
 ]
@@ -427,31 +416,6 @@ SpMicroWiz >> selectScript [
 	presenter
 		otherLabel: script objName;
 		target: script
-]
-
-{ #category : #'menu actions' }
-SpMicroWiz >> setMaxPlotSize: aPlotter [
-	| ret |
-	ret := UIManager default
-		request: 'number of max plots?'
-		initialAnswer: (aPlotter maxSize ifNil: [ '' ]) asString.
-	ret ifNil: [ ^ self ].
-	ret := ret isEmpty
-		ifTrue: [ nil ]
-		ifFalse: [ ret asNumberNoError ].
-	aPlotter maxSize: ret
-]
-
-{ #category : #'menu actions' }
-SpMicroWiz >> setPlotPeriod: aPlotter [
-	| ret |
-	ret := UIManager default
-		request: 'update plot period? (in milliseconds)'
-		initialAnswer: (aPlotter updatePeriod ifNil: [ '' ]) asString.
-	(ret isNil or: [ ret isEmpty ])
-		ifTrue: [ ^ self ].
-	ret := ret asNumberNoError.
-	aPlotter updatePeriod: ret
 ]
 
 { #category : #private }
@@ -571,6 +535,11 @@ SpMicroWiz >> uploadProgram [
 				ifFalse: [ self proxy
 						putFileNamed: each objName , '.' , self pyExtension
 						contents: code ] ]
+]
+
+{ #category : #private }
+SpMicroWiz >> windowClosing [
+	self comm ifNotNil: [ :c | c close ]
 ]
 
 { #category : #accessing }

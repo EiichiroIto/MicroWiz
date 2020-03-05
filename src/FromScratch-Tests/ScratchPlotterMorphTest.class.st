@@ -13,6 +13,17 @@ ScratchPlotterMorphTest >> newPlotter [
 ]
 
 { #category : #test }
+ScratchPlotterMorphTest >> testAcceptPlots [
+	| p |
+	p := self newPlotter.
+	self assert: p acceptPlots.
+	p acceptPlots: false.
+	self deny: p acceptPlots.
+	p acceptPlots: true.
+	self assert: p acceptPlots
+]
+
+{ #category : #test }
 ScratchPlotterMorphTest >> testAddPenColor [
 	| p |
 	p := self newPlotter.
@@ -34,7 +45,10 @@ ScratchPlotterMorphTest >> testAddPlots [
 			(ScratchPlot channel: 1 data: 3)}.
 	self assert: p data size equals: 2.
 	self assertCollection: p data first equals: #(2).
-	self assertCollection: p data second equals: #(3)
+	self assertCollection: p data second equals: #(3).
+	p acceptPlots: false.
+	p addPlots: {(ScratchPlot channel: 1 data: 2)}.
+	self assert: p data size equals: 2
 ]
 
 { #category : #test }
@@ -111,6 +125,13 @@ ScratchPlotterMorphTest >> testListOf [
 	p plot: 2 data: 40.
 	self assertCollection: (p listOf: 1) equals: #(10 20).
 	self assertCollection: (p listOf: 2) equals: #(30 40)
+]
+
+{ #category : #test }
+ScratchPlotterMorphTest >> testMarkerExtent [
+	| p |
+	p := self newPlotter.
+	self assert: p markerExtent equals: 5 @ 5
 ]
 
 { #category : #test }
@@ -217,6 +238,17 @@ ScratchPlotterMorphTest >> testNumChannels [
 	self assert: p numChannels equals: 5.
 	p addPen: 3 color: Color red.
 	self assert: p numChannels equals: 5
+]
+
+{ #category : #test }
+ScratchPlotterMorphTest >> testNumData [
+	| p |
+	p := self newPlotter.
+	self assert: p numData equals: 0.
+	p addPlots: { ScratchPlot channel: 1 data: 1 }.
+	p addPlots: { ScratchPlot channel: 1 data: 2 }.
+	p addPlots: { ScratchPlot channel: 1 data: 3 }.
+	self assert: p numData equals: 3
 ]
 
 { #category : #test }
@@ -400,6 +432,20 @@ ScratchPlotterMorphTest >> testPlottingDataAt [
 ]
 
 { #category : #test }
+ScratchPlotterMorphTest >> testPlottingHeight [
+	| p |
+	p := self newPlotter.
+	self assert: p plottingHeight > 0
+]
+
+{ #category : #test }
+ScratchPlotterMorphTest >> testPlottingWidth [
+	| p |
+	p := self newPlotter.
+	self assert: p plottingWidth > 0
+]
+
+{ #category : #test }
 ScratchPlotterMorphTest >> testPrivCache [
 	| p |
 	p := self newPlotter.
@@ -473,6 +519,16 @@ ScratchPlotterMorphTest >> testUpdatePeriod [
 	self assert: p updatePeriod equals: 100.
 	p updatePeriod: 200.
 	self assert: p updatePeriod equals: 200
+]
+
+{ #category : #test }
+ScratchPlotterMorphTest >> testUseMarker [
+	| p |
+	p := self newPlotter.
+	p width: 100.
+	self assert: p useMarker.
+	100 timesRepeat: [ p addPlots: {(ScratchPlot channel: 1 data: 1)} ].
+	self deny: p useMarker
 ]
 
 { #category : #test }
