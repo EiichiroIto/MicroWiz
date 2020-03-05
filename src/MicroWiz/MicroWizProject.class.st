@@ -16,7 +16,7 @@ Class {
 
 { #category : #accessing }
 MicroWizProject class >> appVersion [
-	^ 1
+	^ 2
 ]
 
 { #category : #accessing }
@@ -203,6 +203,7 @@ MicroWizProject >> fieldsVersion [
 MicroWizProject >> getScratchInfoFrom: aFileReference [
 	| dict icon |
 	dict := super getScratchInfoFrom: aFileReference.
+	dict ifNil: [ ^ nil ].
 	icon := (Smalltalk at: (dict at: 'proxy')) new icon.
 	dict at: 'thumbnail' put: icon.
 	^ dict
