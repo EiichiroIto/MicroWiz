@@ -16,7 +16,7 @@ MicrobitProxy >> newBlockSpecs [
 
 { #category : #api }
 MicrobitProxy >> newCode [
-	^ MicroPythonCode new
+	^ MicroWizCode new
 		generator: MicrobitGenerator new;
 		yourself
 ]

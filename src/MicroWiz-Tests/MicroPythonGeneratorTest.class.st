@@ -42,15 +42,6 @@ MicroPythonGeneratorTest >> testAddExtModule [
 ]
 
 { #category : #test }
-MicroPythonGeneratorTest >> testAddInit [
-	| g |
-	g := self newGenerator.
-	self assert: g inits isEmpty.
-	g addInit: 'a'.
-	self assert: (g inits includes: 'a')
-]
-
-{ #category : #test }
 MicroPythonGeneratorTest >> testAndWith [
 	| g |
 	g := self newGenerator.
@@ -72,15 +63,6 @@ MicroPythonGeneratorTest >> testAppendToList [
 	g := self newGenerator.
 	g append: '1' toList: 'x'.
 	self assert: g code equals: 'x.append(1)' , String lf
-]
-
-{ #category : #test }
-MicroPythonGeneratorTest >> testAppendWithNewline [
-	| g |
-	g := self newGenerator.
-	g appendWithNewline: 'abc'.
-	g appendWithNewline: 'def'.
-	self assert: g code equals: 'abc' , String lf , 'def' , String lf
 ]
 
 { #category : #test }
@@ -119,16 +101,6 @@ MicroPythonGeneratorTest >> testChangeVarBy [
 ]
 
 { #category : #test }
-MicroPythonGeneratorTest >> testCode [
-	| g |
-	g := self newGenerator.
-	self assert: g code isEmpty.
-	g appendWithNewline: 'abc'.
-	g appendWithNewline: 'def'.
-	self assert: g code equals: 'abc' , String lf , 'def' , String lf
-]
-
-{ #category : #test }
 MicroPythonGeneratorTest >> testComputeFunctionOf [
 	| g |
 	g := self newGenerator.
@@ -164,22 +136,6 @@ MicroPythonGeneratorTest >> testDef [
 	g := self newGenerator.
 	g def: 'abc'.
 	self assert: g code equals: 'def abc():' , String lf
-]
-
-{ #category : #test }
-MicroPythonGeneratorTest >> testDelInit [
-	| g |
-	g := self newGenerator.
-	self assert: g inits isEmpty.
-	g addInit: 'a'.
-	g addInit: 'b'.
-	self assert: (g inits includes: 'a').
-	self assert: (g inits includes: 'b').
-	g delInit: 'a'.
-	g delInit: 'c'.
-	self deny: (g inits includes: 'a').
-	self assert: (g inits includes: 'b').
-	self deny: (g inits includes: 'c')
 ]
 
 { #category : #test }
@@ -305,14 +261,6 @@ MicroPythonGeneratorTest >> testExecuteOf [
 	g := self newGenerator.
 	g execute: 'a' of: 'b'.
 	self assert: g code equals: 'b.a()' , String lf
-]
-
-{ #category : #test }
-MicroPythonGeneratorTest >> testExtModules [
-	| g |
-	g := self newGenerator.
-	self assert: g extModules isCollection.
-	self assert: g extModules isEmpty
 ]
 
 { #category : #test }
@@ -475,17 +423,6 @@ MicroPythonGeneratorTest >> testImports [
 ]
 
 { #category : #test }
-MicroPythonGeneratorTest >> testIndent [
-	| g |
-	g := self newGenerator.
-	self assert: g indent equals: 0.
-	g indent: 1.
-	self assert: g indent equals: 1.
-	g indent: 2.
-	self assert: g indent equals: 2
-]
-
-{ #category : #test }
 MicroPythonGeneratorTest >> testInitialize [
 	| g |
 	g := self newGenerator.
@@ -493,16 +430,7 @@ MicroPythonGeneratorTest >> testInitialize [
 	self assert: g imports isCollection.
 	self assert: g listVars isCollection.
 	self assert: g vars isCollection.
-	self assert: g inits isCollection.
 	self assert: g modules isDictionary
-]
-
-{ #category : #test }
-MicroPythonGeneratorTest >> testInits [
-	| g |
-	g := self newGenerator.
-	self assert: g inits isCollection.
-	self assert: g inits isEmpty
 ]
 
 { #category : #test }
@@ -517,7 +445,7 @@ MicroPythonGeneratorTest >> testInsertAtOfList [
 MicroPythonGeneratorTest >> testIsBetweenAnd [
 	| g |
 	g := self newGenerator.
-	self assert: (g is: 2 between: 3 and: 4) equals: '(3)<(2)<(4)'
+	self assert: (g is: 2 between: 3 and: 4) equals: '(3)<=(2)<=(4)'
 ]
 
 { #category : #test }
@@ -563,14 +491,6 @@ MicroPythonGeneratorTest >> testListPosition [
 	self assert: (g listPosition: [21]) equals: '21'.
 	self assert: (g listPosition: '''all''') equals: ':'.
 	self assert: (g listPosition: '''last''') equals: '-1'
-]
-
-{ #category : #test }
-MicroPythonGeneratorTest >> testListVars [
-	| g |
-	g := self newGenerator.
-	self assert: g listVars isCollection.
-	self assert: g listVars isEmpty
 ]
 
 { #category : #test }
@@ -834,35 +754,6 @@ MicroPythonGeneratorTest >> testUnaryFunctionArg [
 ]
 
 { #category : #test }
-MicroPythonGeneratorTest >> testUseListVar [
-	| g |
-	g := self newGenerator.
-	self assert: g listVars isEmpty.
-	g useListVar: 'a'.
-	self assert: (g listVars includes: 'a').
-	self deny: (g listVars includes: 'b')
-]
-
-{ #category : #test }
-MicroPythonGeneratorTest >> testUseVar [
-	| g |
-	g := self newGenerator.
-	self assert: g vars isEmpty.
-	g useVar: 'a'.
-	self assert: (g vars includes: 'a').
-	self deny: (g vars includes: 'b')
-]
-
-{ #category : #test }
-MicroPythonGeneratorTest >> testValueOf [
-	| g |
-	g := self newGenerator.
-	self assert: (g valueOf: 'a') equals: 'a'.
-	self assert: (g valueOf: 10) equals: '10'.
-	self assert: (g valueOf: [10]) equals: '10'
-]
-
-{ #category : #test }
 MicroPythonGeneratorTest >> testVarNo [
 	| g |
 	g := self newGenerator.
@@ -875,12 +766,4 @@ MicroPythonGeneratorTest >> testVariableArgString [
 	g := self newGenerator.
 	self assert: (g variableArgString: 'a') equals: 'a'.
 	self assert: (g vars includes: 'a')
-]
-
-{ #category : #test }
-MicroPythonGeneratorTest >> testVars [
-	| g |
-	g := self newGenerator.
-	self assert: g vars isCollection.
-	self assert: g vars isEmpty
 ]

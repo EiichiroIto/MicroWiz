@@ -335,7 +335,7 @@ SpMicroWiz >> proxyClass: aSymbol [
 
 { #category : #accessing }
 SpMicroWiz >> proxyClasses [
-	^ #(MicroPythonProxy MicrobitProxy ESP8266Proxy MaixPyProxy)
+	^ #(MicroPythonProxy MicrobitProxy ESP8266Proxy MaixPyProxy ULispProxy)
 ]
 
 { #category : #private }

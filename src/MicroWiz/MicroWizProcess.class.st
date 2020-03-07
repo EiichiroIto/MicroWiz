@@ -1,46 +1,46 @@
 Class {
-	#name : #MicroPythonProcess,
+	#name : #MicroWizProcess,
 	#superclass : #Object,
 	#instVars : [
 		'topBlock',
 		'proxy'
 	],
-	#category : #'MicroWiz-MPython'
+	#category : #'MicroWiz-Core'
 }
 
 { #category : #testing }
-MicroPythonProcess >> errorFlag [
+MicroWizProcess >> errorFlag [
 	^ false
 ]
 
 { #category : #testing }
-MicroPythonProcess >> isRunning [
+MicroWizProcess >> isRunning [
 	^ proxy isRunning
 ]
 
 { #category : #accessing }
-MicroPythonProcess >> proxy [
+MicroWizProcess >> proxy [
 	^ proxy
 ]
 
 { #category : #accessing }
-MicroPythonProcess >> proxy: anObject [
+MicroWizProcess >> proxy: anObject [
 	proxy := anObject.
 ]
 
 { #category : #accessing }
-MicroPythonProcess >> stop [
+MicroWizProcess >> stop [
 	proxy isRunning
 		ifTrue: [ proxy sendBreak ].
 	topBlock ifNotNil: [ topBlock scratchProc: nil ]
 ]
 
 { #category : #accessing }
-MicroPythonProcess >> topBlock [
+MicroWizProcess >> topBlock [
 	^ topBlock
 ]
 
 { #category : #accessing }
-MicroPythonProcess >> topBlock: aBlock [ 
+MicroWizProcess >> topBlock: aBlock [ 
 	topBlock := aBlock.
 ]

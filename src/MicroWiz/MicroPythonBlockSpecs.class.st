@@ -1,39 +1,8 @@
 Class {
 	#name : #MicroPythonBlockSpecs,
-	#superclass : #Object,
-	#instVars : [
-		'intModuleDef'
-	],
+	#superclass : #MicroWizBlockSpecs,
 	#category : #'MicroWiz-MPython'
 }
-
-{ #category : #'argument menus' }
-MicroPythonBlockSpecs >> addArgBuilderTo: anArgBuilder [
-	anArgBuilder
-		addChoiceArg: $a selector: #allSubNames;
-		addChoiceArg: $d
-			selector: #digits
-			target: self
-			initialChoice: '0';
-		addNumberExpressArg: $i
-			selector: #listIndexMenu
-			target: self
-			initialExpression: '0';
-		addNumberExpressArg: $y
-			selector: #listIndexForDeleteNames
-			target: self
-			initialExpression: '0'
-]
-
-{ #category : #private }
-MicroPythonBlockSpecs >> addIntModuleDefNamed: aString [
-	| m |
-	m := MicroWizProject intModuleAt: aString.
-	m ifNil: [ ^ self ].
-	intModuleDef := intModuleDef
-		ifNil: [ m ]
-		ifNotNil: [ intModuleDef + m ]
-]
 
 { #category : #'block specs' }
 MicroPythonBlockSpecs >> blocks [
@@ -43,48 +12,8 @@ MicroPythonBlockSpecs >> blocks [
 ]
 
 { #category : #'block specs' }
-MicroPythonBlockSpecs >> controlBlocks [
-	^ #(
-		'control'
-			('when %m clicked'		T	-)
-			-
-			('forever'					c	doForever)
-			('repeat %n'				c	doRepeat 10)
-			('while %b'					c	doWhile)
-			('repeat until %b'		c	doUntil)
-			-
-			('if %b'						c	doIf)
-			('if %b'						c	doIfElse)
-	)
-]
-
-{ #category : #'argument menus' }
-MicroPythonBlockSpecs >> digits [
-	^ (0 to: 9) collect: [ :each | each asString ]
-]
-
-{ #category : #'block specs' }
 MicroPythonBlockSpecs >> displayBlocks [
 	^ #()
-]
-
-{ #category : #initialization }
-MicroPythonBlockSpecs >> initialize [
-	self setupIntModuleDef
-]
-
-{ #category : #'block specs' }
-MicroPythonBlockSpecs >> intBlockDefOf: aSymbol [
-	^ intModuleDef
-		ifNil: [ nil ]
-		ifNotNil: [ :m | m blockDefAt: aSymbol ]
-]
-
-{ #category : #'block specs' }
-MicroPythonBlockSpecs >> intModuleBlocks [
-	^ intModuleDef
-		ifNil: [ #() ]
-		ifNotNil: [ :def | def blockTuples asArray ]
 ]
 
 { #category : #'block specs' }
@@ -92,40 +21,15 @@ MicroPythonBlockSpecs >> ioBlocks [
 	^ #()
 ]
 
-{ #category : #'argument menus' }
-MicroPythonBlockSpecs >> listIndexForDeleteNames [
-	^ #('0' last all)
-		collect: [ :s | 
-			{s localized.
-			s} ]
-]
-
-{ #category : #'argument menus' }
-MicroPythonBlockSpecs >> listIndexNames [
-	^ #('0' any last) collect: [ :s | {s localized. s} ]
-]
-
-{ #category : #'block specs' }
-MicroPythonBlockSpecs >> modulesBlocks [
-	^ #(
-		'modules'
-			('execute %a of %m'		-		execute:of: '' '')
-			('evaluate %a of %m'		r 		evaluate:of: '' '')
-			-
-		)
-]
-
 { #category : #'block specs' }
 MicroPythonBlockSpecs >> operatorsBlocks [
 	^ #(
 		'operators'
-			('%n + %n'						r	+ - -)
-			('%n - %n'						r	- - -)
-			('%n * %n'						r	* - -)
-			('%n / %n'						r	/ - -)
-			('- %n'								r	negated: 1)
-			-
-			('pick random %n to %n'		r	randomFrom:to: 1 10)
+			('%n + %n'							r	+ - -)
+			('%n - %n'							r	- - -)
+			('%n * %n'							r	* - -)
+			('%n / %n'							r	/ - -)
+			('- %n'									r	negated: 1)
 			-
 			('%s < %s'							b	< '' '')
 			('%s = %s'							b	= '' '')
@@ -139,6 +43,13 @@ MicroPythonBlockSpecs >> operatorsBlocks [
 			('true'									b	getTrue)
 			('false'								b	getFalse)
 			-
+			('%n mod %n'						r	\\ - -)
+			('round %n'							r	rounded -)
+			('abs %n'								r	abs -)
+			('abs %n sign %n'			r	abs:sign:	- -)
+			('pick random %n to %n'		r	randomFrom:to: 1 10)
+			('%f of %n'							r	computeFunction:of: 'sqrt' 10)
+			-
 			('string of %n'				r	stringOf:	0)
 			('number of %s'				r	numberOf: '123')
 			('string from %s encoding %s'
@@ -151,13 +62,6 @@ MicroPythonBlockSpecs >> operatorsBlocks [
 			('split %s by %s limit %n to %L'		-
 														split:by:limit:to:		'a,b,c' , -1 'list')
 			('any of %s'					r	anyOf: )
-			-
-			('%n mod %n'					r	\\ - -)
-			('round %n'					r	rounded -)
-			('abs %n'						r	abs -)
-			('abs %n sign %n'			r	abs:sign:	- -)
-			-
-			('%f of %n'					r	computeFunction:of: 'sqrt' 10)
 	)
 ]
 
@@ -182,24 +86,6 @@ MicroPythonBlockSpecs >> setupBlockCategoryTo: aBlockDef [
 
 { #category : #private }
 MicroPythonBlockSpecs >> setupIntModuleDef [
+	intModuleDef := nil.
 	self addIntModuleDefNamed: 'micropython'
-]
-
-{ #category : #'block specs' }
-MicroPythonBlockSpecs >> variablesBlocks [
-	^ #(
-		'list'
-			('add %s to %L'					-	append:toList: 'thing')
-			-
-			('delete %y of %L'				-	deleteLine:ofList: 0)
-			('insert %s at %i of %L'			-	insert:at:ofList: 'thing' 0)
-			('replace item %i of %L with %s'		-	setLine:ofList:to: 0 'list' 'thing')
-			('replace all items of %L with %s'		- replaceAllList:with: 'list' 'a b c')
-			-
-			('item %i of %L'					r	getLine:ofList: 0)
-			('length of %L'					r	lineCountOfList:)
-			('%L contains %s'				b	list:contains: 'list' 'thing')
-			-
-			('list %L'							r	contentsOfList: 'list')
-	)
 ]

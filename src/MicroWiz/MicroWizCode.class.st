@@ -1,26 +1,26 @@
 Class {
-	#name : #MicroPythonCode,
+	#name : #MicroWizCode,
 	#superclass : #ScratchCode,
-	#category : #'MicroWiz-MPython'
+	#category : #'MicroWiz-Core'
 }
 
 { #category : #'code generator' }
-MicroPythonCode >> argsOf: aMorph [
+MicroWizCode >> argsOf: aMorph [
 	^ aMorph blockArgs collect: [ :each | each argOf: parser ]
 ]
 
 { #category : #'control ops' }
-MicroPythonCode >> doForeverBegin: aMorph [
+MicroWizCode >> doForeverBegin: aMorph [
 	generator doForeverBegin
 ]
 
 { #category : #'control ops' }
-MicroPythonCode >> doForeverEnd: aMorph [
+MicroWizCode >> doForeverEnd: aMorph [
 	generator doForeverEnd
 ]
 
 { #category : #'control ops' }
-MicroPythonCode >> doUntilBegin: aMorph [
+MicroWizCode >> doUntilBegin: aMorph [
 	| cond id |
 	cond := aMorph blockArgs first argString: parser.
 	id := generator doUntilBegin: cond.
@@ -28,12 +28,12 @@ MicroPythonCode >> doUntilBegin: aMorph [
 ]
 
 { #category : #'control ops' }
-MicroPythonCode >> doUntilEnd: aMorph [
+MicroWizCode >> doUntilEnd: aMorph [
 	generator doUntilEnd: aMorph labelId
 ]
 
 { #category : #'control ops' }
-MicroPythonCode >> doWhileBegin: aMorph [
+MicroWizCode >> doWhileBegin: aMorph [
 	| cond id |
 	cond := aMorph blockArgs first argString: parser.
 	id := generator doWhileBegin: cond.
@@ -41,12 +41,12 @@ MicroPythonCode >> doWhileBegin: aMorph [
 ]
 
 { #category : #'control ops' }
-MicroPythonCode >> doWhileEnd: aMorph [
+MicroWizCode >> doWhileEnd: aMorph [
 	generator doWhileEnd: aMorph labelId
 ]
 
 { #category : #'arg generator' }
-MicroPythonCode >> expressionArgWithMenuString: aMorph [ 
+MicroWizCode >> expressionArgWithMenuString: aMorph [ 
 	| v |
 	v := aMorph specialValue.
 	v ifNil: [^ self argString: aMorph].
@@ -61,12 +61,12 @@ MicroPythonCode >> expressionArgWithMenuString: aMorph [
 ]
 
 { #category : #private }
-MicroPythonCode >> falseString [
+MicroWizCode >> falseString [
 	^ generator falseString
 ]
 
 { #category : #'code generator' }
-MicroPythonCode >> generateCode: aSymbol morph: aMorph [
+MicroWizCode >> generateCode: aSymbol morph: aMorph [
 	self class addCommand: aSymbol.
 	SpScratchApp
 		try: [ self rawGenerateCode: aSymbol morph: aMorph ]
@@ -74,22 +74,22 @@ MicroPythonCode >> generateCode: aSymbol morph: aMorph [
 ]
 
 { #category : #'code generator' }
-MicroPythonCode >> generateIndent: anInteger [
+MicroWizCode >> generateIndent: anInteger [
 	generator indent: anInteger
 ]
 
 { #category : #'code generator' }
-MicroPythonCode >> generatePass [
+MicroWizCode >> generatePass [
 	generator generatePass
 ]
 
 { #category : #'code generator' }
-MicroPythonCode >> generateReporter: aString [
+MicroWizCode >> generateReporter: aString [
 	generator appendWithNewline: aString
 ]
 
 { #category : #'code generator' }
-MicroPythonCode >> generateReporter: aSymbol morph: aMorph [
+MicroWizCode >> generateReporter: aSymbol morph: aMorph [
 	| ret |
 	self class addCommand: aSymbol.
 	ret := 0.
@@ -100,29 +100,29 @@ MicroPythonCode >> generateReporter: aSymbol morph: aMorph [
 ]
 
 { #category : #'code generator' }
-MicroPythonCode >> generateSubHeader: aString [
+MicroWizCode >> generateSubHeader: aString [
 	generator def: aString
 ]
 
 { #category : #'variable ops' }
-MicroPythonCode >> getVar: var [
+MicroWizCode >> getVar: var [
 	^ generator getVar: var variable
 ]
 
 { #category : #accessing }
-MicroPythonCode >> header [
+MicroWizCode >> header [
 	^ generator header
 ]
 
 { #category : #private }
-MicroPythonCode >> indentLevelFor: aString [ 
+MicroWizCode >> indentLevelFor: aString [ 
 	^ aString = 'startup' "'Scratch-StartClicked'"
 		ifTrue: [0]
 		ifFalse: [1]
 ]
 
 { #category : #accessing }
-MicroPythonCode >> parse: aBlock withHeader: aBoolean [
+MicroWizCode >> parse: aBlock withHeader: aBoolean [
 	| code |
 	code := self parse: aBlock.
 	(code isEmpty or: [ aBoolean not ])
@@ -131,7 +131,7 @@ MicroPythonCode >> parse: aBlock withHeader: aBoolean [
 ]
 
 { #category : #accessing }
-MicroPythonCode >> parseHats: aCollection [
+MicroWizCode >> parseHats: aCollection [
 	| code |
 	aCollection do: [ :each | each parseUsing: parser ].
 	code := generator code.
@@ -139,7 +139,7 @@ MicroPythonCode >> parseHats: aCollection [
 ]
 
 { #category : #'code generator' }
-MicroPythonCode >> rawGenerateCode: aSymbol morph: aMorph [
+MicroWizCode >> rawGenerateCode: aSymbol morph: aMorph [
 	| args |
 	args := self argsOf: aMorph.
 	(aSymbol beginsWith: 'ext')
@@ -156,6 +156,6 @@ MicroPythonCode >> rawGenerateCode: aSymbol morph: aMorph [
 ]
 
 { #category : #private }
-MicroPythonCode >> variableArgString: aString [
+MicroWizCode >> variableArgString: aString [
 	^ generator variableArgString: aString
 ]

@@ -252,8 +252,7 @@ SpMicroWizStage >> pickupOutput [
 	| pos line |
 	pos := output selectionInterval first.
 	line := output pendingText asString lineCorrespondingToIndex: pos.
-	line := line withoutPrefix: proxy class promptResponse asString.
-	line := line withoutPrefix: proxy class pasteResponse asString.
+	line := proxy removePrompts: line.
 	input
 		text: line;
 		selectAll;

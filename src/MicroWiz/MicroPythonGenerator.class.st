@@ -1,17 +1,11 @@
 Class {
 	#name : #MicroPythonGenerator,
-	#superclass : #Object,
+	#superclass : #MicroWizGenerator,
 	#instVars : [
-		'imports',
-		'stream',
-		'varNo',
-		'listVars',
-		'vars',
 		'newlineString',
+		'imports',
 		'modules',
-		'inits',
-		'extModules',
-		'indent'
+		'varNo'
 	],
 	#category : #'MicroWiz-MPython'
 }
@@ -34,11 +28,6 @@ MicroPythonGenerator >> addExtModule: aString [
 	extModules add: aString
 ]
 
-{ #category : #private }
-MicroPythonGenerator >> addInit: aSymbol [
-	inits add: aSymbol
-]
-
 { #category : #'operators ops' }
 MicroPythonGenerator >> and: x with: y [
 	^ self binaryOperator: ' and ' arg1: x arg2: y
@@ -58,9 +47,7 @@ MicroPythonGenerator >> append: arg toList: var [
 { #category : #private }
 MicroPythonGenerator >> appendWithNewline: aString [
 	self generateIndent: indent.
-	stream
-		nextPutAll: aString;
-		nextPutAll: newlineString
+	super appendWithNewline: aString
 ]
 
 { #category : #private }
@@ -88,11 +75,6 @@ MicroPythonGenerator >> bytesFrom: str encoding: encoding [
 MicroPythonGenerator >> changeVar: var by: val [
 	self useVar: var.
 	self appendWithNewline: var , ' = ' , var , ' + ' , (self valueOf: val)
-]
-
-{ #category : #accessing }
-MicroPythonGenerator >> code [
-	^ stream contents
 ]
 
 { #category : #'operators ops' }
@@ -126,11 +108,6 @@ MicroPythonGenerator >> contentsOfList: var [
 { #category : #'control ops' }
 MicroPythonGenerator >> def: aString [
 	self appendWithNewline: 'def ' , aString , '():'
-]
-
-{ #category : #private }
-MicroPythonGenerator >> delInit: aSymbol [
-	inits remove: aSymbol ifAbsent: [  ]
 ]
 
 { #category : #'list ops' }
@@ -225,11 +202,6 @@ MicroPythonGenerator >> execute: func of: module [
 	(m isEmpty or: [ f isEmpty ])
 		ifTrue: [ ^ self ].
 	self appendWithNewline: m , '.' , f , '()'
-]
-
-{ #category : #private }
-MicroPythonGenerator >> extModules [
-	^ extModules
 ]
 
 { #category : #private }
@@ -342,13 +314,6 @@ MicroPythonGenerator >> getTrue [
 	^ 'True'
 ]
 
-{ #category : #accessing }
-MicroPythonGenerator >> header [
-	stream := WriteStream on: String new.
-	self generateHeader.
-	^ stream contents
-]
-
 { #category : #private }
 MicroPythonGenerator >> import: anObject [
 	anObject isString
@@ -364,34 +329,13 @@ MicroPythonGenerator >> imports [
 	^ imports
 ]
 
-{ #category : #accessing }
-MicroPythonGenerator >> indent [
-	^ indent
-]
-
-{ #category : #accessing }
-MicroPythonGenerator >> indent: anInteger [
-	indent := anInteger
-]
-
 { #category : #initialization }
 MicroPythonGenerator >> initialize [
 	super initialize.
-	stream := WriteStream on: String new.
 	varNo := 0.
 	imports := Set new.
 	modules := Dictionary new.
-	extModules := Set new.
-	listVars := Set new.
-	vars := Set new.
-	inits := Set new.
-	indent := 0.
 	self newlineLF
-]
-
-{ #category : #private }
-MicroPythonGenerator >> inits [
-	^ inits
 ]
 
 { #category : #'list ops' }
@@ -404,7 +348,7 @@ MicroPythonGenerator >> insert: val at: pos ofList: list [
 
 { #category : #'operators ops' }
 MicroPythonGenerator >> is: x between: a and: b [
-	^ '(' , (self valueOf: a) , ')<(' , (self valueOf: x) , ')<('
+	^ '(' , (self valueOf: a) , ')<=(' , (self valueOf: x) , ')<=('
 		, (self valueOf: b) , ')'
 ]
 
@@ -445,11 +389,6 @@ MicroPythonGenerator >> listPosition: anObject [
 	v = '''last'''
 		ifTrue: [ ^ '-1' ].
 	^ v
-]
-
-{ #category : #private }
-MicroPythonGenerator >> listVars [
-	^ listVars
 ]
 
 { #category : #'code generator' }
@@ -646,22 +585,6 @@ MicroPythonGenerator >> unaryFunction: aString arg: anObject [
 ]
 
 { #category : #private }
-MicroPythonGenerator >> useListVar: aString [
-	listVars add: aString
-]
-
-{ #category : #private }
-MicroPythonGenerator >> useVar: aString [
-	vars add: aString.
-]
-
-{ #category : #private }
-MicroPythonGenerator >> valueOf: anObject [
-	anObject isBlock ifTrue: [ ^ anObject value asString ].
-	^ anObject asString
-]
-
-{ #category : #private }
 MicroPythonGenerator >> varNo [
 	^ varNo
 ]
@@ -670,9 +593,4 @@ MicroPythonGenerator >> varNo [
 MicroPythonGenerator >> variableArgString: aString [
 	self useVar: aString.
 	^ aString
-]
-
-{ #category : #private }
-MicroPythonGenerator >> vars [
-	^ vars
 ]

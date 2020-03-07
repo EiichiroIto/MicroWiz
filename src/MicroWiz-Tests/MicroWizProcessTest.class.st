@@ -2,40 +2,40 @@
 A MicroPythonProcessTest is a test class for testing the behavior of MicroPythonProcess
 "
 Class {
-	#name : #MicroPythonProcessTest,
+	#name : #MicroWizProcessTest,
 	#superclass : #TestCase,
 	#category : #'MicroWiz-Tests'
 }
 
 { #category : #private }
-MicroPythonProcessTest >> newBlock [
+MicroWizProcessTest >> newBlock [
 	^ BlockMorph new
 ]
 
 { #category : #private }
-MicroPythonProcessTest >> newComm [
+MicroWizProcessTest >> newComm [
 	^ DummyComm new
 ]
 
 { #category : #private }
-MicroPythonProcessTest >> newProcess [
-	^ MicroPythonProcess new
+MicroWizProcessTest >> newProcess [
+	^ MicroWizProcess new
 ]
 
 { #category : #private }
-MicroPythonProcessTest >> newProxy [
+MicroWizProcessTest >> newProxy [
 	^ MicroPythonProxy new
 ]
 
 { #category : #test }
-MicroPythonProcessTest >> testErrorFlag [
+MicroWizProcessTest >> testErrorFlag [
 	| p |
 	p := self newProcess.
 	self deny: p errorFlag
 ]
 
 { #category : #test }
-MicroPythonProcessTest >> testIsRunning [
+MicroWizProcessTest >> testIsRunning [
 	| process proxy comm |
 	process := self newProcess.
 	proxy := self newProxy.
@@ -52,7 +52,7 @@ MicroPythonProcessTest >> testIsRunning [
 ]
 
 { #category : #test }
-MicroPythonProcessTest >> testProxy [
+MicroWizProcessTest >> testProxy [
 	| proxy process |
 	process := self newProcess.
 	self assert: process proxy isNil.
@@ -62,7 +62,7 @@ MicroPythonProcessTest >> testProxy [
 ]
 
 { #category : #test }
-MicroPythonProcessTest >> testStop [
+MicroWizProcessTest >> testStop [
 	| process proxy comm block |
 	process := self newProcess.
 	proxy := self newProxy.
@@ -85,7 +85,7 @@ MicroPythonProcessTest >> testStop [
 ]
 
 { #category : #test }
-MicroPythonProcessTest >> testTopBlock [
+MicroWizProcessTest >> testTopBlock [
 	| p b |
 	p := self newProcess.
 	self assert: p topBlock isNil.

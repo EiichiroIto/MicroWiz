@@ -16,7 +16,7 @@ ESP8266Proxy >> newBlockSpecs [
 
 { #category : #api }
 ESP8266Proxy >> newCode [
-	^ MicroPythonCode new
+	^ MicroWizCode new
 		generator: MicroPythonGenerator new;
 		yourself
 ]
