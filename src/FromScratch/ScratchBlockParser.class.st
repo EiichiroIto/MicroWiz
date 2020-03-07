@@ -203,6 +203,11 @@ ScratchBlockParser >> expressionArgWithMenuString: t1 [
 	^ codeGenerator expressionArgWithMenuString: t1
 ]
 
+{ #category : #'arg generator' }
+ScratchBlockParser >> localVarArgString: aVariableMorph [
+	^ codeGenerator localVarArgString: aVariableMorph variable.
+]
+
 { #category : #accessing }
 ScratchBlockParser >> parseBlock: aTopBlock [
 	aTopBlock emitCode: self indent: 0.

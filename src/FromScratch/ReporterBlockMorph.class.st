@@ -18,7 +18,7 @@ ReporterBlockMorph >> acceptsTypeOf: aBlockMorph [
 
 { #category : #'code generation' }
 ReporterBlockMorph >> argOf: aParser [
-	^ [ aParser reporterArgString: self ]
+	^ [ self argString: aParser ]
 ]
 
 { #category : #'code generation' }

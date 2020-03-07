@@ -147,6 +147,17 @@ MicroPythonGenerator >> doIfEnd: aMorph [
 ]
 
 { #category : #'control ops' }
+MicroPythonGenerator >> doIterateBegin: list var: var [
+	self
+		appendWithNewline: 'for ' , (self valueOf: var) , ' in ' , (self getList: list) , ':'
+]
+
+{ #category : #'control ops' }
+MicroPythonGenerator >> doIterateEnd: anInteger [
+	"do nothing"
+]
+
+{ #category : #'control ops' }
 MicroPythonGenerator >> doRepeatBegin: aNumber [
 	self
 		appendWithNewline: 'for ' , self newVariable , ' in range(' , aNumber asString , '):'
@@ -397,6 +408,11 @@ MicroPythonGenerator >> literalStringFrom: anObject [
 		and: [anObject isNumberString not])
 		ifTrue: [^ self quotedString: anObject].
 	^ anObject asString
+]
+
+{ #category : #private }
+MicroPythonGenerator >> localVarArgString: aString [
+	^ aString
 ]
 
 { #category : #private }

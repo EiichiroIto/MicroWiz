@@ -49,6 +49,16 @@ MicroWizGenerator >> doIfEnd: aMorph [
 ]
 
 { #category : #'control ops' }
+MicroWizGenerator >> doIterateBegin: list var: var [
+	self subclassResponsibility
+]
+
+{ #category : #'control ops' }
+MicroWizGenerator >> doIterateEnd: anInteger [
+	self subclassResponsibility
+]
+
+{ #category : #'control ops' }
 MicroWizGenerator >> doRepeatBegin: aNumber [
 	self subclassResponsibility
 ]

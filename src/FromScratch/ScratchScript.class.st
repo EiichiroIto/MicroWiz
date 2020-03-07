@@ -21,6 +21,7 @@ ScratchScript >> addArgBuilder [
 		addBooleanArg: $b;
 		addEventTitleArg: $e;
 		addChoiceArg: $f selector: #mathFunctionNames initialChoice: 'sqrt';
+		addLocalVarArg: $l;
 		addChoiceArg: $L selector: #listVarNames;
 		addSpriteArg: $m;
 		addNumberExpressArg: $n initialExpression: '10';
@@ -247,6 +248,8 @@ ScratchScript >> blockFromTuple: tuple receiver: scriptOwner [
 
 	| k spec blockColor block argCount arg argBlock |
 	k := tuple first.
+	k = #localVar
+		ifTrue: [ ^ self localVarBlockFromTuple: tuple receiver: scriptOwner ].
 	(#(readVariable changeVariable) includes: k)
 		ifTrue: [ ^ self variableBlockFromTuple: tuple receiver: scriptOwner ].
 	(#(EventHatMorph SubHatMorph) includes: k)
@@ -592,6 +595,16 @@ ScratchScript >> isScriptable [
 { #category : #'argument menus' }
 ScratchScript >> listVarNames [
 	self subclassResponsibility
+]
+
+{ #category : #blocks }
+ScratchScript >> localVarBlockFromTuple: tuple receiver: scriptOwner [
+	| varName rcvr |
+	varName := tuple at: 2.
+	rcvr := scriptOwner.
+	^ LocalVarBlockMorph new
+		commandSpec: varName;
+		receiver: rcvr
 ]
 
 { #category : #'argument menus' }

@@ -20,6 +20,20 @@ MicroWizCode >> doForeverEnd: aMorph [
 ]
 
 { #category : #'control ops' }
+MicroWizCode >> doIterateBegin: aMorph [
+	| list var id |
+	list := aMorph blockArgs first choice.
+	var := aMorph blockArgs second varName.
+	id := generator doIterateBegin: list var: var.
+	aMorph labelId: id
+]
+
+{ #category : #'control ops' }
+MicroWizCode >> doIterateEnd: aMorph [
+	generator doIterateEnd: aMorph labelId
+]
+
+{ #category : #'control ops' }
 MicroWizCode >> doUntilBegin: aMorph [
 	| cond id |
 	cond := aMorph blockArgs first argString: parser.
@@ -119,6 +133,11 @@ MicroWizCode >> indentLevelFor: aString [
 	^ aString = 'startup' "'Scratch-StartClicked'"
 		ifTrue: [0]
 		ifFalse: [1]
+]
+
+{ #category : #private }
+MicroWizCode >> localVarArgString: aString [
+	^ generator localVarArgString: aString
 ]
 
 { #category : #accessing }

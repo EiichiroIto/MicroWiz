@@ -48,7 +48,7 @@ ArgMorph >> acceptsTypeOf: aBlockMorph [
 
 { #category : #'code generation' }
 ArgMorph >> argOf: aParser [
-	^ [ aParser argString: self ]
+	^ [ self argString: aParser ]
 ]
 
 { #category : #'code generation' }
@@ -129,10 +129,4 @@ ArgMorph >> printOn: aStream [
 { #category : #accessing }
 ArgMorph >> project [
 	^ owner ifNotNil: [ owner project ]
-]
-
-{ #category : #accessing }
-ArgMorph >> rootMorph [
-	owner ifNil: [ ^ self ].
-	^ self rootMorph
 ]

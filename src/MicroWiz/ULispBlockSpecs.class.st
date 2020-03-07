@@ -9,9 +9,9 @@ ULispBlockSpecs >> addArgBuilderTo: anArgBuilder [
 	super addArgBuilderTo: anArgBuilder.
 	anArgBuilder
 		addNumberExpressArg: $P
-			selector: #gpioModeNames
-			target: self
-			initialExpression: '0'
+		selector: #gpioModeNames
+		target: self
+		initialExpression: '0'
 ]
 
 { #category : #'argument menus' }

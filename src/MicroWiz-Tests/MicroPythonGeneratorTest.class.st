@@ -66,6 +66,15 @@ MicroPythonGeneratorTest >> testAppendToList [
 ]
 
 { #category : #test }
+MicroPythonGeneratorTest >> testAppendWithNewline [
+	| g |
+	g := self newGenerator.
+	g indent: 2.
+	g appendWithNewline: 'abc'.
+	self assert: g code equals: '        abc' , String lf
+]
+
+{ #category : #test }
 MicroPythonGeneratorTest >> testBinaryFunctionArg1Arg2 [
 	| g |
 	g := self newGenerator.
@@ -190,6 +199,22 @@ MicroPythonGeneratorTest >> testDoIfEnd [
 	| g |
 	g := self newGenerator.
 	g doIfEnd: 'x'.
+	self assert: g code equals: ''
+]
+
+{ #category : #test }
+MicroPythonGeneratorTest >> testDoIterateBeginVar [
+	| g |
+	g := self newGenerator.
+	g doIterateBegin: 'x' var: 'y'.
+	self assert: g code equals: 'for y in x:' , String lf
+]
+
+{ #category : #test }
+MicroPythonGeneratorTest >> testDoIterateEnd [
+	| g |
+	g := self newGenerator.
+	g doIterateEnd: 123.
 	self assert: g code equals: ''
 ]
 
@@ -500,6 +525,14 @@ MicroPythonGeneratorTest >> testLiteralStringFrom [
 	self assert: (g literalStringFrom: 'a') equals: '''a'''.
 	self assert: (g literalStringFrom: '10') equals: '10'.
 	self assert: (g literalStringFrom: 10) equals: '10'
+]
+
+{ #category : #test }
+MicroPythonGeneratorTest >> testLocalVarArgString [
+	| g |
+	g := self newGenerator.
+	self assert: (g localVarArgString: 'abc') equals: 'abc'.
+	self assert: (g localVarArgString: 'def') equals: 'def'
 ]
 
 { #category : #test }

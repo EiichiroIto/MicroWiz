@@ -51,6 +51,7 @@ MicroWizBlockSpecs >> controlBlocks [
 			('repeat %n'				c	doRepeat 10)
 			('while %b'					c	doWhile)
 			('repeat until %b'		c	doUntil)
+			('do %L each %l'			c	doIterate 'list')
 			-
 			('if %b'						c	doIf)
 			('if %b'						c	doIfElse)

@@ -55,6 +55,18 @@ ArgMorphBuilder >> addEventTitleArg: aCharacter [
 ]
 
 { #category : #accessing }
+ArgMorphBuilder >> addLocalVarArg: aCharacter [
+	self addLocalVarArg: aCharacter initialVarName: 'x'
+]
+
+{ #category : #accessing }
+ArgMorphBuilder >> addLocalVarArg: aCharacter initialVarName: aString [
+	self
+		add: aCharacter
+		builder: [ LocalVarArgMorph new varName: aString ]
+]
+
+{ #category : #accessing }
 ArgMorphBuilder >> addNumberExpressArg: aCharacter initialExpression: aString [
 	self add: aCharacter builder: [ ExpressionArgMorph new numExpression: aString ]
 ]

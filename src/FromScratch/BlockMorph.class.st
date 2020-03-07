@@ -913,12 +913,6 @@ BlockMorph >> rootForGrabOf: aMorph [
 		ifFalse: [ self ]
 ]
 
-{ #category : #accessing }
-BlockMorph >> rootMorph [
-	owner ifNil: [ ^ self ].
-	^ self rootMorph
-]
-
 { #category : #processes }
 BlockMorph >> scratchProc [
 	"Answer my process or nil if I'm not currently the top of a running stack."
