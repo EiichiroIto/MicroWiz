@@ -12,6 +12,14 @@ MicroPythonBlockSpecs >> blocks [
 ]
 
 { #category : #'block specs' }
+MicroPythonBlockSpecs >> controlBlocks [
+	^ super controlBlocks , #(
+		'control'
+				('do %L each %l'			c	doIterate 'list')
+		)
+]
+
+{ #category : #'block specs' }
 MicroPythonBlockSpecs >> displayBlocks [
 	^ #()
 ]

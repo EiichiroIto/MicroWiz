@@ -89,7 +89,7 @@ MicroPythonProxy >> newBlockSpecs [
 
 { #category : #api }
 MicroPythonProxy >> newCode [
-	^ MicroWizCode new
+	^ MicroPythonCode new
 		generator: MicroPythonGenerator new;
 		yourself
 ]

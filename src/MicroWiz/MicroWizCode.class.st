@@ -20,43 +20,62 @@ MicroWizCode >> doForeverEnd: aMorph [
 ]
 
 { #category : #'control ops' }
-MicroWizCode >> doIterateBegin: aMorph [
-	| list var id |
-	list := aMorph blockArgs first choice.
-	var := aMorph blockArgs second varName.
-	id := generator doIterateBegin: list var: var.
-	aMorph labelId: id
+MicroWizCode >> doIfBegin: aMorph [
+	| cond |
+	cond := aMorph blockArgs first argString: parser.
+	generator doIfBegin: cond
 ]
 
 { #category : #'control ops' }
-MicroWizCode >> doIterateEnd: aMorph [
-	generator doIterateEnd: aMorph labelId
+MicroWizCode >> doIfElseCenter: aMorph [
+	generator doIfElse
+]
+
+{ #category : #'control ops' }
+MicroWizCode >> doIfEnd: aMorph [
+	generator doIfEnd
+]
+
+{ #category : #'control ops' }
+MicroWizCode >> doRepeatBegin: aMorph [
+	| num var |
+	num := aMorph blockArgs first argString: parser.
+	var := aMorph blockArgs second varName.
+	generator doRepeatBegin: num var: var
+]
+
+{ #category : #'control ops' }
+MicroWizCode >> doRepeatEnd: aMorph [
+	generator doRepeatEnd
 ]
 
 { #category : #'control ops' }
 MicroWizCode >> doUntilBegin: aMorph [
-	| cond id |
+	| cond |
 	cond := aMorph blockArgs first argString: parser.
-	id := generator doUntilBegin: cond.
-	aMorph labelId: id
+	generator doUntilBegin: cond
 ]
 
 { #category : #'control ops' }
 MicroWizCode >> doUntilEnd: aMorph [
-	generator doUntilEnd: aMorph labelId
+	generator doUntilEnd
 ]
 
 { #category : #'control ops' }
 MicroWizCode >> doWhileBegin: aMorph [
-	| cond id |
+	| cond |
 	cond := aMorph blockArgs first argString: parser.
-	id := generator doWhileBegin: cond.
-	aMorph labelId: id
+	generator doWhileBegin: cond
 ]
 
 { #category : #'control ops' }
 MicroWizCode >> doWhileEnd: aMorph [
-	generator doWhileEnd: aMorph labelId
+	generator doWhileEnd
+]
+
+{ #category : #private }
+MicroWizCode >> eventTitleString: aString [
+	self shouldBeImplemented
 ]
 
 { #category : #'arg generator' }

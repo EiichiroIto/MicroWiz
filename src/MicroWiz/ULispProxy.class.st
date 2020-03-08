@@ -61,7 +61,7 @@ ULispProxy >> newBlockSpecs [
 
 { #category : #api }
 ULispProxy >> newCode [
-	^ MicroWizCode new
+	^ ULispCode new
 		generator: ULispGenerator new;
 		yourself
 ]

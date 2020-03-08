@@ -48,10 +48,9 @@ MicroWizBlockSpecs >> controlBlocks [
 			('when %m clicked'		T	-)
 			-
 			('forever'					c	doForever)
-			('repeat %n'				c	doRepeat 10)
+			('repeat %n each %l'	c	doRepeat 10 'i')
 			('while %b'					c	doWhile)
 			('repeat until %b'		c	doUntil)
-			('do %L each %l'			c	doIterate 'list')
 			-
 			('if %b'						c	doIf)
 			('if %b'						c	doIfElse)

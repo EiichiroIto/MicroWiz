@@ -40,6 +40,24 @@ MicroWizGeneratorTest >> testExtModules [
 ]
 
 { #category : #test }
+MicroWizGeneratorTest >> testGenerateHeader [
+	| g |
+	g := self newGenerator.
+	g indent: 5.
+	self assert: g indent equals: 5.
+	g generateHeader.
+	self assert: g indent equals: 0.
+	self assert: g code isEmpty
+]
+
+{ #category : #test }
+MicroWizGeneratorTest >> testHeader [
+	| g |
+	g := self newGenerator.
+	self assert: g header isEmpty
+]
+
+{ #category : #test }
 MicroWizGeneratorTest >> testIndent [
 	| g |
 	g := self newGenerator.

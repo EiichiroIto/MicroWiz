@@ -39,32 +39,22 @@ MicroWizGenerator >> doIfBegin: cond [
 ]
 
 { #category : #'control ops' }
-MicroWizGenerator >> doIfElse: orgId [
+MicroWizGenerator >> doIfElse [
 	self subclassResponsibility
 ]
 
 { #category : #'control ops' }
-MicroWizGenerator >> doIfEnd: aMorph [
+MicroWizGenerator >> doIfEnd [
 	self subclassResponsibility
 ]
 
 { #category : #'control ops' }
-MicroWizGenerator >> doIterateBegin: list var: var [
+MicroWizGenerator >> doRepeatBegin: aNumber var: aString [
 	self subclassResponsibility
 ]
 
 { #category : #'control ops' }
-MicroWizGenerator >> doIterateEnd: anInteger [
-	self subclassResponsibility
-]
-
-{ #category : #'control ops' }
-MicroWizGenerator >> doRepeatBegin: aNumber [
-	self subclassResponsibility
-]
-
-{ #category : #'control ops' }
-MicroWizGenerator >> doRepeatEndLabels: anInteger [
+MicroWizGenerator >> doRepeatEnd [
 	self subclassResponsibility
 ]
 
@@ -74,7 +64,7 @@ MicroWizGenerator >> doUntilBegin: cond [
 ]
 
 { #category : #'control ops' }
-MicroWizGenerator >> doUntilEnd: anInteger [
+MicroWizGenerator >> doUntilEnd [
 	self subclassResponsibility
 ]
 
@@ -84,7 +74,7 @@ MicroWizGenerator >> doWhileBegin: cond [
 ]
 
 { #category : #'control ops' }
-MicroWizGenerator >> doWhileEnd: anInteger [
+MicroWizGenerator >> doWhileEnd [
 	self subclassResponsibility
 ]
 
@@ -100,7 +90,7 @@ MicroWizGenerator >> generateExtCode: aSymbol arguments: aCollection for: aScrip
 
 { #category : #'code generator' }
 MicroWizGenerator >> generateHeader [
-	self subclassResponsibility
+	self indent: 0
 ]
 
 { #category : #'code generator' }

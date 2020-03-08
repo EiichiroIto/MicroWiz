@@ -190,7 +190,7 @@ MicroPythonGeneratorTest >> testDoIfBegin [
 MicroPythonGeneratorTest >> testDoIfElse [
 	| g |
 	g := self newGenerator.
-	g doIfElse: 'a'.
+	g doIfElse.
 	self assert: g code equals: 'else:' , String lf
 ]
 
@@ -198,7 +198,7 @@ MicroPythonGeneratorTest >> testDoIfElse [
 MicroPythonGeneratorTest >> testDoIfEnd [
 	| g |
 	g := self newGenerator.
-	g doIfEnd: 'x'.
+	g doIfEnd.
 	self assert: g code equals: ''
 ]
 
@@ -214,23 +214,23 @@ MicroPythonGeneratorTest >> testDoIterateBeginVar [
 MicroPythonGeneratorTest >> testDoIterateEnd [
 	| g |
 	g := self newGenerator.
-	g doIterateEnd: 123.
+	g doIterateEnd.
 	self assert: g code equals: ''
 ]
 
 { #category : #test }
-MicroPythonGeneratorTest >> testDoRepeatBegin [
+MicroPythonGeneratorTest >> testDoRepeatBeginVar [
 	| g |
 	g := self newGenerator.
-	g doRepeatBegin: '10'.
-	self assert: g code equals: 'for _v1 in range(10):' , String lf
+	g doRepeatBegin: '10' var: 'x'.
+	self assert: g code equals: 'for x in range(10):' , String lf
 ]
 
 { #category : #test }
-MicroPythonGeneratorTest >> testDoRepeatEndLabels [
+MicroPythonGeneratorTest >> testDoRepeatEnd [
 	| g |
 	g := self newGenerator.
-	g doRepeatEndLabels: 'x'.
+	g doRepeatEnd.
 	self assert: g code equals: ''
 ]
 
@@ -246,7 +246,7 @@ MicroPythonGeneratorTest >> testDoUntilBegin [
 MicroPythonGeneratorTest >> testDoUntilEnd [
 	| g |
 	g := self newGenerator.
-	g doUntilEnd: 10.
+	g doUntilEnd.
 	self assert: g code equals: ''
 ]
 
@@ -262,7 +262,7 @@ MicroPythonGeneratorTest >> testDoWhileBegin [
 MicroPythonGeneratorTest >> testDoWhileEnd [
 	| g |
 	g := self newGenerator.
-	g doWhileEnd: 10.
+	g doWhileEnd.
 	self assert: g code equals: ''
 ]
 

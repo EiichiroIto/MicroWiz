@@ -12,6 +12,11 @@ LocalVarArgMorph >> defaultValue: aString [
 	self varName: aString
 ]
 
+{ #category : #accessing }
+LocalVarArgMorph >> defaultValueFromSpec: aString [ 
+	self varName: aString
+]
+
 { #category : #evaluation }
 LocalVarArgMorph >> evaluate [
 	^ labelMorph savedContents
@@ -44,15 +49,9 @@ LocalVarArgMorph >> initialize [
 	self extent: 25 @ 12.
 
 	"To allow for editing in place."
-	labelMorph := StringFieldMorph new
-		forExpressionArg;
-		doResizing: true;
-		font: ScratchTheme argFont;
-		color: Color transparent;
-		isNumeric: false;
-		contents: ''.
+	labelMorph := self newLabelMorph.
 	self addMorph: labelMorph.
-	iconMorph := ImageMorph new form: (Smalltalk ui iconNamed: #smallAdd).
+	iconMorph := self newIconMorph.
 	self addMorphFront: iconMorph.
 	iconMorph on: #mouseDown send: #iconMouseDown: to: self
 ]
@@ -60,6 +59,25 @@ LocalVarArgMorph >> initialize [
 { #category : #testing }
 LocalVarArgMorph >> isExpressionArg [
 	^ true
+]
+
+{ #category : #private }
+LocalVarArgMorph >> newIconMorph [
+	^ Morph new
+		color: (Color h: 25 s: 0.88 v: 0.95);
+		extent: 20 @ labelMorph height;
+		yourself
+]
+
+{ #category : #private }
+LocalVarArgMorph >> newLabelMorph [
+	^ StringFieldMorph new
+		forExpressionArg;
+		doResizing: true;
+		font: ScratchTheme argFont;
+		color: Color transparent;
+		isNumeric: false;
+		contents: ''
 ]
 
 { #category : #private }

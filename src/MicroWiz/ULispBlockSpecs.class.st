@@ -14,9 +14,31 @@ ULispBlockSpecs >> addArgBuilderTo: anArgBuilder [
 		initialExpression: '0'
 ]
 
+{ #category : #'block specs' }
+ULispBlockSpecs >> blocks [
+	^ self ioBlocks , self controlBlocks , self modulesBlocks
+		, self intModuleBlocks, self variablesBlocks
+]
+
+{ #category : #'block specs' }
+ULispBlockSpecs >> controlBlocks [
+	^ super controlBlocks , #(
+		'control'
+			('when %s'					c	doWhen)
+	)
+]
+
 { #category : #'argument menus' }
 ULispBlockSpecs >> gpioModeNames [
 	^ #((INPUT 0) (OUTPUT 1) (INPUT_PULLUP 2))
+]
+
+{ #category : #'block specs' }
+ULispBlockSpecs >> ioBlocks [
+	^ #(
+		'io'
+			('with i2c %l addr %n'				c		withI2c			's' 0)
+	)
 ]
 
 { #category : #'argument menus' }

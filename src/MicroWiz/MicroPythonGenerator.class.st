@@ -137,12 +137,12 @@ MicroPythonGenerator >> doIfBegin: cond [
 ]
 
 { #category : #'control ops' }
-MicroPythonGenerator >> doIfElse: orgId [
+MicroPythonGenerator >> doIfElse [
 	self appendWithNewline: 'else:'
 ]
 
 { #category : #'control ops' }
-MicroPythonGenerator >> doIfEnd: aMorph [
+MicroPythonGenerator >> doIfEnd [
 	"do nothing"
 ]
 
@@ -153,18 +153,18 @@ MicroPythonGenerator >> doIterateBegin: list var: var [
 ]
 
 { #category : #'control ops' }
-MicroPythonGenerator >> doIterateEnd: anInteger [
+MicroPythonGenerator >> doIterateEnd [
 	"do nothing"
 ]
 
 { #category : #'control ops' }
-MicroPythonGenerator >> doRepeatBegin: aNumber [
+MicroPythonGenerator >> doRepeatBegin: aNumber var: aString [
 	self
-		appendWithNewline: 'for ' , self newVariable , ' in range(' , aNumber asString , '):'
+		appendWithNewline: 'for ' , aString , ' in range(' , aNumber asString , '):'
 ]
 
 { #category : #'control ops' }
-MicroPythonGenerator >> doRepeatEndLabels: anInteger [
+MicroPythonGenerator >> doRepeatEnd [
 	"do nothing"
 ]
 
@@ -174,7 +174,7 @@ MicroPythonGenerator >> doUntilBegin: cond [
 ]
 
 { #category : #'control ops' }
-MicroPythonGenerator >> doUntilEnd: anInteger [
+MicroPythonGenerator >> doUntilEnd [
 	"do nothing"
 ]
 
@@ -184,7 +184,7 @@ MicroPythonGenerator >> doWhileBegin: cond [
 ]
 
 { #category : #'control ops' }
-MicroPythonGenerator >> doWhileEnd: anInteger [
+MicroPythonGenerator >> doWhileEnd [
 	"do nothing"
 ]
 
