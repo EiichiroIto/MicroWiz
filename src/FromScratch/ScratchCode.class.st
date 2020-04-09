@@ -236,6 +236,11 @@ ScratchCode >> generateEventHeader: aString [
 ]
 
 { #category : #'code generator' }
+ScratchCode >> generateGlobalVars: aCollection [
+	"do nothing"
+]
+
+{ #category : #'code generator' }
 ScratchCode >> generateIndent: anInteger [
 	"do nothing"
 ]

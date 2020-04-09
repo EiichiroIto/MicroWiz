@@ -30,6 +30,36 @@ MicroPythonProxy class >> quitPasteRequest [
 ]
 
 { #category : #constants }
+MicroPythonProxy class >> quitRawRequest [
+	^ #[2]
+]
+
+{ #category : #constants }
+MicroPythonProxy class >> rawModeResponse [
+	^ '>' asByteArray
+]
+
+{ #category : #constants }
+MicroPythonProxy class >> rawModeStartResponse [
+	^ ('raw REPL; CTRL-B to exit' , String crlf) asByteArray
+]
+
+{ #category : #constants }
+MicroPythonProxy class >> rawOK [
+	^ #[4]
+]
+
+{ #category : #constants }
+MicroPythonProxy class >> rawOKResponse [
+	^ #[4 4 62]
+]
+
+{ #category : #constants }
+MicroPythonProxy class >> rawRequest [
+	^ #[1]
+]
+
+{ #category : #constants }
 MicroPythonProxy class >> rebootRequest [
 	^ #[4]
 ]
@@ -73,13 +103,36 @@ MicroPythonProxy >> icon [
 ]
 
 { #category : #testing }
-MicroPythonProxy >> isPasteResponse: aByteArray [
-	^ aByteArray = self class pasteResponse
+MicroPythonProxy >> isPasteResponse [
+	^ responses notEmpty
+		and: [ responses last = self class pasteResponse ]
 ]
 
 { #category : #testing }
-MicroPythonProxy >> isPromptResponse: aByteArray [
-	^ aByteArray = self class promptResponse
+MicroPythonProxy >> isPromptResponse [
+	^ responses notEmpty
+		and: [ 	responses last = self class promptResponse ]
+]
+
+{ #category : #testing }
+MicroPythonProxy >> isRawMode [
+	^ self status = #rawMode
+]
+
+{ #category : #testing }
+MicroPythonProxy >> isRawPrompted [
+	^ self status = #rawPrompted
+]
+
+{ #category : #testing }
+MicroPythonProxy >> isRawResponse [
+	responses isEmpty
+		ifTrue: [ ^ false ].
+	self isRawMode
+		ifTrue: [ ^ responses last = self class rawModeStartResponse ].
+	self isRawPrompted
+		ifTrue: [ ^ responses last = self class rawOKResponse ].
+	^ false
 ]
 
 { #category : #api }
@@ -98,14 +151,19 @@ MicroPythonProxy >> newCode [
 MicroPythonProxy >> processSendingQueue [
 	self isPastePrompted
 		ifTrue: [ self
-				sendCommand:
-					(sendingQueue isEmpty
-						ifTrue: [ self class quitPasteRequest ]
-						ifFalse: [ sendingQueue removeFirst asByteArray , self class crRequest ]).
+				sendQueueContinue: self class crRequest
+				ifEnd: [ self sendCommand: self class quitPasteRequest ].
 			^ self ].
+	self isRawPrompted
+		ifTrue: [ self
+				sendQueueContinue: self class rawOK
+				ifEnd: [ ^ self sendCommand: self class quitRawRequest ].
+			^ self setRawPrompted ].
 	self isPrompted
 		ifFalse: [ ^ self ].
 	sendingQueue isEmpty
+		ifTrue: [ ^ self ].
+	self isRawMode
 		ifTrue: [ ^ self ].
 	self sendCommand: self class pasteRequest
 ]
@@ -113,8 +171,11 @@ MicroPythonProxy >> processSendingQueue [
 { #category : #api }
 MicroPythonProxy >> putFileNamed: aString1 contents: aString2 [
 	| str |
+	self isConnected ifFalse: [ ^ self ].
 	str := self stringOfFileNamed: aString1 contents: aString2.
-	self execute: str
+	sendingQueue addAll: str lines.
+	self sendCommand: self class rawRequest.
+	self setRawMode
 ]
 
 { #category : #private }
@@ -153,10 +214,27 @@ MicroPythonProxy >> sendPing [
 	self sendCommand: self class crRequest
 ]
 
+{ #category : #private }
+MicroPythonProxy >> sendQueueContinue: aByteArray ifEnd: aBlock [
+	sendingQueue isEmpty
+		ifTrue: [ ^ aBlock value ].
+	self sendCommand: sendingQueue removeFirst asByteArray , aByteArray
+]
+
 { #category : #api }
 MicroPythonProxy >> sendReboot [
 	self sendCommand: self class rebootRequest.
 	self clearSendingQueue
+]
+
+{ #category : #private }
+MicroPythonProxy >> setRawMode [
+	self status: #rawMode
+]
+
+{ #category : #private }
+MicroPythonProxy >> setRawPrompted [
+	self status: #rawPrompted
 ]
 
 { #category : #private }
@@ -204,15 +282,13 @@ MicroPythonProxy >> stringOfFileNamed: aFilename contents: aString [
 
 { #category : #private }
 MicroPythonProxy >> updateStatus [
-	| last |
 	self isReady
 		ifTrue: [ self setPrompted ].
-	responses isEmpty
-		ifTrue: [ ^ self ].
-	last := responses last.
-	(self isPasteResponse: last)
+	self isRawResponse
+		ifTrue: [ ^ self setRawPrompted ].
+	self isPasteResponse
 		ifTrue: [ ^ self setPastePrompted ].
-	(self isPromptResponse: last)
+	self isPromptResponse
 		ifTrue: [ ^ self setReady ]
 ]
 

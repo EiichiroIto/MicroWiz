@@ -7,6 +7,16 @@ Class {
 	#category : #'FromScratch-Tests'
 }
 
+{ #category : #'arithmetic ops' }
+ScTestScript >> abs: aNumber [
+	^ aNumber abs
+]
+
+{ #category : #evaluation }
+ScTestScript >> evaluator [
+	^ self
+]
+
 { #category : #'argument menus' }
 ScTestScript >> listVarNames [
 	^ #(d 'e f')

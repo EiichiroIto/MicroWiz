@@ -94,7 +94,7 @@ CommandBlockMorphTest >> testEvaluate [
 		receiver: self newTestScript;
 		yourself.
 	b commandSpec: 'abs %n'.
-	b selector: #abs.
+	b selector: #abs:.
 	b argPermutation: #(1).
 	b defaultArgs: #(-5).
 	self assert: b evaluate equals: 5.
@@ -103,6 +103,22 @@ CommandBlockMorphTest >> testEvaluate [
 	b argPermutation: #(1 2).
 	b defaultArgs: #(3 4).
 	self assert: b evaluate equals: 7
+]
+
+{ #category : #test }
+CommandBlockMorphTest >> testEvaluateFunctionWithArgs [
+	| b |
+	b := self newBlock
+		receiver: self newTestScript;
+		yourself.
+	b commandSpec: 'abs %n'.
+	b selector: #abs:.
+	self assert: (b evaluateFunctionWithArgs: #(-5)) equals: 5.
+	b commandSpec: 'plus %n and %n'.
+	b selector: #plus:and:.
+	self
+		assert: (b evaluateFunctionWithArgs: #(1 2))
+		equals: 3
 ]
 
 { #category : #test }
@@ -136,7 +152,7 @@ CommandBlockMorphTest >> testEvaluateWithArgs [
 		receiver: self newTestScript;
 		yourself.
 	b commandSpec: 'abs %n'.
-	b selector: #abs.
+	b selector: #abs:.
 	self assert: (b evaluateWithArgs: #(-5)) equals: 5.
 	b commandSpec: 'plus %n and %n'.
 	b selector: #plus:and:.

@@ -2,18 +2,18 @@
 A SteloProcessTest is a test class for testing the behavior of SteloProcess
 "
 Class {
-	#name : #ScratchBaseProcessTest,
+	#name : #ScratchNativeProcessTest,
 	#superclass : #TestCase,
 	#category : #'FromScratch-Tests'
 }
 
 { #category : #private }
-ScratchBaseProcessTest >> newProcess [
-	^ ScratchBaseProcess new
+ScratchNativeProcessTest >> newProcess [
+	^ ScratchNativeProcess new
 ]
 
 { #category : #test }
-ScratchBaseProcessTest >> testProgram [
+ScratchNativeProcessTest >> testProgram [
 	| pr |
 	pr := self newProcess.
 	self assert: pr program isNil.

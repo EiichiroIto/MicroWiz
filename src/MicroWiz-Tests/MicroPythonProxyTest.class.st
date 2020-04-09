@@ -49,6 +49,24 @@ MicroPythonProxyTest >> testEvaluatedString [
 ]
 
 { #category : #test }
+MicroPythonProxyTest >> testIsRawMode [
+	| p |
+	p := self newProxy.
+	self deny: p isRawMode.
+	p setRawMode.
+	self assert: p isRawMode
+]
+
+{ #category : #test }
+MicroPythonProxyTest >> testIsRawPrompted [
+	| p |
+	p := self newProxy.
+	self deny: p isRawPrompted.
+	p setRawPrompted.
+	self assert: p isRawPrompted
+]
+
+{ #category : #test }
 MicroPythonProxyTest >> testProcessSendingQueue [
 	| p c |
 	p := self newProxy.
@@ -160,6 +178,16 @@ MicroPythonProxyTest >> testSendReboot [
 	self assert: p comm putQueue size equals: 1.
 	self assert: p comm getQueue isEmpty.
 	self assertCollection: p comm putQueue first equals: #[4]
+]
+
+{ #category : #test }
+MicroPythonProxyTest >> testSetRawMode [
+	self testIsRawMode
+]
+
+{ #category : #test }
+MicroPythonProxyTest >> testSetRawPrompted [
+	self testIsRawPrompted
 ]
 
 { #category : #test }

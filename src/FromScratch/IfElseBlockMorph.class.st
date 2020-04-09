@@ -281,6 +281,13 @@ IfElseBlockMorph >> falseBlock: aBlockMorph [
 
 ]
 
+{ #category : #accessing }
+IfElseBlockMorph >> falseBlockList [
+	"Answer an array containing the block sequence false-case nested stack."
+
+	^ falseBlock ifNil: [ #() ] ifNotNil: [ falseBlock blockSequence ]
+]
+
 { #category : #private }
 IfElseBlockMorph >> fixBlockLayout [
 	"Update the positions of my submorphs."
@@ -419,4 +426,11 @@ IfElseBlockMorph >> trueBlock: aBlockMorph [
 	trueBlock := aBlockMorph.
 	aBlockMorph ifNotNil: [self addMorph: aBlockMorph].
 
+]
+
+{ #category : #accessing }
+IfElseBlockMorph >> trueBlockList [
+	"Answer an array containing the block sequence true-case nested stack."
+
+	^ trueBlock ifNil: [ #() ] ifNotNil: [ trueBlock blockSequence ]
 ]

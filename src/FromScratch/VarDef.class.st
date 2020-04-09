@@ -67,7 +67,6 @@ VarDef >> classNameFor: aString [
 
 { #category : #accessing }
 VarDef >> delete: aString [
-	| vno |
 	(self includes: aString)
 		ifFalse: [ self error: 'cannot delete not existing var' ].
 	(self isReserved: aString)

@@ -107,6 +107,11 @@ MicroWizCode >> generateCode: aSymbol morph: aMorph [
 ]
 
 { #category : #'code generator' }
+MicroWizCode >> generateGlobalVars: aCollection [
+	generator generateGlobalVars: aCollection
+]
+
+{ #category : #'code generator' }
 MicroWizCode >> generateIndent: anInteger [
 	generator indent: anInteger
 ]

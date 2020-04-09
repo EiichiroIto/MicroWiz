@@ -215,7 +215,7 @@ ScratchScript >> blockFromSpec: spec color: blockColor [
 	blockType := spec at: 2.
 	selector := (spec at: 3) asSymbol.
 	defaultArgs := self defaultArgsFor: spec.
-	(#(E K M S T L) includes: blockType)
+	(#(E K M S T L G) includes: blockType)
 		ifTrue: [ ^ (self hatBlockType: blockType) color: blockColor ].
 	(blockType includes: $c)
 		ifTrue: [ block := selector = #doIfElse
@@ -505,6 +505,66 @@ ScratchScript >> deleteVariable: aString [
 	self subclassResponsibility
 ]
 
+{ #category : #evaluation }
+ScratchScript >> evaluateFor: aTopBlock [
+	| selector args |
+	selector := aTopBlock selector.
+	args := aTopBlock coerceArgs.
+	^ selector isInfix
+		ifTrue: [ self evaluateInfix: selector withArgs: args ]
+		ifFalse: [ self evaluateFunction: selector withArgs: args ]
+]
+
+{ #category : #evaluation }
+ScratchScript >> evaluateFunction: aSymbol withArgs: anArgs [
+	"Evalue this block with the given argument list."
+
+	"special case for unary operators"
+
+	"(#(abs not rounded sqrt truncated) includes: aSymbol)
+		ifTrue: [ ^ anArgs first perform: aSymbol ]."
+	^ self evaluator perform: aSymbol withArguments: anArgs
+]
+
+{ #category : #evaluation }
+ScratchScript >> evaluateInfix: aSymbol withArgs: rawArgs [
+	"Evalue an infix operator with the given arguments list. Special case for comparison operatores when both operands are strings. Reverse order of comparison operands in RTL languages."
+
+	"Note: The strings 'true' and 'false' in either English or the current language are equal to the boolean value that they name."
+
+	| arg1 arg2 |
+	arg1 := rawArgs first.
+	arg2 := rawArgs second.
+	#= = aSymbol
+		ifTrue: [ (arg1 isString and: [ arg2 isKindOf: Boolean ])
+				ifTrue: [ arg1 = 'true'
+						ifTrue: [ ^ arg2 = true ].
+					arg1 = 'false'
+						ifTrue: [ ^ arg2 = false ] ].
+			((arg1 isKindOf: Boolean) and: [ arg2 isString ])
+				ifTrue: [ arg2 = 'true'
+						ifTrue: [ ^ arg1 = true ].
+					arg2 = 'false'
+						ifTrue: [ ^ arg1 = false ] ] ].
+	(#(< = >) includes: aSymbol)
+		ifTrue: [ (arg1 isString and: [ arg1 isNumberString ])
+				ifTrue: [ arg1 := arg1 asNumber ].
+			(arg2 isString and: [ arg2 isNumberString ])
+				ifTrue: [ arg2 := arg2 asNumber ].
+			((arg1 isNumber and: [ arg2 isNumber ])
+				or: [ arg1 isString and: [ arg2 isString ] ])
+				ifTrue: [ ^ arg1 perform: aSymbol with: arg2 ].
+			^ false ].
+	(#(& |) includes: aSymbol)
+		ifTrue: [ ^ arg1 perform: aSymbol with: arg2 ].
+	^ arg1 asNumberNoError perform: aSymbol with: arg2 asNumberNoError
+]
+
+{ #category : #evaluation }
+ScratchScript >> evaluator [
+	^ self
+]
+
 { #category : #program }
 ScratchScript >> eventBlocks [
 	^ blocksBin submorphs select: [:m | m class = EventHatMorph]
@@ -522,6 +582,11 @@ ScratchScript >> hatBlockFromTuple: tuple receiver: scriptOwner [
 	block := blockClass new scriptOwner: scriptOwner.
 	blockClass = EventHatMorph
 		ifTrue: [ eventName := tuple at: 2.
+			eventName = 'start'
+				ifTrue: [ block
+						for: 'when start' event: #start;
+						scriptOwner: scriptOwner.
+					^ block ].
 			eventName = 'startup'
 				ifTrue: [ block
 						forStartupEvent;
@@ -556,6 +621,9 @@ ScratchScript >> hatBlockType: blockType [
 			^ EventHatMorph new
 				scriptOwner: self;
 				eventName: evtName ].
+	'G' = blockType
+		ifTrue: [ ^ (EventHatMorph new for: 'when start' event: #start)
+				scriptOwner: self ].
 	'S' = blockType
 		ifTrue: [ ^ EventHatMorph new forSetupEvent scriptOwner: self ].
 	'T' = blockType
@@ -590,6 +658,11 @@ ScratchScript >> initialize [
 { #category : #testing }
 ScratchScript >> isScriptable [
 	^ true
+]
+
+{ #category : #testing }
+ScratchScript >> isValidSubName: aString [
+	self subclassResponsibility
 ]
 
 { #category : #'argument menus' }
@@ -722,6 +795,11 @@ ScratchScript >> subBlocks [
 	^ blocksBin submorphs select: [:m | m class = SubHatMorph]
 ]
 
+{ #category : #testing }
+ScratchScript >> subNameInUse: aString [
+	^ self subNames includes: aString
+]
+
 { #category : #'argument menus' }
 ScratchScript >> subNames [
 	^ (self subBlocks collect: #subName) asSet asArray sort
@@ -734,6 +812,7 @@ ScratchScript >> toggleWatcher: aToggleButton for: aBlockMorph [
 
 { #category : #'argument menus' }
 ScratchScript >> uncoloredArgMorphFor: specString [
+	argBuilder ifNil: [ self setupArgBuilder ].
 	^ argBuilder uncoloredArgMorphFor: specString
 ]
 

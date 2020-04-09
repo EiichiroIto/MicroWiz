@@ -182,6 +182,11 @@ MicroWizProject >> deleteModule: aSymbol [
 	self updateBlockDefs
 ]
 
+{ #category : #accessing }
+MicroWizProject >> evaluateFor: aTopBlock [
+	^ application evaluateFor: aTopBlock
+]
+
 { #category : #'block specs' }
 MicroWizProject >> extBlockTuples [
 	| st |

@@ -828,6 +828,17 @@ BlockMorph >> layoutChanged [
 
 ]
 
+{ #category : #accessing }
+BlockMorph >> litUp: aBoolean [
+	"If the argument true, light up this block. Otherwise, revert to it's old color."
+
+	"Note: We use super color: so we don't overwrite oldColor. We also force a world update to ensure that the highlighting is seen by the user."
+
+	aBoolean
+		ifTrue: [ super color: (Color h: 60 s: 0.9 v: 0.89) ]
+		ifFalse: [ oldColor ifNotNil: [ super color: oldColor ] ]
+]
+
 { #category : #'event handling' }
 BlockMorph >> mouseDown: evt [
 	"Handle a mouse click. Left button either drags or performs click action. Right button brings up a menu."
@@ -931,6 +942,22 @@ BlockMorph >> scratchProc: aScratchProcess [
 
 ]
 
+{ #category : #processes }
+BlockMorph >> showError [
+	"Make this block to show an error."
+
+	super color: (Color r: 0.831 g: 0.156 b: 0.156)
+]
+
+{ #category : #processes }
+BlockMorph >> showErrorFeedback [
+	"Show that this stack encountered an error."
+
+	hadError := true.
+	cachedFeedbackForm := nil.
+	self changed
+]
+
 { #category : #private }
 BlockMorph >> showMenu: anEvent [
 	self project ifNotNil: [ :p | p application showBlockMenu: self event: anEvent ]
@@ -974,6 +1001,14 @@ BlockMorph >> startDrag: evt [
 BlockMorph >> startProcess [
 	"Start a process running this block stack. This default implementation does nothing."
 
+]
+
+{ #category : #processes }
+BlockMorph >> stop [
+	scratchProc
+		ifNotNil: [ self changed.
+			scratchProc stop.
+			scratchProc := nil ]
 ]
 
 { #category : #processes }

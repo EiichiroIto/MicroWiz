@@ -119,6 +119,19 @@ SpMicroWiz >> backupProject [
 	"do nothing"
 ]
 
+{ #category : #private }
+SpMicroWiz >> checkValidScript: aScript [
+	aScript eventBlocks size = 1
+		ifFalse: [ self inform: 'Start script only needs one' localized.
+			^ false ].
+	^ true
+]
+
+{ #category : #private }
+SpMicroWiz >> checkValidScripts [
+	^ project scripts allSatisfy: [ :each | self checkValidScript: each ]
+]
+
 { #category : #accessing }
 SpMicroWiz >> comm [
 	^ self proxy ifNotNil: [ :p | p comm ]
@@ -216,7 +229,7 @@ SpMicroWiz >> downloadFile [
 	code := MicroPythonParser new parse: code.
 	code := self confirmCode: code title: 'OK to save, or cancel'.
 	code ifNil: [ ^ self ].
-	self exportString: code extension: self pyExtension
+	self exportString: code extension: self pyExtension isBinary: false
 ]
 
 { #category : #processes }
@@ -371,19 +384,6 @@ SpMicroWiz >> savePlotImage: aPlotter [
 	saveForm writePNGFileNamed: fName pathString
 ]
 
-{ #category : #'menu actions' }
-SpMicroWiz >> selectMain [
-	presenter target: (project findObjName: 'main')
-]
-
-{ #category : #'menu actions' }
-SpMicroWiz >> selectOther: aString [
-	| script |
-	script := project findObjName: aString.
-	script ifNil: [ ^ self ].
-	presenter target: script
-]
-
 { #category : #private }
 SpMicroWiz >> selectRemoteFile [
 	| choices ret |
@@ -416,6 +416,14 @@ SpMicroWiz >> selectScript [
 	presenter
 		otherLabel: script objName;
 		target: script
+]
+
+{ #category : #'menu actions' }
+SpMicroWiz >> selectScript: aString [
+	| script |
+	script := project findObjName: aString.
+	script ifNil: [ ^ self ].
+	presenter target: script
 ]
 
 { #category : #private }
@@ -454,8 +462,12 @@ SpMicroWiz >> startProcessFor: topBlock [
 { #category : #'menu actions' }
 SpMicroWiz >> startProgram [
 	| code |
+	(self checkValidScript: self target)
+		ifFalse: [ ^ self ].
 	code := self newCode parseHats: self target hatBlocks.
-	code := self confirmCode: code title: 'OK to send, or cancel' localized.
+	code := self
+		confirmCode: code
+		title: 'OK to send, or cancel' localized.
 	code ifNil: [ ^ self ].
 	self execute: code
 ]
@@ -499,7 +511,7 @@ SpMicroWiz >> uploadFile [
 	| pair filename |
 	self proxy readyToSend
 		ifFalse: [ ^ self inform: 'not connected' localized ].
-	pair := self importFileWithExtension: self pyExtension.
+	pair := self importFileWithExtension: self pyExtension isBinary: false.
 	pair ifNil: [ ^ self ].
 	filename := UIManager default
 		request: 'Upload file name?' localized
@@ -523,6 +535,8 @@ SpMicroWiz >> uploadModule: aString [
 
 { #category : #'menu actions' }
 SpMicroWiz >> uploadProgram [
+	self checkValidScripts
+		ifFalse: [ ^ self ].
 	(self confirm: 'send all program?' localized)
 		ifFalse: [ ^ self ].
 	self proxy readyToSend

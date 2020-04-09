@@ -158,6 +158,17 @@ ScratchBlockParser >> emitEventHatBlock: aMorph indent: indent [
 ]
 
 { #category : #'code generator' }
+ScratchBlockParser >> emitGlobalVars: aCollection indent: indent [
+	aCollection isEmpty
+		ifTrue: [ ^ self ].
+	indent = 0
+		ifTrue: [ ^ self ].
+	codeGenerator
+		generateIndent: indent;
+		generateGlobalVars: aCollection
+]
+
+{ #category : #'code generator' }
 ScratchBlockParser >> emitIfElseBlock: aMorph indent: indent [ 
 	self emitBlockBegin: aMorph.
 	aMorph trueBlock ifNil: [self emitPassIndent: indent + 1]
@@ -182,15 +193,16 @@ ScratchBlockParser >> emitPassIndent: indent [
 
 { #category : #'code generator' }
 ScratchBlockParser >> emitSubHatBlock: aMorph indent: indent [
-	| str |
+	| str i2 |
 	str := aMorph subName.
-	str isEmpty ifTrue: [^ self].
+	str isEmpty
+		ifTrue: [ ^ self ].
 	codeGenerator generateSubHeader: str.
 	aMorph nextBlock
-		ifNotNil: [self
-				emitCode: aMorph nextBlock
-				indent: indent + (codeGenerator indentLevelFor: str)].
-	codeGenerator generateSubFooter: str.
+		ifNotNil: [ i2 := indent + (codeGenerator indentLevelFor: str).
+			self emitGlobalVars: aMorph varNames indent: i2.
+			self emitCode: aMorph nextBlock indent: i2 ].
+	codeGenerator generateSubFooter: str
 ]
 
 { #category : #'arg generator' }

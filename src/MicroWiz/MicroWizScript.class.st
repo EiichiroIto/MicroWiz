@@ -69,6 +69,11 @@ MicroWizScript >> deleteVariable: aString [
 	varNames remove: aString ifAbsent: [  ]
 ]
 
+{ #category : #accessing }
+MicroWizScript >> evaluateFor: aTopBlock [
+	^ project evaluateFor: aTopBlock
+]
+
 { #category : #'block specs' }
 MicroWizScript >> extBlockDefOf: aSymbol [
 	project class availableModules
@@ -107,6 +112,15 @@ MicroWizScript >> initialize [
 { #category : #'block specs' }
 MicroWizScript >> intBlockDefOf: aSymbol [
 	^ project intBlockDefOf: aSymbol
+]
+
+{ #category : #testing }
+MicroWizScript >> isValidSubName: aString [
+	aString isEmpty
+		ifTrue: [ ^ false ].
+	aString first isDigit
+		ifTrue: [ ^ false ].
+	^ aString allSatisfy: [ :each | each isAlphaNumeric ]
 ]
 
 { #category : #'argument menus' }

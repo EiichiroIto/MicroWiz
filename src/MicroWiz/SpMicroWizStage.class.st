@@ -330,6 +330,11 @@ SpMicroWizStage >> sendInput: aString [
 	self clearInput
 ]
 
+{ #category : #accessing }
+SpMicroWizStage >> startStepping [
+	morphTimer morph startStepping
+]
+
 { #category : #stepping }
 SpMicroWizStage >> step [
 	proxy ifNil: [ ^ self ].

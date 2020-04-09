@@ -38,12 +38,14 @@ ULispProxy >> icon [
 ]
 
 { #category : #testing }
-ULispProxy >> isPromptResponse: aByteArray [
+ULispProxy >> isPromptResponse [
 	"uLisp 3.0 
 314> "
 
 	| x str |
-	str := aByteArray asString.
+	responses isEmpty
+		ifTrue: [ ^ false ].
+	str := responses last asString.
 	x := str indexOf: $>.
 	x < 2
 		ifTrue: [ ^ false ].

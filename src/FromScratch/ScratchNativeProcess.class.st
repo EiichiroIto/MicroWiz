@@ -1,5 +1,5 @@
 Class {
-	#name : #ScratchBaseProcess,
+	#name : #ScratchNativeProcess,
 	#superclass : #Object,
 	#instVars : [
 		'program'
@@ -8,41 +8,41 @@ Class {
 }
 
 { #category : #testing }
-ScratchBaseProcess >> isRunning [
+ScratchNativeProcess >> isRunning [
 	self subclassResponsibility.
 ]
 
 { #category : #accessing }
-ScratchBaseProcess >> loop [
+ScratchNativeProcess >> loop [
 	self subclassResponsibility.
 ]
 
 { #category : #accessing }
-ScratchBaseProcess >> program [
+ScratchNativeProcess >> program [
 	^ program
 ]
 
 { #category : #accessing }
-ScratchBaseProcess >> program: aProgram [
+ScratchNativeProcess >> program: aProgram [
 	program := aProgram.
 ]
 
 { #category : #accessing }
-ScratchBaseProcess >> single [
+ScratchNativeProcess >> single [
 	self subclassResponsibility.
 ]
 
 { #category : #accessing }
-ScratchBaseProcess >> startup [
+ScratchNativeProcess >> startup [
 	self subclassResponsibility.
 ]
 
 { #category : #accessing }
-ScratchBaseProcess >> step [
+ScratchNativeProcess >> step [
 	self subclassResponsibility.
 ]
 
 { #category : #accessing }
-ScratchBaseProcess >> stop [
+ScratchNativeProcess >> stop [
 	self subclassResponsibility.
 ]

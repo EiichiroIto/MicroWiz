@@ -23,6 +23,15 @@ SubHatMorph >> initialize [
 	subName := ''.
 ]
 
+{ #category : #processes }
+SubHatMorph >> startProcess [
+	| proc |
+	self receiver ifNil: [ ^ self ].
+	proc := self applicationDo: [ :app | app startProcessFor: self ].
+	self changed.
+	^ proc
+]
+
 { #category : #accessing }
 SubHatMorph >> subName [
 	^ subName
@@ -34,4 +43,9 @@ SubHatMorph >> subName: aString [
 	scriptNameMorph contents: ('Sub ', aString).
 	self fixBlockLayout.
 	self applicationDo: [ :app | app updateContents ]
+]
+
+{ #category : #accessing }
+SubHatMorph >> varNames [
+	^ self receiver varNames
 ]

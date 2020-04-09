@@ -313,6 +313,17 @@ MicroPythonGeneratorTest >> testGenerateFromImport [
 ]
 
 { #category : #test }
+MicroPythonGeneratorTest >> testGenerateGlobalVars [
+	| g |
+	g := self newGenerator.
+	g generateGlobalVars: #(a b c).
+	self assert: g code equals: 'global a,b,c' , String lf.
+	g := self newGenerator.
+	g generateGlobalVars: #().
+	self assert: g code isEmpty
+]
+
+{ #category : #test }
 MicroPythonGeneratorTest >> testGenerateHeader [
 	| g |
 	g := self newGenerator.

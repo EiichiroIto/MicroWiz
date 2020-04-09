@@ -245,6 +245,19 @@ MicroPythonGenerator >> generateFrom: aString1 import: aString2 [
 ]
 
 { #category : #'code generator' }
+MicroPythonGenerator >> generateGlobalVars: aCollection [
+	| st |
+	aCollection isEmpty
+		ifTrue: [ ^ self ].
+	st := WriteStream on: String new.
+	st nextPutAll: 'global '.
+	aCollection
+		do: [ :each | st nextPutAll: each ]
+		separatedBy: [ st nextPut: $, ].
+	self appendWithNewline: st contents
+]
+
+{ #category : #'code generator' }
 MicroPythonGenerator >> generateHeader [
 	self
 		indent: 0;

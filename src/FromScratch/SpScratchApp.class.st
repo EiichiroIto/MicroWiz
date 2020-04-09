@@ -152,6 +152,12 @@ SpScratchApp >> addSubBlock: aPoint script: aScript [
 	subName := UIManager default request: 'Sub name?'.
 	(subName isNil or: [ subName isEmpty ])
 		ifTrue: [ ^ self ].
+	(aScript isValidSubName: subName)
+		ifFalse: [ ^ UIManager default
+				alert: 'invalid sub name' localized ].
+	(aScript subNameInUse: subName)
+		ifTrue: [ ^ UIManager default
+				alert: 'sub name already in use' localized ].
 	aScript addSubBlock: aPoint name: subName
 ]
 
@@ -321,25 +327,25 @@ SpScratchApp >> editNotes [
 	project comment: ret
 ]
 
-{ #category : #processes }
-SpScratchApp >> evaluateFor: aTopBlock [
-	self subclassResponsibility
+{ #category : #private }
+SpScratchApp >> export: anExporter extension: aString [
+	self export: anExporter extension: aString isBinary: false
 ]
 
 { #category : #private }
-SpScratchApp >> export: anExporter extension: aString [
+SpScratchApp >> export: anExporter extension: aString isBinary: aBoolean [
 	| str |
 	str := self class
-		try: [ anExporter exportFrom: self ]
+		try: [ anExporter exportFrom: self isBinary: aBoolean ]
 		onFailure: [ :err | 
 			UIManager default
 				alert: 'Could not generate code:' , err asString
 				title: 'Export failed' localized ].
-	self exportString: str extension: aString
+	self exportString: str extension: aString isBinary: aBoolean
 ]
 
 { #category : #private }
-SpScratchApp >> exportString: aContentsString extension: aString [
+SpScratchApp >> exportString: aContentsString extension: aString isBinary: aBoolean [
 	| fName f |
 	self closeMediaEditorsAndDialogs
 		ifFalse: [ ^ self ].
@@ -358,7 +364,9 @@ SpScratchApp >> exportString: aContentsString extension: aString [
 			fName delete ].
 	f := nil.
 	self class
-		try: [ f := fName writeStream.
+		try: [ f := aBoolean
+				ifTrue: [ fName binaryWriteStream ]
+				ifFalse: [ fName writeStream ].
 			f nextPutAll: aContentsString.
 			f close ]
 		onFailure: [ f ifNotNil: [ f close ].
@@ -374,8 +382,13 @@ SpScratchApp >> extension [
 
 { #category : #private }
 SpScratchApp >> import: anImporter extension: aString [
+	self import: anImporter extension: aString isBinary: false
+]
+
+{ #category : #private }
+SpScratchApp >> import: anImporter extension: aString isBinary: aBoolean [
 	| code |
-	code := self importFileWithExtension: aString.
+	code := self importFileWithExtension: aString isBinary: aBoolean.
 	code ifNil: [ ^ self ].
 	anImporter import: code first to: self.
 	self restoreProject.
@@ -383,7 +396,7 @@ SpScratchApp >> import: anImporter extension: aString [
 ]
 
 { #category : #private }
-SpScratchApp >> importFileWithExtension: aString [
+SpScratchApp >> importFileWithExtension: aString isBinary: aBoolean [
 	| response fr f code |
 	self closeMediaEditorsAndDialogs
 		ifFalse: [ ^ nil ].
@@ -396,7 +409,9 @@ SpScratchApp >> importFileWithExtension: aString [
 	fr := response asFileReference.
 	fr isFile
 		ifFalse: [ ^ nil ].
-	f := fr readStream.
+	f := aBoolean
+		ifTrue: [ fr binaryReadStream ]
+		ifFalse: [ fr readStream ].
 	^ self class
 		try: [ code := f contents.
 			f close.
@@ -457,8 +472,7 @@ SpScratchApp >> newProject [
 	self
 		projectDirectory: (ScratchDirectory current getDefaultFolderForType: #project).
 	self projectName: 'New Project'.
-	self installNewProject: self createProject.
-	presenter plotter clearPlots
+	self installNewProject: self createProject
 ]
 
 { #category : #accessing }
@@ -487,8 +501,7 @@ SpScratchApp >> openProject [
 	newProj ifNil: [ ^ self ].
 	self projectDirectory: response parent.
 	self projectName: response base.
-	self installNewProject: newProj.
-	presenter plotter clearPlots
+	self installNewProject: newProj
 ]
 
 { #category : #private }

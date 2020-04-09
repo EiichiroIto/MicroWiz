@@ -156,7 +156,7 @@ MicroWizProxy >> isPing [
 ]
 
 { #category : #testing }
-MicroWizProxy >> isPromptResponse: aByteArray [
+MicroWizProxy >> isPromptResponse [
 	^ false
 ]
 
@@ -352,12 +352,8 @@ MicroWizProxy >> updateLastMSec [
 
 { #category : #private }
 MicroWizProxy >> updateStatus [
-	| last |
 	self isReady
 		ifTrue: [ self setPrompted ].
-	responses isEmpty
-		ifTrue: [ ^ self ].
-	last := responses last.
-	(self isPromptResponse: last)
+	self isPromptResponse
 		ifTrue: [ ^ self setReady ]
 ]

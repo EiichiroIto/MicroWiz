@@ -122,7 +122,7 @@ ReporterBlockMorph >> drawOn: aCanvas [
 
 { #category : #evaluation }
 ReporterBlockMorph >> evaluate [
-	^ self applicationDo: [ :app | app evaluateFor: self ]
+	^ receiver evaluateFor: self
 ]
 
 { #category : #other }
@@ -202,7 +202,7 @@ ReporterBlockMorph >> showValue [
 		onFailure: [ :err | 'Error!' localized , err asString ].
 	msg ifNil: [ ^ self ].
 	msg := self isBooleanReporter
-		ifTrue: [ msg localized ]
+		ifTrue: [ msg asString localized ]
 		ifFalse: [ msg asString ].
 	self showBalloon: msg
 ]

@@ -32,17 +32,50 @@ ULispProxyTest >> testHasPrompts [
 ULispProxyTest >> testIsPromptResponse [
 	| p |
 	p := self newProxy.
-	self assert: (p isPromptResponse: '123> ').
-	self assert: (p isPromptResponse: '12> ').
-	self assert: (p isPromptResponse: '1> ').
-	self assert: (p isPromptResponse: '12> ' , String cr).
-	self deny: (p isPromptResponse: '123>abc').
-	self deny: (p isPromptResponse: '123>').
-	self deny: (p isPromptResponse: '12a>').
-	self deny: (p isPromptResponse: '12a> abc').
-	self deny: (p isPromptResponse: 'a> abc').
-	self deny: (p isPromptResponse: '> abc').
-	self deny: (p isPromptResponse: '12> ' , String crlf)
+	p
+		clearResponse;
+		addResponse: '123> '.
+	self assert: p isPromptResponse.
+	p
+		clearResponse;
+		addResponse: '12> '.
+	self assert: p isPromptResponse.
+	p
+		clearResponse;
+		addResponse: '1> '.
+	self assert: p isPromptResponse.
+	p
+		clearResponse;
+		addResponse: '12> ' , String cr.
+	self assert: p isPromptResponse.
+	p
+		clearResponse;
+		addResponse: '123>abc'.
+	self deny: p isPromptResponse.
+	p
+		clearResponse;
+		addResponse: '123>'.
+	self deny: p isPromptResponse.
+	p
+		clearResponse;
+		addResponse: '12a>'.
+	self deny: p isPromptResponse.
+	p
+		clearResponse;
+		addResponse: '12a> abc'.
+	self deny: p isPromptResponse.
+	p
+		clearResponse;
+		addResponse: 'a> abc'.
+	self deny: p isPromptResponse.
+	p
+		clearResponse;
+		addResponse: '> abc'.
+	self deny: p isPromptResponse.
+	p
+		clearResponse;
+		addResponse: '12> ' , String crlf.
+	self deny: p isPromptResponse
 ]
 
 { #category : #test }

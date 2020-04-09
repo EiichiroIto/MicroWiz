@@ -1,9 +1,6 @@
 Class {
 	#name : #SexpParser,
 	#superclass : #Object,
-	#instVars : [
-		'out'
-	],
 	#category : #'FromScratch-Converter'
 }
 

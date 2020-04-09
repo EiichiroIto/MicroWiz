@@ -233,6 +233,13 @@ MicroWizProxyTest >> testIsPing [
 ]
 
 { #category : #test }
+MicroWizProxyTest >> testIsPromptResponse [
+	| p |
+	p := self newProxy.
+	self deny: p isPromptResponse
+]
+
+{ #category : #test }
 MicroWizProxyTest >> testIsPrompted [
 	| p |
 	p := self newProxy.

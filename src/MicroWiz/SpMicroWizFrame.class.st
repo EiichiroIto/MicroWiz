@@ -81,8 +81,8 @@ SpMicroWizFrame >> connectPresenters [
 	buttonSave action: [ application saveProject ].
 	stageFrame whenStartProgramDo: [ application startProgram ].
 	libraryPane
-		whenMainButtonPressed: [ application selectMain ];
-		whenOtherButtonPressed: [ :name | application selectOther: name ];
+		whenMainButtonPressed: [ application selectScript: 'main' ];
+		whenOtherButtonPressed: [ :name | application selectScript: name ];
 		whenAddButtonPressed: [ application addScript ];
 		whenDeleteButtonPressed: [ application deleteScript ];
 		whenSelectButtonPressed: [ application selectScript ].
@@ -197,11 +197,13 @@ SpMicroWizFrame >> fileMenu [
 				addItem: [ :item | 
 					item
 						name: 'New';
-						action: [ application newProject ] ];
+						action: [ application newProject.
+							self plotter clearPlots ] ];
 				addItem: [ :item | 
 					item
 						name: 'Open';
-						action: [ application openProject ] ];
+						action: [ application openProject.
+							self plotter clearPlots ] ];
 				addItem: [ :item | 
 					item
 						name: 'Project Notes';
@@ -242,6 +244,10 @@ SpMicroWizFrame >> helpMenu [
 			item
 				name: 'About ' , application appName;
 				action: [ owner window showAbout ] ];
+		addItem: [ :item | 
+			item
+				name: 'Restart';
+				action: [ stageFrame startStepping ] ];
 		addItem: [ :item | 
 			item
 				name: 'Inspect';
