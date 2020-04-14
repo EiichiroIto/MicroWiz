@@ -17,6 +17,34 @@ ModuleImporter >> blockDefClass: anObject [
 	blockDefClass := anObject
 ]
 
+{ #category : #private }
+ModuleImporter >> category: aString [
+	^ BlockCategory new
+		categoryName: aString;
+		yourself
+]
+
+{ #category : #private }
+ModuleImporter >> commandBlock: aString1 args: anArray1 code: aString2 imports: anArray2 [
+	^ self
+		commandBlock: aString1
+		args: anArray1
+		code: aString2
+		imports: anArray2
+		id: nil
+]
+
+{ #category : #private }
+ModuleImporter >> commandBlock: aString1 args: anArray1 code: aString2 imports: anArray2 id: anInteger [
+	^ self blockDefClass new
+		block: aString1;
+		defaultArgs: anArray1;
+		code: aString2;
+		imports: anArray2;
+		id: anInteger;
+		yourself
+]
+
 { #category : #accessing }
 ModuleImporter >> import: aString [
 	| lex list |
@@ -27,17 +55,7 @@ ModuleImporter >> import: aString [
 
 { #category : #private }
 ModuleImporter >> importBlockDef: anArray [
-	| sel |
-	sel := anArray first.
-	sel = 'commandBlock:args:code:imports:'
-		ifTrue: [ ^ self importCommandBlockDef: anArray ].
-	sel = 'reporterBlock:args:return:code:imports:'
-		ifTrue: [ ^ self importReporterBlockDef: anArray ].
-	sel = 'category:'
-		ifTrue: [ ^ self importCategory: anArray ].
-	sel = 'separator'
-		ifTrue: [ ^ BlockSeparator new ].
-	self error: 'invalid block def'
+	^ self perform: anArray first asSymbol withArguments: anArray allButFirst
 ]
 
 { #category : #private }
@@ -46,74 +64,64 @@ ModuleImporter >> importBlockDefs: anArray into: aCollection [
 ]
 
 { #category : #private }
-ModuleImporter >> importCategory: anArray [
-	^ BlockCategory new
-		categoryName: anArray second;
-		yourself
+ModuleImporter >> importFrom: anArray [
+	anArray first = SpMicroWiz appName
+		ifFalse: [ self error: 'invalid appName' ].
+	^ self
+		perform: anArray second first asSymbol
+		withArguments: anArray second allButFirst
 ]
 
 { #category : #private }
-ModuleImporter >> importCommandBlockDef: anArray [
-	| def |
-	def := self blockDefClass new
-		block: anArray second;
-		defaultArgs: anArray third;
-		code: anArray fourth;
-		imports: anArray fifth;
-		yourself.
-	anArray size > 5
-		ifTrue: [ def id: anArray sixth ].
-	^ def
-]
-
-{ #category : #private }
-ModuleImporter >> importExtModule: anArray [
+ModuleImporter >> module: aString1 var: aString2 headers: anArray1 blocks: anArray2 [
 	| module |
 	blockDefClass := ExtBlockDef.
 	module := ExtModuleDef new.
 	module
-		moduleName: anArray second;
-		varName: anArray third;
-		header: (anArray fourth joinUsing: String lf);
+		moduleName: aString1;
+		varName: aString2;
+		header: (anArray1 joinUsing: String lf);
 		blockDefs: OrderedCollection new.
-	self importBlockDefs: anArray fifth into: module blockDefs.
+	self importBlockDefs: anArray2 into: module blockDefs.
 	^ module
 ]
 
 { #category : #private }
-ModuleImporter >> importFrom: anArray [
-	anArray first = SpMicroWiz appName
-		ifFalse: [ self error: 'invalid appName' ].
-	anArray second first = 'module:var:headers:blocks:'
-		ifTrue: [ ^ self importExtModule: anArray second ].
-	anArray second first = 'proxy:blocks:'
-		ifTrue: [ ^ self importIntModule: anArray second ].
-	self error: 'invalid module'
-]
-
-{ #category : #private }
-ModuleImporter >> importIntModule: anArray [
+ModuleImporter >> proxy: aString blocks: anArray [
 	| module |
 	blockDefClass := BlockDef.
 	module := IntModuleDef new.
 	module
-		proxyName: anArray second;
+		proxyName: aString;
 		blockDefs: OrderedCollection new.
-	self importBlockDefs: anArray third into: module blockDefs.
+	self importBlockDefs: anArray into: module blockDefs.
 	^ module
 ]
 
 { #category : #private }
-ModuleImporter >> importReporterBlockDef: anArray [
-	| def |
-	def := self blockDefClass new
-		block: anArray second;
-		defaultArgs: anArray third;
-		return: anArray fourth;
-		code: anArray fifth;
-		imports: anArray sixth;
-		yourself.
-	anArray size > 6
-		ifTrue: [ def id: anArray seventh ].
-	^ def
+ModuleImporter >> reporterBlock: aString1 args: anArray1 return: aString2 code: aString3 imports: anArray2 [
+	^ self
+		reporterBlock: aString1
+		args: anArray1
+		return: aString2
+		code: aString3
+		imports: anArray2
+		id: nil
+]
+
+{ #category : #private }
+ModuleImporter >> reporterBlock: aString1 args: anArray1 return: aString2 code: aString3 imports: anArray2 id: anInteger [
+	^ self blockDefClass new
+		block: aString1;
+		defaultArgs: anArray1;
+		return: aString2;
+		code: aString3;
+		imports: anArray2;
+		id: anInteger;
+		yourself
+]
+
+{ #category : #private }
+ModuleImporter >> separator [
+	^ BlockSeparator new
 ]

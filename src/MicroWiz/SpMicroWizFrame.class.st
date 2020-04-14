@@ -176,7 +176,7 @@ SpMicroWizFrame >> exportMenu [
 	^ self newMenu
 		addItem: [ :item | 
 			item
-				name: 'Export S-EXP';
+				name: 'Export S-expression';
 				action: [ application exportSexpCode ] ];
 		addItem: [ :item | 
 			item
@@ -264,7 +264,7 @@ SpMicroWizFrame >> importMenu [
 	^ self newMenu
 		addItem: [ :item | 
 			item
-				name: 'Import S-EXP';
+				name: 'Import S-expression';
 				action: [ application importSexpCode ] ];
 		yourself
 ]
