@@ -3,19 +3,19 @@
   "vl53l0x"
   "_vl"
   ("from vl53l0x import VL53L0X")
-  ((commandBlock:args:code:imports:
+  ((commandBlock:args:code:imports:id:
     "set vl53l0x"
     ()
     "_vl=VL53L0X(_i2c)"
     ()
     1)
-   (commandBlock:args:code:imports:
+   (commandBlock:args:code:imports:id:
     "vl start"
     ()
     "_vl.start()"
     ()
     2)
-   (reporterBlock:args:return:code:imports:
+   (reporterBlock:args:return:code:imports:id:
     "vl read"
     ()
     r

@@ -24,6 +24,12 @@
     "microbit.running_time()"
     (microbit))
    (reporterBlock:args:return:code:imports:
+    "light"
+    ()
+    r
+    "microbit.display.read_light_level()"
+    (microbit))
+   (reporterBlock:args:return:code:imports:
     "temperature"
     ()
     r

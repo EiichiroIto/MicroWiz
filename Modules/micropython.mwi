@@ -54,7 +54,7 @@
 
    (category: "operators")
    (separator)
-   (commandBlock:args:code:imports:
+   (commandBlock:args:code:imports:id:
     "range %n to %n step %n into %L"
     (0 10 1 "list")
     "%L=range(%n1,%n2,%n3)"
