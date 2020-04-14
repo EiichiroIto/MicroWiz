@@ -11,3 +11,45 @@ Class {
 MicroPythonBlockSpecsTest >> newSpecs [
 	^ MicroPythonBlockSpecs new
 ]
+
+{ #category : #test }
+MicroPythonBlockSpecsTest >> testBlocks [
+	| s |
+	s := self newSpecs.
+	self assert: s blocks isArray
+]
+
+{ #category : #test }
+MicroPythonBlockSpecsTest >> testControlBlocks [
+	| s |
+	s := self newSpecs.
+	self assert: s controlBlocks isArray
+]
+
+{ #category : #test }
+MicroPythonBlockSpecsTest >> testDisplayBlocks [
+	| s |
+	s := self newSpecs.
+	self assert: s displayBlocks isArray
+]
+
+{ #category : #test }
+MicroPythonBlockSpecsTest >> testIoBlocks [
+	| s |
+	s := self newSpecs.
+	self assert: s ioBlocks isArray
+]
+
+{ #category : #test }
+MicroPythonBlockSpecsTest >> testOperatorsBlocks [
+	| s |
+	s := self newSpecs.
+	self assert: s operatorsBlocks isArray
+]
+
+{ #category : #test }
+MicroPythonBlockSpecsTest >> testSensingBlocks [
+	| s |
+	s := self newSpecs.
+	self assert: s sensingBlocks isArray
+]
