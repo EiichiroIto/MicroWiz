@@ -137,6 +137,11 @@
     "_i2c.writeto(%n2,%n1)"
     ())
    (commandBlock:args:code:imports:
+    "i2c write %n %n to %n"
+    (0 100 10)
+    "_i2c.writeto(%n3,bytes([%n1,%n2]))"
+    ())
+   (commandBlock:args:code:imports:
     "i2c write %s to %n"
     ("[1,2,3]" 10)
     "_i2c.writeto(%n,bytes(%'s))"
@@ -145,6 +150,12 @@
     "i2c write %L to %n"
     ("list" 10)
     "_i2c.writeto(%n,bytes(%L))"
+    ())
+   (reporterBlock:args:return:code:imports:
+    "scan"
+    ()
+    r
+    "_i2c.scan()"
     ())
 
    (category: "spi")
