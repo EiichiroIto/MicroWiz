@@ -196,8 +196,8 @@ SpMicroWizStage >> initializePresenters [
 		label: 'Reboot';
 		icon: (self iconNamed: #refresh).
 	buttonBreak := self newButton
-		help: 'Break';
-		label: 'Break';
+		help: 'Stop';
+		label: 'Stop';
 		icon: (ScratchTheme formAt: #stopButton).
 	buttonStart := self newButton
 		help: 'Start';
