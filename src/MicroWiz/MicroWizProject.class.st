@@ -56,7 +56,7 @@ MicroWizProject class >> intModuleAt: aString [
 
 { #category : #accessing }
 MicroWizProject class >> intModules [
-	^ IntModules ifNil: [ #() ]
+	^ IntModules ifNil: [ Dictionary new ]
 ]
 
 { #category : #accessing }
