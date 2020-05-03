@@ -485,7 +485,8 @@ SpMicroWiz >> suppressPaste: aBoolean [
 { #category : #'menu actions' }
 SpMicroWiz >> toggleModule: aString [
 	project toggleModule: aString.
-	presenter updateViewer
+	presenter updateViewer.
+	self updateStatus
 ]
 
 { #category : #private }
@@ -500,10 +501,22 @@ SpMicroWiz >> updateInfo [
 
 { #category : #private }
 SpMicroWiz >> updateStatus [
-	| str |
-	str := ' (', self proxyClass asString, ')'.
-	str := str , ' (', self commClass asString , ')'.
-	presenter status: str
+	| s |
+	s := WriteStream on: String new.
+	s
+		nextPut: $(;
+		nextPutAll: self proxyClass asString;
+		nextPut: $);
+		nextPut: $[.
+	project modules
+		do: [ :each | s nextPutAll: each asString ]
+		separatedBy: [ s nextPut: Character space ].
+	s
+		nextPut: $];
+		nextPut: $(;
+		nextPutAll: self commClass asString;
+		nextPut: $).
+	presenter status: s contents
 ]
 
 { #category : #'menu actions' }
