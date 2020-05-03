@@ -172,6 +172,11 @@ ScratchSexpGenerator >> literalStringFrom: anObject [
 	self error.
 ]
 
+{ #category : #'as yet unclassified' }
+ScratchSexpGenerator >> localVarArgString: aString [ 
+	^ aString
+]
+
 { #category : #accessing }
 ScratchSexpGenerator >> parse: aTopBlock initialIndent: anInteger [
 	indents at: 1 put: anInteger.
