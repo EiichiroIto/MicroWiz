@@ -229,7 +229,8 @@ SpMicroWizFrame >> fileMenu [
 		addItem: [ :item | 
 			item
 				name: 'Close';
-				action: [ application close ] ];
+				action: [ application close ];
+				enabled: [ application class dontClose not ] ];
 		addItem: [ :item | 
 			item
 				name: 'Quit';
@@ -347,20 +348,6 @@ SpMicroWizFrame >> proxy: aProxy [
 { #category : #accessing }
 SpMicroWizFrame >> replLog [
 	^ stageFrame log
-]
-
-{ #category : #private }
-SpMicroWizFrame >> selectSetting: aSymbol [
-	| list choice |
-	list := SpMicroWiz optionsFor: aSymbol.
-	list isEmpty
-		ifTrue: [ ^ self ].
-	choice := UIManager default
-		chooseFrom: list
-		title: 'Select options for ' , aSymbol.
-	choice = 0
-		ifTrue: [ ^ self ].
-	SpMicroWiz perform: (aSymbol , ':') asSymbol with: (list at: choice)
 ]
 
 { #category : #private }

@@ -185,6 +185,23 @@ SpScratchFrame >> scriptMenuFor: aScript [
 ]
 
 { #category : #private }
+SpScratchFrame >> selectSetting: aSymbol [
+	| list choice appClass |
+	appClass := self application class.
+	list := appClass optionsFor: aSymbol.
+	list isEmpty
+		ifTrue: [ ^ self ].
+	choice := UIManager default
+		chooseFrom: list
+		title: 'Select options for ' , aSymbol.
+	choice = 0
+		ifTrue: [ ^ self ].
+	appClass perform: (aSymbol , ':') asSymbol with: (list at: choice).
+	aSymbol = #dontClose
+		ifTrue: [ self updateDontCloseSetting ]
+]
+
+{ #category : #private }
 SpScratchFrame >> stageShotExtent: size [
 	^ self formFrom: self display extent: size
 ]
@@ -226,6 +243,15 @@ SpScratchFrame >> updateContents [
 { #category : #accessing }
 SpScratchFrame >> updateDisplay [
 	self display changed
+]
+
+{ #category : #private }
+SpScratchFrame >> updateDontCloseSetting [
+	| win |
+	win := 	self window window.
+	self application class dontClose
+		ifTrue: [ win makeUnclosable ]
+		ifFalse: [ win makeClosable ]
 ]
 
 { #category : #stepping }

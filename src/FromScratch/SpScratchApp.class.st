@@ -35,6 +35,16 @@ SpScratchApp class >> clipboard: anObject [
 ]
 
 { #category : #accessing }
+SpScratchApp class >> dontClose [
+	^ self settings at: #dontClose ifAbsentPut: [ false ]
+]
+
+{ #category : #accessing }
+SpScratchApp class >> dontClose: aBoolean [
+	self settings at: #dontClose put: aBoolean
+]
+
+{ #category : #accessing }
 SpScratchApp class >> extension [
 	self subclassResponsibility
 ]
@@ -69,9 +79,11 @@ SpScratchApp class >> loadSettings [
 { #category : #accessing }
 SpScratchApp class >> optionsFor: aSymbol [
 	aSymbol = #stickyWindow
-		ifTrue: [ ^ #(true false) ].
+		ifTrue: [ ^ {true . false} ].
 	aSymbol = #useErrorCatcher
-		ifTrue: [ ^ #(true false) ].
+		ifTrue: [ ^ {true . false} ].
+	aSymbol = #dontClose
+		ifTrue: [ ^ {true . false} ].
 	^ #()
 ]
 

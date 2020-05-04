@@ -332,6 +332,11 @@ MicroWizProxy >> status: aSymbol [
 ]
 
 { #category : #accessing }
+MicroWizProxy >> statusString [
+	^ self status
+]
+
+{ #category : #accessing }
 MicroWizProxy >> step [
 	| ret |
 	[ ret := self get.

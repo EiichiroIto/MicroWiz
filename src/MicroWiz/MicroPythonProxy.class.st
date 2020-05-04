@@ -237,6 +237,13 @@ MicroPythonProxy >> setRawPrompted [
 	self status: #rawPrompted
 ]
 
+{ #category : #accessing }
+MicroPythonProxy >> statusString [
+	self isRawPrompted
+		ifFalse: [ ^ super statusString ].
+	^ '(', sendingQueue size asString, ')'
+]
+
 { #category : #private }
 MicroPythonProxy >> stringOfFileNamed: aString [
 	| out |

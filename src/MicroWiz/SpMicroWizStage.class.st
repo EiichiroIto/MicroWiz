@@ -342,7 +342,7 @@ SpMicroWizStage >> step [
 		ifFalse: [ buttonConnect state: false.
 			^ labelStatus label: 'unconnected' ].
 	proxy step.
-	labelStatus label: proxy status.
+	labelStatus label: proxy statusString.
 	self addOutput: proxy responseString
 ]
 
