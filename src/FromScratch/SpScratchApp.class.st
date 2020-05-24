@@ -65,6 +65,16 @@ SpScratchApp class >> initialize [
 ]
 
 { #category : #accessing }
+SpScratchApp class >> keepMaximize [
+	^ self settings at: #keepMaximize ifAbsentPut: [ false ]
+]
+
+{ #category : #accessing }
+SpScratchApp class >> keepMaximize: aBoolean [
+	self settings at: #keepMaximize put: aBoolean
+]
+
+{ #category : #accessing }
 SpScratchApp class >> loadSettings [
 	| fr dict |
 	fr := FileSystem workingDirectory / self settingsFilename.
@@ -83,6 +93,8 @@ SpScratchApp class >> optionsFor: aSymbol [
 	aSymbol = #useErrorCatcher
 		ifTrue: [ ^ {true . false} ].
 	aSymbol = #dontClose
+		ifTrue: [ ^ {true . false} ].
+	aSymbol = #keepMaximize
 		ifTrue: [ ^ {true . false} ].
 	^ #()
 ]
@@ -317,6 +329,13 @@ SpScratchApp >> deserializeFrom: aString [
 	obj ifNil: [ ^ nil ].
 	obj position: ActiveHand position.
 	^ obj
+]
+
+{ #category : #'change reporting' }
+SpScratchApp >> displayExtentChanged [
+	self class keepMaximize
+		ifFalse: [ ^ self ].
+	presenter window window fullscreen
 ]
 
 { #category : #'menu actions' }
