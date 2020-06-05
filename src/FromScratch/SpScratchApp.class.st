@@ -139,7 +139,7 @@ SpScratchApp class >> thumbnailExtent [
 SpScratchApp class >> try: aBlock onFailure: anErrorBlock [
 	^ self useErrorCatcher
 		ifTrue: [ aBlock ifError: anErrorBlock ]
-		ifFalse: aBlock value
+		ifFalse: [ aBlock value ]
 ]
 
 { #category : #accessing }
