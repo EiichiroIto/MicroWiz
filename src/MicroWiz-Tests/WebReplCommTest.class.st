@@ -82,12 +82,12 @@ WebReplCommTest >> testMakeHeaderSize [
 	ws := self newComm.
 	self
 		assertCollection: (ws makeHeaderSize: 10)
-		equals: (ByteArray with: 16r82 with: 10).
+		equals: (ByteArray with: 16r81 with: 10).
 	self
 		assertCollection: (ws makeHeaderSize: 200)
 		equals:
 			(ByteArray
-				with: 16r82
+				with: 16r81
 				with: 126
 				with: 0
 				with: 200).
@@ -95,7 +95,7 @@ WebReplCommTest >> testMakeHeaderSize [
 		assertCollection: (ws makeHeaderSize: 300)
 		equals:
 			(ByteArray
-				with: 16r82
+				with: 16r81
 				with: 126
 				with: 1
 				with: 44)
