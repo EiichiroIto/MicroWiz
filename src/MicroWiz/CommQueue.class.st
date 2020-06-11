@@ -58,9 +58,11 @@ CommQueue >> flush [
 
 { #category : #api }
 CommQueue >> get [
+	| msg |
 	queue isEmpty
 		ifFalse: [ ^ queue removeFirst ].
-	self processReceived: comm get.
+	[ msg := comm get.
+	msg notNil ] whileTrue: [ self processReceived: msg ].
 	queue isEmpty
 		ifFalse: [ ^ queue removeFirst ].
 	self isTimeout

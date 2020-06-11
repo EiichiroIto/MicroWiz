@@ -151,7 +151,7 @@ SpMicroWiz >> commClass: aSymbol [
 
 { #category : #accessing }
 SpMicroWiz >> commClasses [
-	^ #(SerialComm DummyComm)
+	^ #(SerialComm WebReplComm DummyComm)
 ]
 
 { #category : #private }
