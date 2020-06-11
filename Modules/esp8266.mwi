@@ -59,10 +59,30 @@
     ("essid" "ESP-AP")
     "_wlan.config('%w'=%s)"
     ())
-   (commandBlock:args:code:imports:
-    "wifi ifconfig to %L"
-    ("list")
-    "%L=_wlan.ifconfig()"
+   (separator)
+   (reporterBlock:args:return:code:imports:
+    "ip address"
+    ()
+    r
+    "_wlan.ifconfig()[0]"
+    ())
+   (reporterBlock:args:return:code:imports:
+    "subnet address"
+    ()
+    r
+    "_wlan.ifconfig()[1]"
+    ())
+   (reporterBlock:args:return:code:imports:
+    "gateway address"
+    ()
+    r
+    "_wlan.ifconfig()[2]"
+    ())
+   (reporterBlock:args:return:code:imports:
+    "dns address"
+    ()
+    r
+    "_wlan.ifconfig()[3]"
     ())
    (reporterBlock:args:return:code:imports:
     "wifi status"

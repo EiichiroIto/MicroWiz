@@ -1,0 +1,16 @@
+(MicroWiz
+ (module:var:headers:blocks:
+  "hcsr04"
+  "_us"
+  ("import hcsr04")
+  ((commandBlock:args:code:imports:
+    "init usonic trigger %n echo %n"
+    (1 2)
+    "_us=hcsr04.HCSR04(trigger=pin%n1,echo=pin%n2)"
+    ((microbit "*")))
+   (reporterBlock:args:return:code:imports:
+    "usonic distance"
+    ()
+    r
+    "_us.distance()"
+    ()))))

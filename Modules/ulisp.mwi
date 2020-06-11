@@ -1,0 +1,179 @@
+(MicroWiz
+ (proxy:blocks:
+  "ULisp"
+
+  ((category: "operators")
+   (separator)
+   (reporterBlock:args:return:code:imports:
+    "%n + %n"
+    (1 2)
+    r
+    "(+ %n1 %n2)"
+    ())
+   (reporterBlock:args:return:code:imports:
+    "%n - %n"
+    (2 1)
+    r
+    "(- %n1 %n2)"
+    ())
+   (reporterBlock:args:return:code:imports:
+    "%n * %n"
+    (2 3)
+    r
+    "(* %n1 %n2)"
+    ())
+   (reporterBlock:args:return:code:imports:
+    "%n / %n"
+    (5 2)
+    r
+    "(/ %n1 %n2)"
+    ())
+   (reporterBlock:args:return:code:imports:
+    "%n mod %n"
+    (11 5)
+    r
+    "(mod %n1 %n2)"
+    ())
+   (reporterBlock:args:return:code:imports:
+    "- %n"
+    (1)
+    r
+    "(- %n)"
+    ())
+   (separator)
+   (reporterBlock:args:return:code:imports:
+    "%n < %n"
+    (1 2)
+    b
+    "(< %n1 %n2)"
+    ())
+   (reporterBlock:args:return:code:imports:
+    "%n = %n"
+    (1 2)
+    b
+    "(= %n1 %n2)"
+    ())
+   (reporterBlock:args:return:code:imports:
+    "%n > %n"
+    (1 2)
+    b
+    "(> %n1 %n2)"
+    ())
+   (reporterBlock:args:return:code:imports:
+    "%n between %n and %n"
+    (5 1 10)
+    b
+    "(and (<= %n2 %n1) (<= %n1 %n3))"
+    ())
+   (reporterBlock:args:return:code:imports:
+    "%s is None"
+    (nil)
+    b
+    "(null %s)"
+    ())
+   (separator)
+   (reporterBlock:args:return:code:imports:
+    "%b and %b"
+    ()
+    b
+    "(and %b1 %b2)"
+    ())
+   (reporterBlock:args:return:code:imports:
+    "%b or %b"
+    ()
+    b
+    "(or %b1 %b2)"
+    ())
+   (reporterBlock:args:return:code:imports:
+    "not %b"
+    ()
+    b
+    "(not %b)"
+    ())
+   (reporterBlock:args:return:code:imports:
+    "true"
+    ()
+    b
+    "t"
+    ())
+   (reporterBlock:args:return:code:imports:
+    "false"
+    ()
+    b
+    "nil"
+    ())
+   (separator)
+   (reporterBlock:args:return:code:imports:
+    "abs %n"
+    ()
+    r
+    "(abs %n)"
+    ())
+   (reporterBlock:args:return:code:imports:
+    "pick random %n to %n"
+    (1 10)
+    r
+    "(+ (random (1+ (- %n2 %n1))) %n1)"
+    ())
+   
+   (category: "misc")
+   (separator)
+   (commandBlock:args:code:imports:
+    "print %n"
+    (123)
+    "(print %n)"
+    ())
+
+   (category: "sensing")
+   (reporterBlock:args:return:code:imports:
+    "running time"
+    ()
+    r
+    "(millis)"
+    ())
+
+   (category: "control")
+   (separator)
+   (commandBlock:args:code:imports:
+    "wait %n msecs"
+    (1000)
+    "(delay %n)"
+    ())
+   (reporterBlock:args:return:code:imports:
+    "call %S"
+    ("")
+    r
+    "(%S)"
+    ())
+
+   (category: "io")
+   (separator)
+   (commandBlock:args:code:imports:
+    "set digital pin %n for %P"
+    (0 0)
+    "(pinmode %n %P)"
+    ())
+   (reporterBlock:args:return:code:imports:
+    "digital read pin %n"
+    (0)
+    b
+    "(digitalread %n)"
+    ())
+   (commandBlock:args:code:imports:
+    "digital write pin %n to %b"
+    (0 0)
+    "(digitalwrite %n %b)"
+    ())
+   (reporterBlock:args:return:code:imports:
+    "analog read pin %n"
+    (0)
+    r
+    "(analogread %n)"
+    ())
+   (commandBlock:args:code:imports:
+    "analog write pin %n to %n"
+    (0 0)
+    "(analogwrite %n1 %n2)"
+    ())
+
+   )))
