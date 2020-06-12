@@ -138,6 +138,22 @@
     (0)
     "_sock%d.close()"
     ())
+   (separator)
+   (commandBlock:args:code:imports:
+    "start webrepl"
+    ()
+    "webrepl.start()"
+    (webrepl))
+   (commandBlock:args:code:imports:
+    "stop webrepl"
+    ()
+    "webrepl.stop()"
+    (webrepl))
+   (commandBlock:args:code:imports:
+    "setup webrepl"
+    ()
+    "import webrepl_setup"
+    ())
 
    (category: "i2c")
    (separator)
