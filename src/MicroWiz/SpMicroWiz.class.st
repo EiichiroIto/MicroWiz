@@ -265,7 +265,7 @@ SpMicroWiz >> exportReplLog [
 	| log |
 	log := presenter replLog.
 	log isEmpty ifTrue: [ ^ self ].
-	self exportString: log extension: self txtExtension
+	self exportString: log extension: self txtExtension isBinary: false
 ]
 
 { #category : #'menu actions' }

@@ -77,14 +77,34 @@ WebReplCommTest >> testDataFromFrame [
 ]
 
 { #category : #test }
-WebReplCommTest >> testMakeHeaderSize [
+WebReplCommTest >> testHeaderOfPutFileNamedContents [
+	| c ret |
+	c := self newComm.
+	ret := c headerOfPutFileNamed: 'ABC' contents: 'defghi'.
+	self assert: ret size equals: 82.
+	self assert: ret first equals: $W asciiValue.
+	self assert: ret second equals: $A asciiValue.
+	self assert: ret third equals: 1.
+	self assert: ret fourth equals: 0.
+	self
+		assertCollection: (ret copyFrom: 5 to: 12)
+		equals: #[0 0 0 0 0 0 0 0].
+	self assertCollection: (ret copyFrom: 13 to: 16) equals: #[6 0 0 0].
+	self assertCollection: (ret copyFrom: 17 to: 18) equals: #[3 0].
+	self assertCollection: (ret copyFrom: 19 to: 21) equals: #[65 66 67].
+	self
+		assert: ((ret copyFrom: 22 to: ret size) allSatisfy: [ :each | each = 0 ])
+]
+
+{ #category : #test }
+WebReplCommTest >> testMakeHeaderSizeAsText [
 	| ws |
 	ws := self newComm.
 	self
-		assertCollection: (ws makeHeaderSize: 10)
-		equals: (ByteArray with: 16r81 with: 10).
+		assertCollection: (ws makeHeaderSize: 10 asText: false)
+		equals: (ByteArray with: 16r82 with: 10).
 	self
-		assertCollection: (ws makeHeaderSize: 200)
+		assertCollection: (ws makeHeaderSize: 200 asText: true)
 		equals:
 			(ByteArray
 				with: 16r81
@@ -92,7 +112,7 @@ WebReplCommTest >> testMakeHeaderSize [
 				with: 0
 				with: 200).
 	self
-		assertCollection: (ws makeHeaderSize: 300)
+		assertCollection: (ws makeHeaderSize: 300 asText: true)
 		equals:
 			(ByteArray
 				with: 16r81

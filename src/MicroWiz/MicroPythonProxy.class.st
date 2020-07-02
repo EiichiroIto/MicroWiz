@@ -171,7 +171,10 @@ MicroPythonProxy >> processSendingQueue [
 { #category : #api }
 MicroPythonProxy >> putFileNamed: aString1 contents: aString2 [
 	| str |
-	self isConnected ifFalse: [ ^ self ].
+	self isConnected
+		ifFalse: [ ^ self ].
+	self comm canPutFile
+		ifTrue: [ ^ self comm putFileNamed: aString1 contents: aString2 ].
 	str := self stringOfFileNamed: aString1 contents: aString2.
 	sendingQueue addAll: str lines.
 	self sendCommand: self class rawRequest.

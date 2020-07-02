@@ -5,6 +5,16 @@ Class {
 }
 
 { #category : #api }
+MWComm >> canGetFile [
+	^ false
+]
+
+{ #category : #api }
+MWComm >> canPutFile [
+	^ false
+]
+
+{ #category : #api }
 MWComm >> close [
 	self subclassResponsibility
 ]

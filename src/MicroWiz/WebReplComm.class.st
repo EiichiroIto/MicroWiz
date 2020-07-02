@@ -30,6 +30,11 @@ WebReplComm >> buffer: aByteArray [
 	buffer := aByteArray
 ]
 
+{ #category : #api }
+WebReplComm >> canPutFile [
+	^ true
+]
+
 { #category : #accessing }
 WebReplComm >> clear [
 	buffer := ByteArray new.
@@ -87,17 +92,42 @@ WebReplComm >> get [
 	^ (self dataFromFrame: frame) asByteArray
 ]
 
+{ #category : #private }
+WebReplComm >> headerOfPutFileNamed: aString1 contents: aString2 [
+	"<2sBBQLH64s"
+
+	"WEBREPL_PUT_FILE = 1"
+
+	"    rec = struct.pack(WEBREPL_REQ_S, 'WA', WEBREPL_PUT_FILE, 0, 0, sz,
+	 len(dest_fname), dest_fname)"
+
+	| stream |
+	stream := WriteStream on: ByteArray new.
+	stream
+		nextPut: $W asciiValue;
+		nextPut: $A asciiValue;
+		nextPut: 1;
+		nextPut: 0;
+		nextPutAll: #(0 0 0 0 0 0 0 0);
+		nextPutAll: (aString2 size asByteArrayOfSize: 4) reverse;
+		nextPutAll: (aString1 size asByteArrayOfSize: 2) reverse;
+		nextPutAll: (aString1 padRightTo: 64 with: Character null) asByteArray.
+	^ stream contents
+]
+
 { #category : #api }
 WebReplComm >> isConnected [
 	^ socket notNil and: [ socket isConnected ]
 ]
 
 { #category : #private }
-WebReplComm >> makeHeaderSize: anInteger [
+WebReplComm >> makeHeaderSize: anInteger asText: aBoolean [
+	| op |
+	op := aBoolean ifTrue: [ 16r81 ] ifFalse: [ 16r82 ].
 	^ anInteger < 126
-		ifTrue: [ ByteArray with: 16r81 with: anInteger ]
+		ifTrue: [ ByteArray with: op with: anInteger ]
 		ifFalse: [ ByteArray
-				with: 16r81
+				with: op
 				with: 126
 				with: anInteger // 256
 				with: anInteger \\ 256 ]
@@ -170,13 +200,30 @@ WebReplComm >> parseServerResponse: aByteString [
 
 { #category : #api }
 WebReplComm >> put: aByteArray [
+	self put: aByteArray asText: true
+]
+
+{ #category : #private }
+WebReplComm >> put: aByteArray asText: aBoolean [
 	| header |
 	self isConnected
 		ifFalse: [ ^ self ].
-	header := self makeHeaderSize: aByteArray size.
+	header := self makeHeaderSize: aByteArray size asText: aBoolean.
 	socket
 		sendData: header;
 		sendData: aByteArray
+]
+
+{ #category : #api }
+WebReplComm >> putFileNamed: aString1 contents: aString2 [
+	| header stream buf |
+	header := self headerOfPutFileNamed: aString1 contents: aString2.
+	self put: (header copyFrom: 1 to: 10) asText: false.
+	self put: (header copyFrom: 11 to: header size) asText: false.
+	stream := ReadStream on: aString2 asByteArray.
+	[ stream atEnd ]
+		whileFalse: [ buf := stream next: 1024.
+			self put: buf asText: false ]
 ]
 
 { #category : #accessing }
