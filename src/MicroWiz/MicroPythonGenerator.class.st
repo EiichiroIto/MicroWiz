@@ -67,6 +67,46 @@ MicroPythonGenerator >> binaryOperator: aSymbol arg1: anObject1 arg2: anObject2 
 ]
 
 { #category : #'operators ops' }
+MicroPythonGenerator >> bit: x and: y [
+	| a b |
+	a := self valueOf: x.
+	b := self valueOf: y.
+	^ '(int(' , a asString , ') & int(' , b asString , '))'
+]
+
+{ #category : #'operators ops' }
+MicroPythonGenerator >> bit: x or: y [
+	| a b |
+	a := self valueOf: x.
+	b := self valueOf: y.
+	^ '(int(' , a asString , ') | int(' , b asString , '))'
+]
+
+{ #category : #'operators ops' }
+MicroPythonGenerator >> bit: x shiftLeft: y [
+	| a b |
+	a := self valueOf: x.
+	b := self valueOf: y.
+	^ '(int(' , a asString , ') << int(' , b asString , '))'
+]
+
+{ #category : #'operators ops' }
+MicroPythonGenerator >> bit: x shiftRight: y [
+	| a b |
+	a := self valueOf: x.
+	b := self valueOf: y.
+	^ '(int(' , a asString , ') >> int(' , b asString , '))'
+]
+
+{ #category : #'operators ops' }
+MicroPythonGenerator >> bit: x xor: y [
+	| a b |
+	a := self valueOf: x.
+	b := self valueOf: y.
+	^ '(int(' , a asString , ') ^ int(' , b asString , '))'
+]
+
+{ #category : #'operators ops' }
 MicroPythonGenerator >> bytesFrom: str encoding: encoding [
 	^ self binaryFunction: 'bytes' arg1: str arg2: encoding
 ]

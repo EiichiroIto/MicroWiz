@@ -93,6 +93,51 @@ MicroPythonGeneratorTest >> testBinaryOperatorArg1Arg2 [
 ]
 
 { #category : #test }
+MicroPythonGeneratorTest >> testBitAnd [
+	| g |
+	g := self newGenerator.
+	self
+		assert: (g bit: 1 and: 2)
+		equals: '(int(1) & int(2))'
+]
+
+{ #category : #test }
+MicroPythonGeneratorTest >> testBitOr [
+	| g |
+	g := self newGenerator.
+	self
+		assert: (g bit: 1 or: 2)
+		equals: '(int(1) | int(2))'
+]
+
+{ #category : #test }
+MicroPythonGeneratorTest >> testBitShiftLeft [
+	| g |
+	g := self newGenerator.
+	self
+		assert: (g bit: 1 shiftLeft: 2)
+		equals: '(int(1) << int(2))'
+]
+
+{ #category : #test }
+MicroPythonGeneratorTest >> testBitShiftRight [
+	| g |
+	g := self newGenerator.
+	self
+		assert: (g bit: 1 shiftRight: 2)
+		equals: '(int(1) >> int(2))'
+]
+
+{ #category : #test }
+MicroPythonGeneratorTest >> testBitXor [
+	| g |
+	g := self newGenerator.
+	self
+		assert: (g bit: 1 xor: 2)
+		equals: '(int(1) ^ int(2))'
+]
+
+{ #category : #test }
 MicroPythonGeneratorTest >> testBytesFromEncoding [
 	| g |
 	g := self newGenerator.

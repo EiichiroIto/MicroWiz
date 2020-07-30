@@ -51,6 +51,12 @@ MicroPythonBlockSpecs >> operatorsBlocks [
 			('true'									b	getTrue)
 			('false'								b	getFalse)
 			-
+			('%n bitand %n'					r	bit:and:	2	6)
+			('%n bitor %n'						r	bit:or:		2	6)
+			('%n bitxor %n'					r	bit:xor:	2	6)
+			('%n bit shift left %n'		r	bit:shiftLeft:		1	5)
+			('%n bit shift right %n'	r	bit:shiftRight:	256	6)
+			-
 			('%n mod %n'						r	\\ - -)
 			('round %n'							r	rounded -)
 			('abs %n'								r	abs -)
