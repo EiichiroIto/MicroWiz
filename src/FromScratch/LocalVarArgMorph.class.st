@@ -64,7 +64,7 @@ LocalVarArgMorph >> isExpressionArg [
 { #category : #private }
 LocalVarArgMorph >> newIconMorph [
 	^ Morph new
-		color: (Color h: 25 s: 0.88 v: 0.95);
+		color: ScratchTheme variableBlockColor;
 		extent: 20 @ labelMorph height;
 		yourself
 ]
@@ -74,7 +74,7 @@ LocalVarArgMorph >> newLabelMorph [
 	^ StringFieldMorph new
 		forExpressionArg;
 		doResizing: true;
-		font: ScratchTheme argFont;
+		font: ScratchTranslator argFont;
 		color: Color transparent;
 		isNumeric: false;
 		contents: ''

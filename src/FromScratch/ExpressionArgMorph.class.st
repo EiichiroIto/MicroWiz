@@ -120,7 +120,7 @@ ExpressionArgMorph >> initialize [
 	labelMorph := StringFieldMorph new
 		forExpressionArg;
 		doResizing: true;
-		font: ScratchTheme argFont;
+		font: ScratchTranslator argFont;
 		color: Color transparent.
 	self addMorph: labelMorph.
 	self numExpression: '10'

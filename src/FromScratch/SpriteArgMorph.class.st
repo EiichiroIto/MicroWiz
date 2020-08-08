@@ -85,7 +85,7 @@ SpriteArgMorph >> initialize [
 	self borderWidth: 1.
 	self color: Color white.
 	labelMorph := StringMorph new
-		font: ScratchTheme argFont;
+		font: ScratchTranslator argFont;
 		color: Color white.
 	self addMorph: labelMorph.
 	self

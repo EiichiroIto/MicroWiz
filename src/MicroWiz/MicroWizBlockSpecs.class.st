@@ -117,18 +117,18 @@ MicroWizBlockSpecs >> setupIntModuleDef [
 { #category : #'block specs' }
 MicroWizBlockSpecs >> variablesBlocks [
 	^ #(
-		'list'
-			('add %s to %L'					-	append:toList: 'thing')
+		'lists'
+			('empty list'							r	emptyList)
+			('split %s by space'				r	splitBySpace: 			'a b c')
+			('split %s by %s limit %n'	r	split:by:limit:		'a,b,c' , -1)
 			-
-			('delete %y of %L'				-	deleteLine:ofList: 0)
-			('insert %s at %i of %L'			-	insert:at:ofList: 'thing' 0)
-			('replace item %i of %L with %s'		-	setLine:ofList:to: 0 'list' 'thing')
-			('replace all items of %L with %s'		- replaceAllList:with: 'list' 'a b c')
+			('add %s to %s'						-	append:toList: 'thing' 'list')
+			('delete %y of %s'					-	deleteLine:ofList: 0 'list')
+			('insert %s at %i of %s'		-	insert:at:ofList: 'thing' 0 'list')
+			('replace item %i of %s with %s'
+															-	setLine:ofList:to: 0 'list' 'thing')
 			-
-			('item %i of %L'					r	getLine:ofList: 0)
-			('length of %L'					r	lineCountOfList:)
-			('%L contains %s'				b	list:contains: 'list' 'thing')
-			-
-			('list %L'							r	contentsOfList: 'list')
+			('%s contains %s'					b	list:contains: 'list' 'thing')
+			('bytes of %s'							r	bytesOfList:	'list')
 	)
 ]

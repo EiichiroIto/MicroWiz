@@ -75,6 +75,26 @@ SpScratchApp class >> keepMaximize: aBoolean [
 ]
 
 { #category : #accessing }
+SpScratchApp class >> language [
+	^ self settings at: #language ifAbsent: [ '' ]
+]
+
+{ #category : #accessing }
+SpScratchApp class >> language: aString [
+	| old |
+	old := self language.
+	(ScratchTranslator setLocale: aString)
+		ifFalse: [ ^ self ].
+	self settings at: #language put: aString.
+	old = aString
+		ifTrue: [ ^ self ].
+	(self confirm: 'Language settings has changed. Restart application?')
+		ifFalse: [ ^ self ].
+	self saveSettings.
+	Smalltalk snapshot: false andQuit: true
+]
+
+{ #category : #accessing }
 SpScratchApp class >> loadSettings [
 	| fr dict |
 	fr := FileSystem workingDirectory / self settingsFilename.
@@ -96,6 +116,8 @@ SpScratchApp class >> optionsFor: aSymbol [
 		ifTrue: [ ^ {true . false} ].
 	aSymbol = #keepMaximize
 		ifTrue: [ ^ {true . false} ].
+	aSymbol = #language
+		ifTrue: [ ^ ScratchTranslator availableLocales ].
 	^ #()
 ]
 
@@ -165,7 +187,7 @@ SpScratchApp >> addList: aScript [
 		ifTrue: [ ^ self ].
 	(aScript variableNameInUse: listName)
 		ifTrue: [ ^ UIManager default
-				alert: 'That list name is already in use' localized ].
+				alert: 'That list name is already in use!' localized ].
 	aScript addList: listName.
 	presenter currentCategory: #variables
 ]
@@ -173,15 +195,15 @@ SpScratchApp >> addList: aScript [
 { #category : #'menu actions' }
 SpScratchApp >> addSubBlock: aPoint script: aScript [
 	| subName |
-	subName := UIManager default request: 'Sub name?'.
+	subName := UIManager default request: 'Sub name?' localized.
 	(subName isNil or: [ subName isEmpty ])
 		ifTrue: [ ^ self ].
 	(aScript isValidSubName: subName)
 		ifFalse: [ ^ UIManager default
-				alert: 'invalid sub name' localized ].
+				alert: 'invalid sub name!' localized ].
 	(aScript subNameInUse: subName)
 		ifTrue: [ ^ UIManager default
-				alert: 'sub name already in use' localized ].
+				alert: 'That sub name is already in use!' localized ].
 	aScript addSubBlock: aPoint name: subName
 ]
 
@@ -193,7 +215,7 @@ SpScratchApp >> addVariable: aScript [
 		ifTrue: [ ^ self ].
 	(aScript variableNameInUse: varName)
 		ifTrue: [ ^ UIManager default
-				alert: 'That variable name is already in use' localized ].
+				alert: 'That variable name is already in use!' localized ].
 	aScript addVariable: varName.
 	presenter currentCategory: #variables
 ]
@@ -370,7 +392,7 @@ SpScratchApp >> export: anExporter extension: aString isBinary: aBoolean [
 		try: [ anExporter exportFrom: self isBinary: aBoolean ]
 		onFailure: [ :err | 
 			UIManager default
-				alert: 'Could not generate code:' , err asString
+				alert: 'Could not generate code: ' localized , err asString
 				title: 'Export failed' localized ].
 	self exportString: str extension: aString isBinary: aBoolean
 ]
@@ -384,13 +406,13 @@ SpScratchApp >> exportString: aContentsString extension: aString isBinary: aBool
 	fName := self
 		chooseNewFileDefault: self projectName
 		extension: aString
-		title: 'Export ...'
+		title: 'Export ...' localized
 		type: #export.
 	fName ifNil: [ ^ self ].
 	fName := fName withExtension: aString.
 	fName isFile
 		ifTrue: [ (UIManager default
-				confirm: 'Overwrite existing ' , fName basename , '?')
+				confirm: 'Overwrite existing file: ' localized , fName basename , '?')
 				ifFalse: [ ^ self ].
 			fName delete ].
 	f := nil.
@@ -402,7 +424,7 @@ SpScratchApp >> exportString: aContentsString extension: aString isBinary: aBool
 			f close ]
 		onFailure: [ f ifNotNil: [ f close ].
 			UIManager default
-				alert: 'Could not write file' , fName basename
+				alert: 'Could not write file: ' localized , fName basename
 				title: 'Export failed' localized ]
 ]
 
@@ -434,7 +456,7 @@ SpScratchApp >> importFileWithExtension: aString isBinary: aBoolean [
 	self stopAllProcesses.
 	response := self
 		chooseExistingFileType: #export
-		title: 'Import ...'
+		title: 'Import ...' localized
 		extension: aString.
 	response ifNil: [ ^ nil ].
 	fr := response asFileReference.
@@ -450,7 +472,7 @@ SpScratchApp >> importFileWithExtension: aString isBinary: aBoolean [
 			fr} ]
 		onFailure: [ f ifNotNil: [ f close ].
 			UIManager default
-				alert: 'Could not read file' localized
+				alert: 'Could not read file: ' localized , fr basename
 				title: 'Import failed' localized.
 			nil ]
 ]
@@ -458,6 +480,7 @@ SpScratchApp >> importFileWithExtension: aString isBinary: aBoolean [
 { #category : #initialization }
 SpScratchApp >> initialize [
 	self class loadSettings.
+	ScratchTranslator setLocale: self class language.
 	super initialize.
 	presenter := self newPresenter.
 	updateInfoCount := 0
@@ -522,7 +545,7 @@ SpScratchApp >> openProject [
 	self stopAllProcesses.
 	(project notNil and: [ project modified ])
 		ifTrue: [ response := UIManager default
-				confirm: 'Save the current project?'
+				confirm: 'Save the current project?' localized
 				orCancel: [ ^ self ].
 			response
 				ifTrue: [ self saveProjectNoDialog ] ].
@@ -543,7 +566,7 @@ SpScratchApp >> openScratchFileFor: aProject [
 		extension: self extension;
 		project: aProject;
 		setupForFileInfoViewer;
-		title: 'Open Project';
+		title: 'Open Project' localized;
 		type: #project.
 	d := dialog openModalWithSpec: #openScratchFileSpec.
 	d isCancelled
@@ -597,6 +620,13 @@ SpScratchApp >> projectName: aString [
 	presenter window
 		title: text;
 		updateTitle
+]
+
+{ #category : #'menu actions' }
+SpScratchApp >> quit [
+	(self confirm: 'Quit Application?' localized)
+		ifFalse: [ ^ self ].
+	Smalltalk snapshot: false andQuit: true
 ]
 
 { #category : #private }
@@ -658,7 +688,7 @@ SpScratchApp >> saveScratchFileFor: aProject [
 		filename: self projectName;
 		extension: self extension;
 		setupForFileInfoEditor;
-		title: 'Save Project';
+		title: 'Save Project' localized;
 		type: #project;
 		author: aProject author;
 		comment: aProject comment.
@@ -682,7 +712,7 @@ SpScratchApp >> saveScriptsToImage [
 	fName := self
 		chooseNewFileDefault: ''
 		extension: pngExt
-		title: 'Save Scripts Snapshot'
+		title: 'Save script snapshot' localized
 		type: #scriptsSnapshot.
 	fName ifNil: [ ^ self ].
 	fName := fName withExtension: pngExt.
@@ -698,31 +728,6 @@ SpScratchApp >> serializeBlocks: aTopBlock [
 	^ code
 ]
 
-{ #category : #'menu actions' }
-SpScratchApp >> setMaxPlotSize: aPlotter [
-	| ret |
-	ret := UIManager default
-		request: 'number of max plots?'
-		initialAnswer: (aPlotter maxSize ifNil: [ '' ]) asString.
-	ret ifNil: [ ^ self ].
-	ret := ret isEmpty
-		ifTrue: [ nil ]
-		ifFalse: [ ret asNumberNoError ].
-	aPlotter maxSize: ret
-]
-
-{ #category : #'menu actions' }
-SpScratchApp >> setPlotPeriod: aPlotter [
-	| ret |
-	ret := UIManager default
-		request: 'update plot period? (in milliseconds)'
-		initialAnswer: (aPlotter updatePeriod ifNil: [ '' ]) asString.
-	(ret isNil or: [ ret isEmpty ])
-		ifTrue: [ ^ self ].
-	ret := ret asNumberNoError.
-	aPlotter updatePeriod: ret
-]
-
 { #category : #private }
 SpScratchApp >> setupView [
 	| viewTarget |
@@ -736,10 +741,12 @@ SpScratchApp >> setupView [
 
 { #category : #'menu actions' }
 SpScratchApp >> showBlockMenu: aBlockMorph event: anEvent [
-	(presenter
+	| menu |
+	menu := presenter
 		blockMenuFor: aBlockMorph
-		inScriptEditor: aBlockMorph isInScriptEditor)
-		openWithSpecAt: anEvent cursorPoint
+		inScriptEditor: aBlockMorph isInScriptEditor.
+	menu ifNil: [ ^ self ].
+	menu openWithSpecAt: anEvent cursorPoint
 ]
 
 { #category : #'menu actions' }

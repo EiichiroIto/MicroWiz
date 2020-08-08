@@ -3,8 +3,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'colors',
-		'forms',
-		'fonts'
+		'forms'
 	],
 	#classVars : [
 		'CurrentTheme',
@@ -13,19 +12,9 @@ Class {
 	#category : #'FromScratch-Morphic'
 }
 
-{ #category : #fonts }
-ScratchTheme class >> argFont [
-	^ self fontAt: #Arg
-]
-
 { #category : #colors }
 ScratchTheme class >> blockArgColor [
 	^ self colorAt: #blockArgColor
-]
-
-{ #category : #fonts }
-ScratchTheme class >> buttonFont [
-	^ self fontAt: #Button
 ]
 
 { #category : #accessing }
@@ -35,7 +24,7 @@ ScratchTheme class >> buttonLabel: aString selector: aSymbolOrNil [
 	| button |
 	button := ResizableToggleButton2 new
 		offForm: (self formAt: #btn) onForm: (self formAt: #btnPressed);
-		label: aString font: self buttonFont;
+		label: aString font: ScratchTranslator buttonFont;
 		actionSelector: aSymbolOrNil;
 		labelColorOn: self labelOnColor
 			labelColorOff: self labelOffColor
@@ -50,7 +39,7 @@ ScratchTheme class >> colorAt: aSymbol [
 
 { #category : #accessing }
 ScratchTheme class >> current [
-	^ CurrentTheme ifNil: [ self error: 'Did not setup any theme yet.' ]
+	^ CurrentTheme ifNil: [ self error: 'No themes!' ]
 ]
 
 { #category : #accessing }
@@ -61,11 +50,6 @@ ScratchTheme class >> current: aTheme [
 { #category : #colors }
 ScratchTheme class >> dialogBoxTextColor [
 	^ self colorAt: #dialogBoxTextColor
-]
-
-{ #category : #accessing }
-ScratchTheme class >> fontAt: aSymbol [
-	^ self current fontAt: aSymbol
 ]
 
 { #category : #accessing }
@@ -82,20 +66,15 @@ ScratchTheme class >> formAt: aString ifAbsent: aBlock [
 ScratchTheme class >> getThemes [
 	| response ref url |
 	url := self themesURL.
-	url ifNil: [ self error: 'Need to set ThemesURL' ].
+	url ifNil: [ self error: 'ThemesURL is not set!' ].
 	response := ZnEasy get: url.
 	response isSuccess
-		ifFalse: [ self error: 'Cannot get Themes.zip' ].
+		ifFalse: [ self error: 'Could not get Themes.zip!' ].
 	ref := 'Themes.zip' asFileReference.
 	ref binaryWriteStream
 		nextPutAll: response contents;
 		close.
 	(ZipArchive new readFrom: ref fullName) extractAllTo: FileLocator workingDirectory.
-]
-
-{ #category : #fonts }
-ScratchTheme class >> labelFont [
-	^ self fontAt: #Label
 ]
 
 { #category : #colors }
@@ -117,7 +96,6 @@ ScratchTheme class >> listBlockColor [
 ScratchTheme class >> newThemeNamed: aString [
 	| obj |
 	obj := self new.
-	self setupFont: obj.
 	self readForms: aString to: obj.
 	^ obj
 ]
@@ -138,77 +116,24 @@ ScratchTheme class >> plotterPaneColor [
 ]
 
 { #category : #private }
-ScratchTheme class >> readForms: aString to: aTheme [ 
+ScratchTheme class >> readForms: aString to: aTheme [
 	| base dir |
 	base := 'Themes' asFileReference.
 	base exists
-		ifFalse: [self error: 'Themes directory not found'].
+		ifFalse: [ self error: 'Themes folder not found!' ].
 	dir := base / 'common'.
 	dir isDirectory
-		ifFalse: [self error: 'common directory not found'].
+		ifFalse: [ self error: 'common folder not found!' ].
 	aTheme readFormsFrom: dir.
 	dir := base / aString.
 	dir isDirectory
-		ifFalse: [self error: aString , ' directory not found'].
-	aTheme readFormsFrom: dir.
+		ifFalse: [ self error: 'That folder not found: ' , aString ].
+	aTheme readFormsFrom: dir
 ]
 
 { #category : #colors }
 ScratchTheme class >> scriptsPaneColor [
 	^ self colorAt: #scriptsPaneColor
-]
-
-{ #category : #private }
-ScratchTheme class >> setupFont: aTheme [
-	aTheme fontAt: #Arg name: 'Verdana' size: 10.
-	aTheme fontAt: #Label name: 'VerdanaBoldNarrowSpace' size: 10.
-	aTheme fontAt: #MenuTitle name: 'VerdanaBold' size: 14.
-	aTheme fontAt: #Button name: 'VerdanaBold' size: 10.
-	aTheme fontAt: #Category name: 'VerdanaBold' size: 10.
-	aTheme fontAt: #Tab name: 'VerdanaBold' size: 11.
-	aTheme fontAt: #CommentBlock name: 'Verdana' size: 10.
-	aTheme fontAt: #TalkBubble name: 'VerdanaBold' size: 12.
-	aTheme fontAt: #ToolTip name: 'Verdana' size: 13.
-	aTheme fontAt: #ReporterToolTip name: 'Verdana' size: 14.
-	aTheme fontAt: #XYReadout name: 'Verdana' size: 10.
-	aTheme fontAt: #XYReadoutBold name: 'VerdanaBold' size: 10.
-	aTheme fontAt: #CostumesPage name: 'VerdanaBold' size: 11.
-	aTheme fontAt: #SoundsPage name: 'VerdanaBold' size: 11.
-	aTheme fontAt: #ViewerPage name: 'VerdanaBold' size: 11.
-	aTheme fontAt: #UpdatingStringField name: 'VerdanaBold' size: 11.
-	aTheme fontAt: #Watcher name: 'VerdanaBold' size: 10.
-	aTheme fontAt: #WatcherLarge name: 'VerdanaBold' size: 14.
-	aTheme fontAt: #PaintUtilityButton name: 'VerdanaBold' size: 10.
-	aTheme fontAt: #PaintSetRotationCenter name: 'VerdanaBold' size: 11.
-	aTheme fontAt: #LibraryItemName name: 'VerdanaBold' size: 9	.
-	aTheme fontAt: #LibraryItemInfo name: 'Verdana' size: 6	.
-	aTheme fontAt: #MediaItemInfo name: 'Verdana' size: 9	.
-	aTheme fontAt: #DialogBoxTitle name: 'VerdanaBold' size: 14.
-	aTheme fontAt: #DialogBoxMessage name: 'VerdanaBold' size: 13.
-	aTheme fontAt: #DialogBoxButton name: 'VerdanaBold' size: 11.
-	aTheme fontAt: #ProjectNotes name: 'Verdana' size: 10.
-	aTheme fontAt: #LinkMorphDefault name: 'VerdanaBold' size: 10.
-	aTheme fontAt: #ShareLink name: 'VerdanaBold' size: 13.
-	aTheme fontAt: #SoundRecorderButton name: 'VerdanaBold' size: 13.
-	aTheme fontAt: #SoundRecorderTimer name: 'NewYorkBold' size: 10.
-	aTheme fontAt: #StringDialogTypeIn name: 'Verdana' size: 12.
-	aTheme fontAt: #NewVariableDialogBox name: 'Verdana' size: 11.
-	aTheme fontAt: #AboutScratch name: 'VerdanaBold' size: 11.
-	aTheme fontAt: #UploadTagLabel name: 'VerdanaBold' size: 10.
-	aTheme fontAt: #UploadTag name: 'Verdana' size: 10.
-	aTheme fontAt: #UploadDialogLabel name: 'VerdanaBold' size: 10.
-	aTheme fontAt: #UploadDialogContents name: 'Verdana' size: 10.
-	aTheme fontAt: #UploadDialogComment name: 'Verdana' size: 10.
-	aTheme fontAt: #FolderShortcut name: 'Verdana' size: 11.
-	aTheme fontAt: #FileChooserNewFileTitle name: 'VerdanaBold' size: 10.
-	aTheme fontAt: #FileChooserNewFilename name: 'Verdana' size: 10.
-	aTheme fontAt: #FileChooserLabel name: 'VerdanaBold' size: 10.
-	aTheme fontAt: #FileChooserContents name: 'Verdana' size: 12.
-	aTheme fontAt: #FileChooserComment name: 'Verdana' size: 10.
-	aTheme fontAt: #FilePickerDirectoryName name: 'VerdanaBold' size: 9	.
-	aTheme fontAt: #FilePickerEntry name: 'Verdana' size: 11.
-	aTheme fontAt: #FilePickerEntryHighlighted name: 'VerdanaBold' size: 11.
-	aTheme fontAt: #FrameMorphProjectTitle name: 'VerdanaBold' size: 13
 ]
 
 { #category : #private }
@@ -285,18 +210,6 @@ ScratchTheme >> colors [
 ]
 
 { #category : #accessing }
-ScratchTheme >> fontAt: aSymbol [
-	^ fonts at: aSymbol
-]
-
-{ #category : #accessing }
-ScratchTheme >> fontAt: aSymbol name: aString size: anInteger [
-	| font |
-	font := StrikeFont fontName: aString size: anInteger.
-	fonts at: aSymbol put: font
-]
-
-{ #category : #accessing }
 ScratchTheme >> formAt: aSymbol [
 	^ forms at: aSymbol asSymbol
 ]
@@ -319,8 +232,7 @@ ScratchTheme >> forms [
 { #category : #initialization }
 ScratchTheme >> initialize [
 	colors := Dictionary new.
-	forms := Dictionary new.
-	fonts := Dictionary new
+	forms := Dictionary new
 ]
 
 { #category : #'file read' }

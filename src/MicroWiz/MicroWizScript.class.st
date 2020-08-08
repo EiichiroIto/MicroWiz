@@ -11,18 +11,13 @@ Class {
 
 { #category : #'ston-core' }
 MicroWizScript class >> stonAllInstVarNames [
-	^ super stonAllInstVarNames , #(objName varNames listVarNames)
+	^ super stonAllInstVarNames , #(objName varNames)
 ]
 
 { #category : #'argument menus' }
 MicroWizScript >> addArgBuilder [
 	super addArgBuilder.
 	project addArgBuilderTo: argBuilder
-]
-
-{ #category : #variables }
-MicroWizScript >> addList: aString [
-	listVarNames add: aString
 ]
 
 { #category : #variables }
@@ -60,11 +55,6 @@ MicroWizScript >> compareHatBlock: a and: b [
 ]
 
 { #category : #variables }
-MicroWizScript >> deleteList: aString [
-	listVarNames remove: aString ifAbsent: [  ]
-]
-
-{ #category : #variables }
 MicroWizScript >> deleteVariable: aString [
 	varNames remove: aString ifAbsent: [  ]
 ]
@@ -98,15 +88,14 @@ MicroWizScript >> hatBlocks [
 MicroWizScript >> initFieldsFrom: anObjStream version: classVersion [
 	super initFieldsFrom: anObjStream version: classVersion.
 	self
-		initFieldsNamed: #(objName varNames listVarNames)
+		initFieldsNamed: #(objName varNames)
 		from: anObjStream
 ]
 
 { #category : #initialization }
 MicroWizScript >> initialize [
 	super initialize.
-	varNames := OrderedCollection new.
-	listVarNames := OrderedCollection new
+	varNames := OrderedCollection new
 ]
 
 { #category : #'block specs' }
@@ -121,11 +110,6 @@ MicroWizScript >> isValidSubName: aString [
 	aString first isDigit
 		ifTrue: [ ^ false ].
 	^ aString allSatisfy: [ :each | each isAlphaNumeric ]
-]
-
-{ #category : #'argument menus' }
-MicroWizScript >> listVarNames [
-	^ listVarNames
 ]
 
 { #category : #accessing }
@@ -147,7 +131,12 @@ MicroWizScript >> setupBlockCategory [
 { #category : #'object i/o' }
 MicroWizScript >> storeFieldsOn: anObjStream [
 	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(objName varNames listVarNames) on: anObjStream.
+	self storeFieldsNamed: #(objName varNames) on: anObjStream.
+]
+
+{ #category : #testing }
+MicroWizScript >> useList [
+	^ false
 ]
 
 { #category : #testing }
@@ -162,5 +151,5 @@ MicroWizScript >> varNames [
 
 { #category : #variables }
 MicroWizScript >> variableNameInUse: aString [
-	^ (varNames includes: aString) or: [ listVarNames includes: aString ]
+	^ varNames includes: aString
 ]

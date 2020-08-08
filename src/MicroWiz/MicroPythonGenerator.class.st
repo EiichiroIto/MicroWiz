@@ -111,6 +111,11 @@ MicroPythonGenerator >> bytesFrom: str encoding: encoding [
 	^ self binaryFunction: 'bytes' arg1: str arg2: encoding
 ]
 
+{ #category : #'list ops' }
+MicroPythonGenerator >> bytesOfList: list [
+	^ self unaryFunction: 'bytes' arg: list
+]
+
 { #category : #'variable ops' }
 MicroPythonGenerator >> changeVar: var by: val [
 	self useVar: var.
@@ -138,11 +143,6 @@ MicroPythonGenerator >> computeFunction: aSymbol of: aNumber [
 { #category : #'operators ops' }
 MicroPythonGenerator >> concatenate: x with: y [
 	^ 'str(' , (self valueOf: x) , ')+str(' , (self valueOf: y) , ')'
-]
-
-{ #category : #'list ops' }
-MicroPythonGenerator >> contentsOfList: var [
-	^ self getList: var
 ]
 
 { #category : #'control ops' }
@@ -226,6 +226,11 @@ MicroPythonGenerator >> doWhileBegin: cond [
 { #category : #'control ops' }
 MicroPythonGenerator >> doWhileEnd [
 	"do nothing"
+]
+
+{ #category : #'list ops' }
+MicroPythonGenerator >> emptyList [
+	^ '[]'
 ]
 
 { #category : #'operators ops' }
@@ -360,17 +365,10 @@ MicroPythonGenerator >> getFalse [
 	^ 'False'
 ]
 
-{ #category : #'list ops' }
-MicroPythonGenerator >> getLine: pos ofList: var [
-	pos = #any
-		ifTrue: [ ^ self random , 'choice(' , (self getList: var) , ')' ].
-	^ (self getList: var) , '[' , (self listPosition: pos) , ']'
-]
-
 { #category : #private }
 MicroPythonGenerator >> getList: aList [
-	self useListVar: aList.
-	^ aList
+	"self useListVar: aList."
+	^ self valueOf: aList
 ]
 
 { #category : #'operators ops' }
@@ -432,11 +430,6 @@ MicroPythonGenerator >> letter: anInteger of: aString [
 	a := self valueOf: anInteger.
 	b := self valueOf: aString.
 	^ '(', b, ')[', a, ']'
-]
-
-{ #category : #'list ops' }
-MicroPythonGenerator >> lineCountOfList: var [
-	^ 'len(' , (self getList: var) , ')'
 ]
 
 { #category : #'list ops' }
@@ -582,12 +575,6 @@ MicroPythonGenerator >> randomFrom: arg1 to: arg2 [
 	^ self binaryFunction: self random, 'randint' arg1: arg1 arg2: arg2
 ]
 
-{ #category : #'list ops' }
-MicroPythonGenerator >> replaceAllList: var with: val [
-	self
-		appendWithNewline: (self getList: var) , ' = (' , (self valueOf: val) , ').split()'
-]
-
 { #category : #'operators ops' }
 MicroPythonGenerator >> rounded: aNumber [
 	^ self unaryFunction: 'round' arg: aNumber
@@ -610,11 +597,14 @@ MicroPythonGenerator >> setVar: var to: val [
 ]
 
 { #category : #'operators ops' }
-MicroPythonGenerator >> split: str by: delimiter limit: size to: list [
-	self
-		appendWithNewline:
-			(self valueOf: list) , '=' , (self valueOf: str) , '.'
-				, (self binaryFunction: 'split' arg1: delimiter arg2: size)
+MicroPythonGenerator >> split: str by: delimiter limit: size [
+	^ (self valueOf: str) , '.'
+		, (self binaryFunction: 'split' arg1: delimiter arg2: size)
+]
+
+{ #category : #'list ops' }
+MicroPythonGenerator >> splitBySpace: val [
+	^ (self valueOf: val) , '.split()'
 ]
 
 { #category : #'code generator' }

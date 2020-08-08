@@ -91,7 +91,7 @@ SpFileChooserDialog class >> saveScratchFileSpec [
 
 { #category : #private }
 SpFileChooserDialog class >> shortcutButtonWidth [
-	^ 120
+	^ 160
 ]
 
 { #category : #accessing }
@@ -162,7 +162,7 @@ SpFileChooserDialog >> initializePresenters [
 	textFilename := self instantiate: SpLabelledTextInput.
 	fileInfo := self instantiate: SpFileInfo.
 	textFilename
-		label: 'Filename:' localized;
+		label: 'Filename:';
 		acceptOnCR: true.
 	self focusOrder
 		add: fileList;
@@ -193,7 +193,7 @@ SpFileChooserDialog >> selectedFile [
 { #category : #initialization }
 SpFileChooserDialog >> setupForFileInfoEditor [
 	fileInfo readOnly: false.
-	textFilename label: 'New filename:' localized
+	textFilename label: 'New filename:'
 ]
 
 { #category : #initialization }

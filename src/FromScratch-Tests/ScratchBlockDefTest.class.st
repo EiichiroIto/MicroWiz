@@ -130,7 +130,7 @@ ScratchBlockDefTest >> testBlocksForScript [
 	self assert: ret isEmpty.
 	ret := def blocksFor: 'sensing' script: sc.
 	self assert: ret size equals: 1.
-	self assert: ret first commandSpec equals: 'return value'
+	self assert: ret first commandSpec equals: 'return value' localized
 ]
 
 { #category : #test }

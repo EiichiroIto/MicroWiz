@@ -81,7 +81,8 @@ ScratchScript >> addGenericListBlocksTo: page y: startY [
 						ifTrue: [ y := y + 15 ].
 					blockOrSym = #~
 						ifTrue: [ y := y + 5 ] ]
-				ifFalse: [ y := self createBlock: blockOrSym atPosition: x @ y onPage: page.
+				ifFalse: [ self updateListArgFor: blockOrSym.
+					y := self createBlock: blockOrSym atPosition: x @ y onPage: page.
 					page submorphs last color: ScratchTheme listBlockColor ] ].
 	^ y
 ]
@@ -208,7 +209,7 @@ ScratchScript >> blockDef [
 ScratchScript >> blockFromSpec: spec color: blockColor [
 	| blockLabelSpec blockType selector defaultArgs block rcvr argPermutation c |
 	c := blockColor.
-	blockLabelSpec := spec at: 1.
+	blockLabelSpec := (spec at: 1) localized.
 	argPermutation := CommandBlockMorph
 		argPermutationForSpec: (spec at: 1)
 		withTranslation: blockLabelSpec.
@@ -575,6 +576,11 @@ ScratchScript >> fieldsVersion [
 	^ 1
 ]
 
+{ #category : #evaluation }
+ScratchScript >> getVar: aString [
+	^ self evaluator getVar: aString
+]
+
 { #category : #blocks }
 ScratchScript >> hatBlockFromTuple: tuple receiver: scriptOwner [
 	| blockClass block eventName |
@@ -738,8 +744,8 @@ ScratchScript >> setupBlockCategory [
 		addCategory: 'control' color: (Color h: 41 s: 0.85 v: 0.9);
 		addCategory: 'operators' color: (Color h: 93 s: 0.9 v: 0.76);
 		addCategory: 'sensing' color: (Color h: 200 s: 0.98 v: 0.86);
-		addCategory: 'variables' color: (Color h: 25 s: 0.88 v: 0.95);
-		addCategory: 'list' color: (Color h: 25 s: 0.88 v: 0.95)
+		addCategory: 'variables' color: ScratchTheme variableBlockColor;
+		addCategory: 'list' color: ScratchTheme listBlockColor
 ]
 
 { #category : #'block specs' }
@@ -816,6 +822,19 @@ ScratchScript >> uncoloredArgMorphFor: specString [
 	^ argBuilder uncoloredArgMorphFor: specString
 ]
 
+{ #category : #'argument menus' }
+ScratchScript >> updateListArgFor: aBlock [
+	| listVar |
+	listVar := self listVarNames
+		ifEmpty: [ ^ self ]
+		ifNotEmpty: [ :l | l first ].
+	aBlock argMorphs
+		do: [ :each | 
+			((each isKindOf: ChoiceArgMorph)
+				and: [ each getOptionsSelector = #listVarNames ])
+				ifTrue: [ each defaultValue: listVar ] ]
+]
+
 { #category : #accessing }
 ScratchScript >> updateWatcher: aToggleButton for: aBlockMorph [
 	self subclassResponsibility
@@ -872,7 +891,7 @@ ScratchScript >> variableBlockFromTuple: tuple receiver: scriptOwner [
 					block replaceArgMorph: block expressionArg by: argBlock ]
 				ifFalse: [ "argument is a value" block expressionArg defaultValue: arg ].
 			^ block ].
-	self error: 'unknown variable spec'
+	self error: 'unknown variable spec!'
 ]
 
 { #category : #variables }

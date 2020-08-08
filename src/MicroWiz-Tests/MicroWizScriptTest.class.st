@@ -13,17 +13,6 @@ MicroWizScriptTest >> newScript [
 ]
 
 { #category : #test }
-MicroWizScriptTest >> testAddList [
-	| s |
-	s := self newScript.
-	self assert: s listVarNames isEmpty.
-	s addList: 'abc'.
-	s addList: 'def'.
-	self assert: (s listVarNames includes: 'abc').
-	self assert: (s listVarNames includes: 'def')
-]
-
-{ #category : #test }
 MicroWizScriptTest >> testAddVariable [
 	| s |
 	s := self newScript.
@@ -45,23 +34,6 @@ MicroWizScriptTest >> testCompareHatBlockAnd [
 	a := EventHatMorph new eventName: 'a'.
 	self assert: (s compareHatBlock: b and: a).
 	self deny: (s compareHatBlock: a and: b)
-]
-
-{ #category : #test }
-MicroWizScriptTest >> testDeleteList [
-	| s |
-	s := self newScript.
-	self assert: s listVarNames isEmpty.
-	s addList: 'abc'.
-	s addList: 'def'.
-	self assert: (s listVarNames includes: 'abc').
-	self assert: (s listVarNames includes: 'def').
-	self deny: (s listVarNames includes: 'ghi').
-	s deleteList: 'abc'.
-	s deleteList: 'ghi'.
-	self deny: (s listVarNames includes: 'abc').
-	self assert: (s listVarNames includes: 'def').
-	self deny: (s listVarNames includes: 'ghi')
 ]
 
 { #category : #test }
@@ -98,8 +70,7 @@ MicroWizScriptTest >> testHatBlocks [
 MicroWizScriptTest >> testInitialize [
 	| s |
 	s := self newScript.
-	self assert: s varNames isEmpty.
-	self assert: s listVarNames isEmpty
+	self assert: s varNames isEmpty
 ]
 
 { #category : #test }
@@ -113,11 +84,6 @@ MicroWizScriptTest >> testIsValidSubName [
 	self deny: (s isValidSubName: '2abc').
 	self deny: (s isValidSubName: '2a-bc').
 	self deny: (s isValidSubName: '2a bc')
-]
-
-{ #category : #test }
-MicroWizScriptTest >> testListVarNames [
-	self testAddList
 ]
 
 { #category : #test }
@@ -146,9 +112,5 @@ MicroWizScriptTest >> testVariableNameInUse [
 	s addVariable: 'abc'.
 	self assert: (s variableNameInUse: 'abc').
 	self deny: (s variableNameInUse: 'def').
-	self deny: (s variableNameInUse: 'ghi').
-	s addList: 'def'.
-	self assert: (s variableNameInUse: 'abc').
-	self assert: (s variableNameInUse: 'def').
 	self deny: (s variableNameInUse: 'ghi')
 ]

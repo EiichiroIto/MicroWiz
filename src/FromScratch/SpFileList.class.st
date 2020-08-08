@@ -143,7 +143,7 @@ SpFileList >> newFolder [
 		ifTrue: [ ^ self ].
 	[ (directory / name) createDirectory ]
 		ifError:
-			[ :err :rcvr | ^ UIManager default alert: 'Could not create folder.' localized ].
+			[ :err :rcvr | ^ UIManager default alert: 'Could not create folder!' localized ].
 	self directory: directory / name
 ]
 

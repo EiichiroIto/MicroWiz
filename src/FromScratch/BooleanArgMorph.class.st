@@ -80,11 +80,3 @@ BooleanArgMorph >> initialize [
 	self extent: 25@13.
 
 ]
-
-{ #category : #other }
-BooleanArgMorph >> printArgOn: aStream [
-	"Print this argument morph on the given stream."
-
-	aStream nextPutAll: 'false'.
-
-]

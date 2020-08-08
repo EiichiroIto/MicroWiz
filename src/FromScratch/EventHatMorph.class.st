@@ -44,7 +44,7 @@ EventHatMorph >> for: aString event: aSymbol [
 	super initialize.
 	self removeAllMorphs.
 	s := self newLabelString
-		contents: aString;
+		contents: aString localized;
 		yourself.
 	self addMorphBack: s.
 
@@ -74,8 +74,8 @@ EventHatMorph >> initialize [
 	super initialize.
 	self removeAllMorphs.
 	label := StringMorph
-		contents: 'when I receive'
-		font: ScratchTheme labelFont.
+		contents: 'when I receive' localized
+		font: ScratchTranslator labelFont.
 	label color: Color white.
 	self addMorphBack: label.
 	scriptNameMorph := EventTitleMorph new.
@@ -85,7 +85,7 @@ EventHatMorph >> initialize [
 { #category : #initialization }
 EventHatMorph >> newLabelString [
 	^ StringMorph new
-		font: ScratchTheme labelFont;
+		font: ScratchTranslator labelFont;
 		color: Color white;
 		yourself
 ]

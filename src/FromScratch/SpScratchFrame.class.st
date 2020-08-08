@@ -48,21 +48,21 @@ SpScratchFrame >> addBlockMenu: aMenu for: aBlockMorph [
 			grp
 				addItem: [ :item | 
 					item
-						name: 'copy';
+						name: 'copy' localized;
 						action: [ application copyBlock: aBlockMorph ] ];
 				addItem: [ :item | 
 					item
-						name: 'cut';
+						name: 'cut' localized;
 						action: [ application cutBlock: aBlockMorph ] ] ];
 		addGroup: [ :grp | 
 			grp
 				addItem: [ :item | 
 					item
-						name: 'delete';
+						name: 'delete' localized;
 						action: [ aBlockMorph delete ] ];
 				addItem: [ :item | 
 					item
-						name: 'duplicate';
+						name: 'duplicate' localized;
 						action: [ application duplicateBlock: aBlockMorph ] ] ]
 ]
 
@@ -72,24 +72,24 @@ SpScratchFrame >> addScriptMenu: aMenu for: aScript [
 		ifTrue: [ aMenu
 				addItem: [ :item | 
 					item
-						name: 'paste';
+						name: 'paste' localized;
 						action: [ application pasteBlock ] ] ].
 	aMenu
 		addGroup: [ :grp | 
 			grp
 				addItem: [ :item | 
 					item
-						name: 'add sub block';
+						name: 'add sub block' localized;
 						action: [ application addSubBlock: ActiveHand cursorPoint script: aScript ] ] ];
 		addGroup: [ :grp | 
 			grp
 				addItem: [ :item | 
 					item
-						name: 'clean up';
+						name: 'clean up' localized;
 						action: [ aScript cleanUp ] ];
 				addItem: [ :item | 
 					item
-						name: 'save picture of scripts';
+						name: 'save picture of scripts' localized;
 						action: [ application saveScriptsToImage ] ] ]
 ]
 
@@ -97,7 +97,7 @@ SpScratchFrame >> addScriptMenu: aMenu for: aScript [
 SpScratchFrame >> blockMenuFor: aBlockMorph inScriptEditor: aBoolean [
 	| menu |
 	aBoolean
-		ifFalse: [ ^ self ].
+		ifFalse: [ ^ nil ].
 	menu := self newMenu.
 	self addBlockMenu: menu for: aBlockMorph.
 	^ menu
@@ -194,7 +194,7 @@ SpScratchFrame >> selectSetting: aSymbol [
 		ifTrue: [ ^ self ].
 	choice := UIManager default
 		chooseFrom: list
-		title: 'Select options for ' , aSymbol.
+		title: 'Select options for ' localized , aSymbol.
 	choice = 0
 		ifTrue: [ ^ self ].
 	appClass perform: (aSymbol , ':') asSymbol with: (list at: choice).

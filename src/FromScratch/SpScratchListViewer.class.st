@@ -25,7 +25,7 @@ SpScratchListViewer >> categories: aCollection [
 { #category : #initialization }
 SpScratchListViewer >> connectPresenters [
 	categories
-		display: [ :each | each asCamelCase ];
+		display: [ :each | each asString localized ];
 		icons: [ :each | self markerFormFor: each ];
 		whenSelectionChangedDo: [ :each | self updateContents ]
 ]

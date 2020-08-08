@@ -84,5 +84,13 @@ SpMicroWizStageTest >> testPlotDataFromString [
 	self assert: ret first data equals: 45.
 	self assert: (ret second isKindOf: ScratchPlotData).
 	self assert: ret second channel equals: 2.
+	self assert: ret second data equals: 67.
+	ret := s plotDataFromString: '[45, 67]'.
+	self assert: ret size equals: 2.
+	self assert: (ret first isKindOf: ScratchPlotData).
+	self assert: ret first channel equals: 1.
+	self assert: ret first data equals: 45.
+	self assert: (ret second isKindOf: ScratchPlotData).
+	self assert: ret second channel equals: 2.
 	self assert: ret second data equals: 67
 ]

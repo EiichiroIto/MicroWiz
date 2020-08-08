@@ -124,7 +124,7 @@ ScratchProject >> extractInfoFrom: aByteArray [
 	s := ReadStream on: aByteArray.
 	version := obj class fileVersion: self class from: s.
 	version = self class appVersion
-		ifFalse: [ ^ self inform: 'Invalid version' ].
+		ifFalse: [ ^ self inform: 'Invalid app version!' localized ].
 	s skip: 4.
 	info := obj readObjFrom: s showProgress: false
 ]
@@ -136,11 +136,11 @@ ScratchProject >> extractProjectFrom: aByteArray [
 	s := ReadStream on: aByteArray.
 	version := obj class fileVersion: self class from: s.
 	version = self class appVersion
-		ifFalse: [ ^ self inform: 'Invalid app version' ].
+		ifFalse: [ ^ self inform: 'Invalid app version!' localized ].
 	s skip: s uint32.
 	proj := obj readObjFrom: s showProgress: true.
 	proj isProject
-		ifFalse: [ ^ self error: 'Invalid project format :' , proj class asString ].
+		ifFalse: [ ^ self error: 'Invalid project format:' localized , proj class asString ].
 	proj scripts
 		do: [ :m | 
 			m
@@ -170,7 +170,8 @@ ScratchProject >> getScratchInfoFrom: aFileReference [
 		try: [ f := aFileReference binaryReadStream.
 			version := obj class fileVersion: self class from: f.
 			version = self class appVersion
-				ifFalse: [ self inform: 'invalid app version'. ^ nil ].
+				ifFalse: [ self inform: 'Invalid app version!' localized.
+					^ nil ].
 			buf := f next: f uint32.
 			result := obj readObjFrom: (ReadStream on: buf).
 			f close ]
@@ -233,8 +234,8 @@ ScratchProject >> readProjectFrom: aFileReference [
 	f := aFileReference binaryReadStream.
 	f
 		ifNil: [ UIManager default
-				alert: aFileReference pathString
-				title: 'Could not read' localized.
+				alert: 'Could not read file: ' localized , aFileReference pathString
+				title: 'Load failed' localized.
 			^ nil ].
 	SpScratchApp
 		try: [ projData := f contents.
@@ -243,7 +244,7 @@ ScratchProject >> readProjectFrom: aFileReference [
 		onFailure: [ :err :rcvr | 
 			UIManager default
 				alert: err
-				title: 'Could not read project; file may be damaged'.
+				title: 'Could not read project; file may be damaged' localized.
 			^ nil ].
 	self modified: false.
 	^ newProj
@@ -308,7 +309,7 @@ ScratchProject >> writeProjectAs: aFileReference [
 	SpScratchApp
 		try: [ out := tmpFile binaryWriteStream.
 			out
-				ifNil: [ saveError := 'Folder may be locked or read-only' ]
+				ifNil: [ saveError := 'Folder may be locked or read-only' localized ]
 				ifNotNil: [ out nextPutAll: self class appVersionString asByteArray.
 					self storeProjectInfoOn: out.
 					self newObjStream storeObj: self on: out.
@@ -320,13 +321,13 @@ ScratchProject >> writeProjectAs: aFileReference [
 			saveError := err ].
 	self scripts do: [ :m | m convertTuplesToStacks ].
 	saveError
-		ifNotNil: [ UIManager default alert: saveError title: 'Save failed'.
+		ifNotNil: [ UIManager default alert: saveError title: 'Save failed' localized.
 			^ false ].
 	aFileReference deleteIfAbsent: [  ].
 	[ tmpFile renameTo: aFileReference basename ]
 		ifError: [ UIManager default
 				alert: 'Is the folder read-only?' localized
-				title: 'Save failed'.
+				title: 'Save failed' localized.
 			^ false ].
 	self modified: false.
 	^ true

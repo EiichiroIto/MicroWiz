@@ -349,14 +349,12 @@ StringFieldMorph >> font: aFont [
 
 { #category : #initialization }
 StringFieldMorph >> forExpressionArg [
-
 	frame := nil.
 	borderColor := Color transparent.
 	borderWidth := 0.
 	insetX := 0.
 	heightPadding := 2.
-	self font: (ScratchTheme argFont).
-
+	self font: ScratchTranslator argFont
 ]
 
 { #category : #geometry }

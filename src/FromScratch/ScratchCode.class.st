@@ -71,7 +71,7 @@ ScratchCode >> choiceString: aMorph [
 	| v |
 	v := aMorph choice.
 	(v isString and: [ v isEmpty ])
-		ifTrue: [ self error: 'choice is empty' ].
+		ifTrue: [ self error: 'Choice is empty!' ].
 	^ v
 ]
 
@@ -214,7 +214,7 @@ ScratchCode >> generateCode: aSymbol morph: aMorph [
 	self class addCommand: aSymbol.
 	SpScratchApp
 		try: [ self perform: aSymbol withArguments: aMorph blockArgs ]
-		onFailure: [ aMorph showBalloon: 'error' ]
+		onFailure: [ aMorph showBalloon: 'Error!' localized ]
 ]
 
 { #category : #'code generator' }
@@ -259,7 +259,7 @@ ScratchCode >> generateReporter: aSymbol morph: aMorph [
 		try: [ ret := self
 				perform: aSymbol asSymbol
 				withArguments: aMorph blockArgs ]
-		onFailure: [ aMorph showBalloon: 'error' ].
+		onFailure: [ aMorph showBalloon: 'Error!' localized ].
 	^ ret
 ]
 

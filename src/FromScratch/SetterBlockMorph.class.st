@@ -39,9 +39,9 @@ SetterBlockMorph >> expressionArg [
 
 { #category : #initialization }
 SetterBlockMorph >> initChangerForVar: varName [
-	self commandSpec: 'change %v by %n'.
+	self commandSpec: 'change %v by %n' localized.
 	argPermutation := CommandBlockMorph
-		argPermutationForSpec: 'set %v to %n'
+		argPermutationForSpec: 'change %v to %n'
 		withTranslation: commandSpec.
 	self selector: #changeVar:by:.
 	self variable: varName
@@ -49,7 +49,7 @@ SetterBlockMorph >> initChangerForVar: varName [
 
 { #category : #initialization }
 SetterBlockMorph >> initSetterForVar: varName [
-	self commandSpec: 'set %v to %n'.
+	self commandSpec: 'set %v to %n' localized.
 	argPermutation := CommandBlockMorph
 		argPermutationForSpec: 'set %v to %n'
 		withTranslation: commandSpec.
@@ -68,14 +68,12 @@ SetterBlockMorph >> initialize [
 
 { #category : #private }
 SetterBlockMorph >> labelMorphFor: aString [
-
 	| s |
 	s := aString.
-	"commandSpec isUnicode ifTrue: [s := UTF8 withAll: s]."
-	"self variable isUnicode ifTrue: [s := UTF8 withAll: s]."
-	^ (StringMorph contents: s font: (ScratchTheme labelFont))
+	"commandSpec isUnicode ifTrue: [s := UTF8 withAll: s].
+	self variable isUnicode ifTrue: [s := UTF8 withAll: s]."
+	^ (StringMorph contents: s font: ScratchTranslator labelFont)
 		color: self labelColor
-
 ]
 
 { #category : #accessing }

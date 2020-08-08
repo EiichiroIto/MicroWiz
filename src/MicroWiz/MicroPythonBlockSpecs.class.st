@@ -15,7 +15,7 @@ MicroPythonBlockSpecs >> blocks [
 MicroPythonBlockSpecs >> controlBlocks [
 	^ super controlBlocks , #(
 		'control'
-				('do %L each %l'			c	doIterate 'list')
+				('do %s each %l'			c	doIterate 'list')
 		)
 ]
 
@@ -71,11 +71,9 @@ MicroPythonBlockSpecs >> operatorsBlocks [
 			('bytes from %s encoding %s'
 													r	bytesFrom:encoding: 'abc' 'utf8')
 			('join %s %s'					r	concatenate:with: 'hello ' 'world')
-			('letter %n of %s'			r	letter:of: 0 'world')
+			('item %n of %s'				r	letter:of: 0 'world')
 			('length of %s'				r	stringLength: 'world')
-			('split %s by %s limit %n to %L'		-
-														split:by:limit:to:		'a,b,c' , -1 'list')
-			('any of %s'					r	anyOf: )
+			('any of %s'					r	anyOf: 'hello')
 	)
 ]
 
@@ -95,6 +93,7 @@ MicroPythonBlockSpecs >> setupBlockCategoryTo: aBlockDef [
 		addCategory: 'i2c' color: (Color h: 225 s: 0.65 v: 0.83);
 		addCategory: 'spi' color: (Color h: 225 s: 0.65 v: 0.83);
 "
+		addCategory: 'lists' color: ScratchTheme listBlockColor;
 		addCategory: 'misc' color: (Color h: 165 s: 1 v: 0.63)
 ]
 

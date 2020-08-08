@@ -368,22 +368,6 @@ SpMicroWiz >> restoreProject [
 	"do nothing"
 ]
 
-{ #category : #'menu actions' }
-SpMicroWiz >> savePlotImage: aPlotter [
-	| fName saveForm pngExt |
-	pngExt := 'png'.
-	saveForm := presenter formFrom: aPlotter extent: 400 @ 400.
-	saveForm ifNil: [ ^ self ].
-	fName := self
-		chooseNewFileDefault: ''
-		extension: pngExt
-		title: 'Save Plots Snapshot'
-		type: #scriptsSnapshot.
-	fName ifNil: [ ^ self ].
-	fName := fName withExtension: pngExt.
-	saveForm writePNGFileNamed: fName pathString
-]
-
 { #category : #private }
 SpMicroWiz >> selectRemoteFile [
 	| choices ret |

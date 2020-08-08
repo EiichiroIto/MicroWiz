@@ -147,6 +147,14 @@ MicroPythonGeneratorTest >> testBytesFromEncoding [
 ]
 
 { #category : #test }
+MicroPythonGeneratorTest >> testBytesOfList [
+	| g r |
+	g := self newGenerator.
+	r := g bytesOfList: 'a'.
+	self assert: r equals: 'bytes(a)'
+]
+
+{ #category : #test }
 MicroPythonGeneratorTest >> testChangeVarBy [
 	| g |
 	g := self newGenerator.
@@ -175,13 +183,6 @@ MicroPythonGeneratorTest >> testConcatenateWith [
 	| g |
 	g := self newGenerator.
 	self assert: (g concatenate: 'x' with: 'y') equals: 'str(x)+str(y)'
-]
-
-{ #category : #test }
-MicroPythonGeneratorTest >> testContentsOfList [
-	| g |
-	g := self newGenerator.
-	self assert: (g contentsOfList: 'x') equals: 'x'
 ]
 
 { #category : #test }
@@ -309,6 +310,14 @@ MicroPythonGeneratorTest >> testDoWhileEnd [
 	g := self newGenerator.
 	g doWhileEnd.
 	self assert: g code equals: ''
+]
+
+{ #category : #test }
+MicroPythonGeneratorTest >> testEmptyList [
+	| g r |
+	g := self newGenerator.
+	r := g emptyList.
+	self assert: r equals: '[]'
 ]
 
 { #category : #test }
@@ -454,13 +463,6 @@ MicroPythonGeneratorTest >> testGetFalse [
 ]
 
 { #category : #test }
-MicroPythonGeneratorTest >> testGetLineOfList [
-	| g |
-	g := self newGenerator.
-	self assert: (g getLine: 5 ofList: 'x') equals: 'x[5]'
-]
-
-{ #category : #test }
 MicroPythonGeneratorTest >> testGetList [
 	| g |
 	g := self newGenerator.
@@ -548,13 +550,6 @@ MicroPythonGeneratorTest >> testLetterOf [
 	| g |
 	g := self newGenerator.
 	self assert: (g letter: 6 of: 'x') equals: '(x)[6]'
-]
-
-{ #category : #test }
-MicroPythonGeneratorTest >> testLineCountOfList [
-	| g |
-	g := self newGenerator.
-	self assert: (g lineCountOfList: 'x') equals: 'len(x)'
 ]
 
 { #category : #test }
@@ -749,14 +744,6 @@ MicroPythonGeneratorTest >> testRandomFromTo [
 ]
 
 { #category : #test }
-MicroPythonGeneratorTest >> testReplaceAllListWith [
-	| g |
-	g := self newGenerator.
-	g replaceAllList: 'x' with: '''a b c'''.
-	self assert: g code equals: 'x = (''a b c'').split()' , String lf
-]
-
-{ #category : #test }
 MicroPythonGeneratorTest >> testRounded [
 	| g |
 	g := self newGenerator.
@@ -780,17 +767,19 @@ MicroPythonGeneratorTest >> testSetVarTo [
 ]
 
 { #category : #test }
-MicroPythonGeneratorTest >> testSplitByLimitTo [
-	| g |
+MicroPythonGeneratorTest >> testSplitByLimit [
+	| g r |
 	g := self newGenerator.
-	g
-		split: '''a,b,c'''
-		by: ''','''
-		limit: 3
-		to: 'list'.
-	self
-		assert: g code
-		equals: 'list=''a,b,c''.split('','',3)' , String lf
+	r := g split: '''a,b,c''' by: ''',''' limit: 3.
+	self assert: r equals: '''a,b,c''.split('','',3)'
+]
+
+{ #category : #test }
+MicroPythonGeneratorTest >> testSplitBySpace [
+	| g r |
+	g := self newGenerator.
+	r := g splitBySpace: '''a b c'''.
+	self assert: r equals: '''a b c''.split()'
 ]
 
 { #category : #test }

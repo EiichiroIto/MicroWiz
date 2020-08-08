@@ -262,8 +262,11 @@ SpMicroWizStage >> pickupOutput [
 
 { #category : #private }
 SpMicroWizStage >> plotDataFromString: aString [
-	| tokens |
-	tokens := ([ :c | c isSeparator or: [ c = $, ] ] split: aString)
+	| str tokens |
+	str := aString trimBoth.
+	((str beginsWith: '[') and: [ str endsWith: ']' ])
+		ifTrue: [ str := str copyFrom: 2 to: str size - 1 ].
+	tokens := ([ :c | c isSeparator or: [ c = $, ] ] split: str)
 		select: [ :each | each notEmpty ].
 	(tokens allSatisfy: [ :each | each isNumberString ])
 		ifFalse: [ ^ #() ].

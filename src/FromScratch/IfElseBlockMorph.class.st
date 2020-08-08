@@ -256,9 +256,9 @@ IfElseBlockMorph >> drawVerticalBarOn: aCanvas [
 
 { #category : #private }
 IfElseBlockMorph >> elseBarHeight [
-
-	 ^ (ScratchTranslator stringExtent: 'else' localized font: (ScratchTheme labelFont)) y
-
+	^ (ScratchTranslator
+		stringExtent: 'else' localized
+		font: ScratchTranslator labelFont) y
 ]
 
 { #category : #'code generation' }
@@ -333,7 +333,8 @@ IfElseBlockMorph >> fixBlockLayout [
 					(self top + elseBarY
 						+
 							((ScratchTranslator
-								centerOffsetForButtonWithFont: ScratchTheme labelFont) // 4))
+								centerOffsetForButtonWithFont: ScratchTranslator labelFont)
+								// 4))
 ]
 
 { #category : #initialization }
