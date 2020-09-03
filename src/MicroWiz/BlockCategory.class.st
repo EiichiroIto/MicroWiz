@@ -27,6 +27,11 @@ BlockCategory >> isCategory [
 	^ true
 ]
 
+{ #category : #accessing }
+BlockCategory >> moduleName: aString [
+	"do nothing"
+]
+
 { #category : #printing }
 BlockCategory >> printOn: aStream [
 	aStream

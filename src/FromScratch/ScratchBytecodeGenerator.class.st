@@ -70,6 +70,31 @@ ScratchBytecodeGenerator >> binaryCommand: aSymbol arg1: anObject1 arg2: anObjec
 	^ nil
 ]
 
+{ #category : #'arithmetic ops' }
+ScratchBytecodeGenerator >> bitAnd: x with: y [
+	^ self binaryCommand: #bitAnd arg1: x arg2: y
+]
+
+{ #category : #'arithmetic ops' }
+ScratchBytecodeGenerator >> bitOr: x with: y [
+	^ self binaryCommand: #bitOr arg1: x arg2: y
+]
+
+{ #category : #'arithmetic ops' }
+ScratchBytecodeGenerator >> bitShift: x left: y [
+	^ self binaryCommand: #bitShiftLeft arg1: x arg2: y
+]
+
+{ #category : #'arithmetic ops' }
+ScratchBytecodeGenerator >> bitShift: x right: y [
+	^ self binaryCommand: #bitShiftRight arg1: x arg2: y
+]
+
+{ #category : #'arithmetic ops' }
+ScratchBytecodeGenerator >> bitXor: x with: y [
+	^ self binaryCommand: #bitXor arg1: x arg2: y
+]
+
 { #category : #'control ops' }
 ScratchBytecodeGenerator >> callSub: aString [
 	self appendCall: aString.

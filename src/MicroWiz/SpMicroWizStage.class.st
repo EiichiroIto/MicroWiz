@@ -229,8 +229,8 @@ SpMicroWizStage >> log [
 
 { #category : #initialization }
 SpMicroWizStage >> newTimer [
-	^ TimerMorph new
-		target: self;
+	^ ScratchStepperMorph new
+		whenStepsDo: [ self step ];
 		stepTime: self defaultStepTime;
 		yourself
 ]

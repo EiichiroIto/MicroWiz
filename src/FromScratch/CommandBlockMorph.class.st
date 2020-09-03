@@ -458,7 +458,7 @@ CommandBlockMorph >> isForever [
 
 { #category : #testing }
 CommandBlockMorph >> isStop [
-	^ #(stopThread stopAll return: break continue) includes: selector
+	^ #(stopThread stopAll return: break continue doReturn) includes: selector
 ]
 
 { #category : #testing }

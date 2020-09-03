@@ -49,6 +49,41 @@ ScratchCode >> argString: anArgMorph [
 			generator literalStringFrom: v]
 ]
 
+{ #category : #'arithmetic ops' }
+ScratchCode >> bitAnd: x with: y [
+	^ generator
+		bitAnd: [ x argString: parser ]
+		with: [ y argString: parser ]
+]
+
+{ #category : #'arithmetic ops' }
+ScratchCode >> bitOr: x with: y [
+	^ generator
+		bitOr: [ x argString: parser ]
+		with: [ y argString: parser ]
+]
+
+{ #category : #'arithmetic ops' }
+ScratchCode >> bitShift: x left: y [
+	^ generator
+		bitShift: [ x argString: parser ]
+		left: [ y argString: parser ]
+]
+
+{ #category : #'arithmetic ops' }
+ScratchCode >> bitShift: x right: y [
+	^ generator
+		bitShift: [ x argString: parser ]
+		right: [ y argString: parser ]
+]
+
+{ #category : #'arithmetic ops' }
+ScratchCode >> bitXor: x with: y [
+	^ generator
+		bitXor: [ x argString: parser ]
+		with: [ y argString: parser ]
+]
+
 { #category : #'control ops' }
 ScratchCode >> broadcast: msg [
 	| eno |

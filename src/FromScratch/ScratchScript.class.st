@@ -385,7 +385,7 @@ ScratchScript >> blocks [
 			-
 			('%f of %n'						r	computeFunction:of: 'sqrt' 10)
 		'sensing'
-			('return value'				r	returnValue)
+			('returned value'				r	returnValue)
 	).
 
 	^ blocks
@@ -799,6 +799,11 @@ ScratchScript >> storeFieldsOn: anObjStream [
 { #category : #program }
 ScratchScript >> subBlocks [
 	^ blocksBin submorphs select: [:m | m class = SubHatMorph]
+]
+
+{ #category : #accessing }
+ScratchScript >> subHatBlockNamed: aString [
+	^ self subBlocks detect: [ :each | each subName = aString ] ifNone: [ nil ]
 ]
 
 { #category : #testing }

@@ -254,7 +254,7 @@ MicroWizProject >> modules [
 
 { #category : #private }
 MicroWizProject >> newObjStream [
-	^ MicroWizObjStream new
+	^ STONObjStream new
 ]
 
 { #category : #accessing }

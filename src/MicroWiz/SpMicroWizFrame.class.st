@@ -290,7 +290,7 @@ SpMicroWizFrame >> initializePresenters [
 	viewerPane := self instantiate: SpScratchListViewer.
 	editorPane := self instantiate: SpMicroWizEditor.
 	titlePane := self instantiate: SpScratchTitle.
-	libraryPane := self instantiate: SpMicroWizLibrary.
+	libraryPane := self instantiate: SpScratchLibrary.
 	stageFrame := self instantiate: SpMicroWizStage.
 	self focusOrder add: editorPane
 ]
@@ -350,30 +350,6 @@ SpMicroWizFrame >> proxy: aProxy [
 { #category : #accessing }
 SpMicroWizFrame >> replLog [
 	^ stageFrame log
-]
-
-{ #category : #private }
-SpMicroWizFrame >> settingsMenu [
-	| m |
-	m := self newMenu.
-	m
-		addGroup: [ :grp | 
-			SpMicroWiz settings keys sort
-				do: [ :key | 
-					grp
-						addItem: [ :item | 
-							item
-								name: [ key , ' = ' , (SpMicroWiz perform: key) asString ];
-								autoRefresh: true;
-								action: [ self selectSetting: key ] ] ] ].
-	m
-		addGroup: [ :grp | 
-			grp
-				addItem: [ :item | 
-					item
-						name: 'Save settings';
-						action: [ SpMicroWiz saveSettings ] ] ].
-	^ m
 ]
 
 { #category : #initialization }

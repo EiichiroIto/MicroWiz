@@ -77,7 +77,7 @@ ScratchBlockDefTest >> testBlockColorAt [
 	sp addCategory: 'operators' color: Color blue.
 	list := #(
 			'sensing'
-			('return value'				r	returnValue)
+			('returned value'				r	returnValue)
 			'operators'
 			('%n + %n'						r	+ - -)
 			('%n - %n'						r	- - -)).
@@ -104,12 +104,12 @@ ScratchBlockDefTest >> testBlockSpecAt [
 	sp := self newBlockDef.
 	list := #(
 			'sensing'
-			('return value'				r	returnValue)
+			('returned value'				r	returnValue)
 			'operators'
 			('%n + %n'						r	+ - -)
 			('%n - %n'						r	- - -)).
 	sp setupFrom: list.
-	self assertCollection: (sp blockSpecAt: #returnValue) equals: #('return value' r #returnValue).
+	self assertCollection: (sp blockSpecAt: #returnValue) equals: #('returned value' r #returnValue).
 	self assertCollection: (sp blockSpecAt: #+) equals: #('%n + %n' r #+ #- #-).
 	self assertCollection: (sp blockSpecAt: #-) equals: #('%n - %n' r #- #- #-)
 ]
@@ -121,7 +121,7 @@ ScratchBlockDefTest >> testBlocksForScript [
 	def := self newBlockDef.
 	list := #(
 			'sensing'
-			('return value'				r	returnValue)
+			('returned value'				r	returnValue)
 			'operators'
 			('%n + %n'						r	+ - -)
 			('%n - %n'						r	- - -)).
@@ -130,7 +130,7 @@ ScratchBlockDefTest >> testBlocksForScript [
 	self assert: ret isEmpty.
 	ret := def blocksFor: 'sensing' script: sc.
 	self assert: ret size equals: 1.
-	self assert: ret first commandSpec equals: 'return value' localized
+	self assert: ret first commandSpec equals: 'returned value' localized
 ]
 
 { #category : #test }
@@ -205,12 +205,12 @@ ScratchBlockDefTest >> testSetupFrom [
 	sp addCategory: 'operators' color: Color blue.
 	list := #(
 			'sensing'
-			('return value'				r	returnValue)
+			('returned value'				r	returnValue)
 			'operators'
 			('%n + %n'						r	+ - -)
 			('%n - %n'						r	- - -)).
 	sp setupFrom: list.
-	self assertCollection: (sp privBlockSpecs at: #returnValue) equals: #('return value' r #returnValue).
+	self assertCollection: (sp privBlockSpecs at: #returnValue) equals: #('returned value' r #returnValue).
 	self assertCollection: (sp privBlockSpecs at: #+) equals: #('%n + %n' r #+ #- #-).
 	self assertCollection: (sp privBlockSpecs at: #-) equals: #('%n - %n' r #- #- #-).
 	self assert: (sp privBlockColors at: #returnValue) equals: sp unknownCategoryColor.

@@ -1,5 +1,5 @@
 Class {
-	#name : #SpMicroWizLibrary,
+	#name : #SpScratchLibrary,
 	#superclass : #SpPresenter,
 	#instVars : [
 		'buttonMain',
@@ -8,11 +8,11 @@ Class {
 		'buttonDelete',
 		'buttonOther'
 	],
-	#category : #'MicroWiz-Spec2'
+	#category : #'FromScratch-Spec2'
 }
 
 { #category : #specs }
-SpMicroWizLibrary class >> defaultSpec [
+SpScratchLibrary class >> defaultSpec [
 	^ SpBoxLayout newHorizontal
 		add: #buttonMain;
 		add: #buttonOther;
@@ -22,14 +22,24 @@ SpMicroWizLibrary class >> defaultSpec [
 		yourself
 ]
 
+{ #category : #private }
+SpScratchLibrary >> defaultMainButtonName [
+	^ 'main'
+]
+
+{ #category : #private }
+SpScratchLibrary >> defaultOtherButtonName [
+	^ '(none)'
+]
+
 { #category : #initialization }
-SpMicroWizLibrary >> initializePresenters [
+SpScratchLibrary >> initializePresenters [
 	buttonMain := self newButton
-		label: 'main';
+		label: self defaultMainButtonName;
 		icon: (self iconNamed: #page);
 		yourself.
 	buttonOther := self newButton
-		label: '(none)';
+		label: self defaultOtherButtonName;
 		icon: (self iconNamed: #page);
 		yourself.
 	buttonSelect := self newButton
@@ -49,47 +59,53 @@ SpMicroWizLibrary >> initializePresenters [
 ]
 
 { #category : #accessing }
-SpMicroWizLibrary >> mainLabel [
+SpScratchLibrary >> mainLabel [
 	^ buttonMain label asString
 ]
 
 { #category : #accessing }
-SpMicroWizLibrary >> otherLabel [
+SpScratchLibrary >> otherLabel [
 	^ buttonOther label asString
 ]
 
 { #category : #accessing }
-SpMicroWizLibrary >> otherLabel: aString [
+SpScratchLibrary >> otherLabel: aString [
 	buttonOther label: aString
 ]
 
 { #category : #accessing }
-SpMicroWizLibrary >> selectButton: aString [
+SpScratchLibrary >> reset [
+	self otherLabel: self defaultOtherButtonName.
+	self selectButton: self defaultMainButtonName
+]
+
+{ #category : #accessing }
+SpScratchLibrary >> selectButton: aString [
 	buttonMain state: (self mainLabel = aString).
 	buttonOther state: (self otherLabel = aString)
 ]
 
 { #category : #accessing }
-SpMicroWizLibrary >> whenAddButtonPressed: aBlock [
+SpScratchLibrary >> whenAddButtonPressed: aBlock [
 	buttonAdd action: aBlock
 ]
 
 { #category : #accessing }
-SpMicroWizLibrary >> whenDeleteButtonPressed: aBlock [
+SpScratchLibrary >> whenDeleteButtonPressed: aBlock [
 	buttonDelete action: aBlock
 ]
 
 { #category : #accessing }
-SpMicroWizLibrary >> whenMainButtonPressed: aBlock [
+SpScratchLibrary >> whenMainButtonPressed: aBlock [
 	buttonMain action: aBlock
 ]
 
 { #category : #accessing }
-SpMicroWizLibrary >> whenOtherButtonPressed: aBlock [
+SpScratchLibrary >> whenOtherButtonPressed: aBlock [
 	buttonOther action: [ aBlock cull: self otherLabel ]
 ]
 
 { #category : #accessing }
-SpMicroWizLibrary >> whenSelectButtonPressed: aBlock [
+SpScratchLibrary >> whenSelectButtonPressed: aBlock [
 	buttonSelect action: aBlock
 ]

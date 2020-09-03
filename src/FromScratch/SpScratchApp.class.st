@@ -132,6 +132,16 @@ SpScratchApp class >> saveSettings [
 	stream close
 ]
 
+{ #category : #accessing }
+SpScratchApp class >> settingKeys [
+	^ self settings keys sorted
+]
+
+{ #category : #accessing }
+SpScratchApp class >> settingValueFor: aSymbol [
+	^ self perform: aSymbol
+]
+
 { #category : #private }
 SpScratchApp class >> settings [
 	^ Settings ifNil: [ Settings := Dictionary new ]
@@ -762,8 +772,7 @@ SpScratchApp >> startProcessFor: topBlock [
 
 { #category : #processes }
 SpScratchApp >> stepProcesses [
-	process ifNil: [ ^ self ].
-	process step.
+	process ifNotNil: [ process step ].
 	updateInfoCount := updateInfoCount + 1.
 	updateInfoCount > self maxUpdateInfoCount
 		ifTrue: [ updateInfoCount := 0.
