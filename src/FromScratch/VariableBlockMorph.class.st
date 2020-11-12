@@ -26,6 +26,11 @@ VariableBlockMorph >> argString: aGenerator [
 	^ aGenerator variableArgString: self.
 ]
 
+{ #category : #accessing }
+VariableBlockMorph >> args [
+	^ { self variable }
+]
+
 { #category : #private }
 VariableBlockMorph >> asBlockTuple [
 	"Answer a tuple (Array) describing this block and its arguments."
@@ -72,11 +77,21 @@ VariableBlockMorph >> isVariableBlock [
 ]
 
 { #category : #accessing }
+VariableBlockMorph >> numberArgFlags [
+	^ #(false)
+]
+
+{ #category : #accessing }
 VariableBlockMorph >> receiver: anObject [
 	"Set my receiver object and, if possible, my block color."
 
 	receiver := anObject.
 	self color: ScratchTheme variableBlockColor darker
+]
+
+{ #category : #accessing }
+VariableBlockMorph >> selector [
+	^ #getVar:
 ]
 
 { #category : #accessing }

@@ -212,7 +212,7 @@ ScratchTranslator >> addMsgId: aString1 msgStr: aString2 [
 
 { #category : #private }
 ScratchTranslator >> defaultFont [
-	^ StrikeFont fontName: 'Verdana' size: 10
+	^ StrikeFont familyName: 'Verdana' size: 10
 ]
 
 { #category : #accessing }

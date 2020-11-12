@@ -463,6 +463,11 @@ ScratchStackProcess >> stop [
 	topBlock ifNotNil: [ topBlock scratchProc: nil ]
 ]
 
+{ #category : #api }
+ScratchStackProcess >> stopAll [
+	topBlock applicationDo: [ :app | app stopAllProcesses ]
+]
+
 { #category : #accessing }
 ScratchStackProcess >> topBlock [
 	^ topBlock

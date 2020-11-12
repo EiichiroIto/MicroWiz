@@ -384,7 +384,7 @@ StringFieldMorph >> initialize [
 
 	stringMorph := StringMorph new
 		contents: '';
-		font: (StrikeFont fontName: 'Verdana' size: 12).
+		font: (StrikeFont familyName: 'Verdana' size: 12).
 	self addMorph: stringMorph.
 
 	self color: Color red.

@@ -195,6 +195,8 @@ MicroWizCode >> rawGenerateCode: aSymbol morph: aMorph [
 				generateIntCode: aSymbol asSymbol
 				arguments: args
 				for: aMorph script ].
+	aSymbol = #getVar:
+		ifTrue: [ ^ aMorph variable ].
 	^ generator perform: aSymbol asSymbol withArguments: args
 ]
 
