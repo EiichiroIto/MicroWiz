@@ -29,7 +29,9 @@ SpMicroWiz class >> initialize [
 	ScratchDirectory current appName: self appFolderName.
 	ScratchTheme
 		themesURL: self themesURL;
-		setupThemeNamed: self appFolderName
+		setupThemeNamed: self appFolderName.
+	"workaround for travis test errors"
+	ObjStream setupVariables
 ]
 
 { #category : #accessing }
